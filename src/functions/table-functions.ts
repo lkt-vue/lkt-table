@@ -1,9 +1,7 @@
 import {Column} from "../instances/Column";
 import {LktObject} from "lkt-ts-interfaces";
-import {Option} from "lkt-field";
 import {reactive} from "vue";
 import {__} from "lkt-i18n";
-import {TypeOfColumn} from "../enums/TypeOfColumn";
 
 /**
  *
@@ -11,90 +9,6 @@ import {TypeOfColumn} from "../enums/TypeOfColumn";
  */
 export const createColumn = (data: Column): Column => {
     return reactive(new Column(data));
-}
-
-/**
- * @deprecated
- */
-export const createLinkColumn = (key: string, label: string, href: string | Function, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, sortable, type: TypeOfColumn.Link, link: href}));
-}
-
-/**
- * @deprecated
- */
-export const createActionColumn = (key: string, label: string, action: Function, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, sortable, type: TypeOfColumn.Action, action}));
-}
-
-/**
- * @deprecated
- */
-export const createTextColumn = (key: string, label: string, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, type: TypeOfColumn.Text, sortable}));
-}
-
-/**
- * @deprecated
- */
-export const createIntegerColumn = (key: string, label: string, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, type: TypeOfColumn.Number, sortable}));
-}
-
-/**
- * @deprecated
- */
-export const createFloatColumn = (key: string, label: string, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, type: TypeOfColumn.Number, sortable}));
-}
-
-/**
- * @deprecated
- */
-export const createEmailColumn = (key: string, label: string, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, type: TypeOfColumn.Email, sortable}));
-}
-
-/**
- * @deprecated
- */
-export const createTelColumn = (key: string, label: string, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, type: TypeOfColumn.Tel, sortable}));
-}
-
-/**
- * @deprecated
- */
-export const createCheckColumn = (key: string, label: string, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, type: TypeOfColumn.Check, sortable}));
-}
-
-/**
- * @deprecated
- */
-export const createSwitchColumn = (key: string, label: string, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, type: TypeOfColumn.Switch, sortable}));
-}
-
-/**
- * @deprecated
- */
-export const createSelectColumn = (key: string, label: string, options: Option[], sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, type: TypeOfColumn.Select, sortable}));
-}
-
-/**
- * @deprecated
- */
-export const createFileColumn = (key: string, label: string, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, type: TypeOfColumn.File, sortable}));
-}
-
-/**
- * @deprecated
- */
-export const createHiddenColumn = (key: string, label: string, sortable: boolean = true): Column => {
-    return reactive(new Column({key, label, sortable, hidden: true}));
 }
 
 /**
