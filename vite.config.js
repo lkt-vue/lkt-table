@@ -36,6 +36,7 @@ export default {
                 'lkt-i18n',
                 'sortablejs',
                 'sortable',
+                'lkt-vue-kernel',
             ],
             output: {
                 globals: {

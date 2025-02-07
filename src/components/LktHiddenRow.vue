@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import {getColumnDisplayContent} from "../functions/table-functions";
-import {Column} from "../instances/Column";
 import LktTableCell from "./LktTableCell.vue";
 import {ref, watch} from "vue";
 import {LktObject} from "lkt-ts-interfaces";
+import {Column} from "lkt-vue-kernel";
 
 const emit = defineEmits(['update:modelValue', 'click']);
 

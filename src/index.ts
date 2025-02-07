@@ -6,7 +6,7 @@ export {
     createColumn
 } from "./functions/table-functions";
 
-export {Column} from "./instances/Column";
+export {Column} from "lkt-vue-kernel";
 
 import "./../lkt-table.css"
 import {Settings} from "./settings/Settings";

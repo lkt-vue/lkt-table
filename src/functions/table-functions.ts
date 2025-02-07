@@ -1,14 +1,15 @@
-import {Column} from "../instances/Column";
+// import {Column} from "../instances/Column";
 import {LktObject} from "lkt-ts-interfaces";
 import {reactive} from "vue";
 import {__} from "lkt-i18n";
+import {Column, ColumnConfig} from "lkt-vue-kernel";
 
 /**
  *
  * @param data
  */
-export const createColumn = (data: Column): Column => {
-    return reactive(new Column(data));
+export const createColumn = (data: ColumnConfig): Column => {
+    return new Column(data);
 }
 
 /**

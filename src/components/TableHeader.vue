@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {getColumnClasses, getVerticalColSpan} from "../functions/table-functions";
-import {Column} from "../instances/Column";
+import {Column} from "lkt-vue-kernel";
 import {computed} from "vue";
 import {LktObject} from "lkt-ts-interfaces";
 import {__} from "lkt-i18n";
@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<{
     amountOfColumns: number,
     items: LktObject[]
 }>(), {
-    column: () => ({}),
+    column: () => (new Column()),
     items: () => [],
     isDraggable: true,
     sortBy: '',

@@ -2,7 +2,7 @@
 import {defaultTableSorter, getColumnByKey, getDefaultSortColumn} from "../functions/table-functions";
 import LktTableRow from "../components/LktTableRow.vue";
 import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
-import {Column} from "../instances/Column";
+import {Column, SortDirection} from "lkt-vue-kernel";
 import LktHiddenRow from "../components/LktHiddenRow.vue";
 import {generateRandomString, replaceAll} from "lkt-string-tools";
 import {LktObject} from "lkt-ts-interfaces";
@@ -17,7 +17,6 @@ import {Settings} from "../settings/Settings";
 import {TypeOfTable} from "../enums/TypeOfTable";
 import {ValidPermissionType} from "../types/ValidPermissionType";
 import {Permission} from "../enums/Permission";
-import {SortDirection} from "../enums/SortDirection";
 import {RowDisplayType} from "../enums/RowDisplayType";
 
 const emit = defineEmits([

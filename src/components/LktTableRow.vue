@@ -5,7 +5,6 @@ import {
     getColumnDisplayContent,
     getHorizontalColSpan
 } from "../functions/table-functions";
-import {Column} from "../instances/Column";
 import LktTableCell from "./LktTableCell.vue";
 import {computed, ref, useSlots, watch} from "vue";
 import {LktObject} from "lkt-ts-interfaces";
@@ -14,6 +13,7 @@ import DropButton from "./DropButton.vue";
 import EditButton from "./EditButton.vue";
 import {replaceAll} from "lkt-string-tools";
 import {RowDisplayType} from "../enums/RowDisplayType";
+import {Column} from "lkt-vue-kernel";
 
 const slots = useSlots();
 const emit = defineEmits(['update:modelValue', 'click', 'show', 'item-up', 'item-down', 'item-drop']);

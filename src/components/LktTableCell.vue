@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import {getColumnDisplayContent} from "../functions/table-functions";
-import {Column} from "../instances/Column";
 import {computed, ref, watch} from "vue";
 import {LktObject} from "lkt-ts-interfaces";
-import {TypeOfColumn} from "../enums/TypeOfColumn";
+import {Column, ColumnType} from "lkt-vue-kernel";
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -28,7 +27,7 @@ const item = ref(props.modelValue),
     inputElement = ref(null);
 
 let calculatedColumnType = props.column.type;
-if ([TypeOfColumn.Integer, TypeOfColumn.Float].includes(calculatedColumnType)) calculatedColumnType = TypeOfColumn.Number;
+if ([ColumnType.Integer, ColumnType.Float].includes(calculatedColumnType)) calculatedColumnType = ColumnType.Number;
 
 watch(value, (v) => {
     const payload = JSON.parse(JSON.stringify(item.value));
@@ -62,34 +61,34 @@ const computedModalData = computed(() => {
 </script>
 
 <template>
-    <template v-if="column.type === TypeOfColumn.Link">
+    <template v-if="column.type === ColumnType.Anchor">
         <lkt-anchor
-            :to="column.getHref(item)"
+            v-bind="column.anchor"
         >{{ getColumnDisplayContent(column, item, i) }}</lkt-anchor>
     </template>
-    <template v-else-if="column.type === TypeOfColumn.Action">
-        <a href="#" v-on:click="column.doAction(item)">{{ getColumnDisplayContent(column, item, i) }}</a>
+    <template v-else-if="column.type === ColumnType.Button">
+        <lkt-button
+            v-bind="column.button"
+        >{{ getColumnDisplayContent(column, item, i) }}</lkt-button>
     </template>
-    <template v-else-if="column.type !== '' && hasInlineEditPerm">
+    <template v-else-if="column.type === ColumnType.Field && hasInlineEditPerm">
         <lkt-field
             v-bind="column.field"
-            :type="calculatedColumnType"
             :read-mode="!column.editable || !editModeEnabled"
             :ref="(el:any) => inputElement = el"
             :slot-data="slotData"
-            :label="column.type === 'switch' || column.type === 'check' ? column.label : ''"
+            :label="column.field?.type === 'switch' || column.field?.type === 'check' ? column.label : ''"
             :modal-data="computedModalData"
             :prop="item"
             v-model="value"/>
     </template>
-    <template v-else-if="column.type !== ''">
+    <template v-else-if="column.type === ColumnType.Field">
         <lkt-field
             v-bind="column.field"
-            :type="calculatedColumnType"
             read-mode
             :ref="(el:any) => inputElement = el"
             :slot-data="slotData"
-            :label="column.type === 'switch' || column.type === 'check' ? column.label : ''"
+            :label="column.field?.type === 'switch' || column.field?.type === 'check' ? column.label : ''"
             :modal-data="computedModalData"
             :prop="item"
             :model-value="value"/>
