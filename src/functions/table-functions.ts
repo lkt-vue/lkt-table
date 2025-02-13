@@ -1,8 +1,5 @@
-// import {Column} from "../instances/Column";
-import {LktObject} from "lkt-ts-interfaces";
-import {reactive} from "vue";
 import {__} from "lkt-i18n";
-import {Column, ColumnConfig} from "lkt-vue-kernel";
+import {Column, ColumnConfig, LktObject} from "lkt-vue-kernel";
 
 /**
  *

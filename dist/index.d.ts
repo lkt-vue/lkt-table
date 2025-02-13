@@ -1,0 +1,11 @@
+import { Component, Plugin } from "vue";
+export { createColumn } from "./functions/table-functions";
+export { Column } from "lkt-vue-kernel";
+import "./../lkt-table.css";
+declare const LktTable: Plugin;
+export default LktTable;
+export declare const setTableNavButtonSlot: (component: string | Component) => boolean;
+export declare const setTableDropButtonSlot: (component: string | Component) => boolean;
+export declare const setTableCreateButtonSlot: (component: string | Component) => boolean;
+export declare const setTableEmptySlot: (component?: string | Component) => void;
+export declare const setTableSaveIcon: (icon: string) => void;

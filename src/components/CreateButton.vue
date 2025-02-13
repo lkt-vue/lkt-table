@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed} from "vue";
 import {Settings} from "../settings/Settings";
-import {LktObject} from "lkt-ts-interfaces";
+import {LktObject, ModalConfig} from "lkt-vue-kernel";
 
 const emit = defineEmits(['click', 'append']);
 
@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<{
     icon?: string
     to?: string
     modal?: string
-    modalData?: LktObject
+    modalData?: Partial<ModalConfig>
 }>(), {
     disabled: false,
     text: '',

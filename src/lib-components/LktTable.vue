@@ -2,10 +2,18 @@
 import {defaultTableSorter, getColumnByKey, getDefaultSortColumn} from "../functions/table-functions";
 import LktTableRow from "../components/LktTableRow.vue";
 import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
-import {Column, SortDirection} from "lkt-vue-kernel";
+import {
+    Column,
+    SortDirection,
+    TablePermission,
+    TableRowType,
+    TableType,
+    ValidTablePermission,
+    ValidTableRowTypeValue,
+    LktObject
+} from "lkt-vue-kernel";
 import LktHiddenRow from "../components/LktHiddenRow.vue";
 import {generateRandomString, replaceAll} from "lkt-string-tools";
-import {LktObject} from "lkt-ts-interfaces";
 import {DataState} from "lkt-data-state";
 import {HTTPResponse} from "lkt-http-client";
 import CreateButton from "../components/CreateButton.vue";
@@ -14,10 +22,6 @@ import TableHeader from "../components/TableHeader.vue";
 import {__} from "lkt-i18n";
 import {time} from "lkt-date-tools";
 import {Settings} from "../settings/Settings";
-import {TypeOfTable} from "../enums/TypeOfTable";
-import {ValidPermissionType} from "../types/ValidPermissionType";
-import {Permission} from "../enums/Permission";
-import {RowDisplayType} from "../enums/RowDisplayType";
 
 const emit = defineEmits([
     'update:modelValue',
@@ -38,7 +42,7 @@ const slots = useSlots();
 
 const props = withDefaults(defineProps<{
     modelValue: LktObject[]
-    type?: TypeOfTable,
+    type?: TableType,
     columns: Column[]
     sorter?: Function
     draggableChecker?: Function
@@ -54,7 +58,7 @@ const props = withDefaults(defineProps<{
 
 
     page?: number
-    perms?: ValidPermissionType[]
+    perms?: ValidTablePermission[]
     resource?: string
     noResultsText?: string
     title?: string
@@ -98,13 +102,13 @@ const props = withDefaults(defineProps<{
     requiredItemsForBottomCreate?: number
 
     slotItemVar?: string
-    rowDisplayType?: RowDisplayType|Function
+    rowDisplayType?: ValidTableRowTypeValue
     modal?: string,
     modalData?: LktObject,
 
 }>(), {
     modelValue: () => [],
-    type: TypeOfTable.Table,
+    type: TableType.Table,
     columns: () => [],
     sorter: defaultTableSorter,
     draggableChecker: (item: any) => true,
@@ -161,7 +165,7 @@ const props = withDefaults(defineProps<{
     requiredItemsForBottomCreate: 0,
 
     slotItemVar: 'item',
-    rowDisplayType: RowDisplayType.Auto,
+    rowDisplayType: TableRowType.Auto,
     modal: ''
 });
 
@@ -195,8 +199,8 @@ watch(isLoading, v => emit('update:loading', v));
 watch(Page, (v) => emit('page', v));
 
 const Type = ref(props.type);
-if (props.itemMode && Type.value === TypeOfTable.Table) {
-    Type.value = TypeOfTable.Item;
+if (props.itemMode && Type.value === TableType.Table) {
+    Type.value = TableType.Item;
 }
 
 const onPerms = (r: string[]) => {
@@ -319,15 +323,15 @@ const emptyColumns = computed(() => {
         }
         return props.editModeText;
     }),
-    hasCreatePerm = computed(() => permissions.value.includes(Permission.Create)),
+    hasCreatePerm = computed(() => permissions.value.includes(TablePermission.Create)),
     hasReadPerm = computed(() => permissions.value.includes('read')),
-    hasUpdatePerm = computed(() => permissions.value.includes(Permission.Update)),
-    hasEditPerm = computed(() => permissions.value.includes(Permission.Edit)),
-    hasInlineEditPerm = computed(() => permissions.value.includes(Permission.InlineEdit)),
-    hasModalCreatePerm = computed(() => permissions.value.includes(Permission.ModalCreate)),
-    hasInlineCreatePerm = computed(() => permissions.value.includes(Permission.InlineCreate)),
-    hasInlineCreateEverPerm = computed(() => permissions.value.includes(Permission.InlineCreateEver)),
-    hasDropPerm = computed(() => permissions.value.includes(Permission.Drop));
+    hasUpdatePerm = computed(() => permissions.value.includes(TablePermission.Update)),
+    hasEditPerm = computed(() => permissions.value.includes(TablePermission.Edit)),
+    hasInlineEditPerm = computed(() => permissions.value.includes(TablePermission.InlineEdit)),
+    hasModalCreatePerm = computed(() => permissions.value.includes(TablePermission.ModalCreate)),
+    hasInlineCreatePerm = computed(() => permissions.value.includes(TablePermission.InlineCreate)),
+    hasInlineCreateEverPerm = computed(() => permissions.value.includes(TablePermission.InlineCreateEver)),
+    hasDropPerm = computed(() => permissions.value.includes(TablePermission.Drop));
 
 
 const getItemByEvent = (e: any) => {
@@ -394,7 +398,7 @@ const getItemByEvent = (e: any) => {
             if (typeof props.newValueGenerator === 'function') {
                 let newValue = props.newValueGenerator();
 
-                if (typeof newValue === 'object' || Type.value !== TypeOfTable.Table) {
+                if (typeof newValue === 'object' || Type.value !== TableType.Table) {
                     Items.value.push(newValue);
                     return;
                 }
@@ -448,7 +452,9 @@ const getItemByEvent = (e: any) => {
         updateTimeStamp.value = time();
     },
     stopSortable = () => {
-        if (sortableObject.value) {
+        //@ts-ignore
+        if (sortableObject.value && typeof sortableObject.value?.destroy === 'function') {
+            //@ts-ignore
             sortableObject.value.destroy();
             sortableObject.value = {};
         }
@@ -645,7 +651,7 @@ const hasEmptySlot = computed(() => {
             <lkt-loader v-if="isLoading"/>
 
             <div v-show="!isLoading && Items.length > 0" class="lkt-table" :data-sortable="sortable">
-                <table v-if="Type === TypeOfTable.Table">
+                <table v-if="Type === TableType.Table">
                     <thead>
                     <tr>
                         <th v-if="sortable && editModeEnabled" data-role="drag-indicator"/>
@@ -748,6 +754,8 @@ const hasEmptySlot = computed(() => {
                             :visible-columns="visibleColumns"
                             :empty-columns="emptyColumns"
                             :hidden-is-visible="isVisible(i)"
+                            :edit-mode-enabled="editModeEnabled"
+                            :has-inline-edit-perm="hasInlineEditPerm"
                             v-on:click="onClick"
                             v-on:show="show"
                         >
@@ -765,7 +773,7 @@ const hasEmptySlot = computed(() => {
                     </tbody>
                 </table>
 
-                <div v-else-if="Type === TypeOfTable.Item"
+                <div v-else-if="Type === TableType.Item"
                      ref="tableBody"
                      :id="'lkt-table-body-' + uniqueId"
                      class="lkt-table-items-container"
@@ -792,7 +800,7 @@ const hasEmptySlot = computed(() => {
                     </template>
                 </div>
 
-                <ul v-else-if="TypeOfTable.Ul" class="lkt-table-items-container" :class="itemsContainerClass">
+                <ul v-else-if="TableType.Ul" class="lkt-table-items-container" :class="itemsContainerClass">
                     <template
                         v-for="(item, i) in Items">
                         <li class="lkt-table-item" v-if="canDisplayItem(item, i)" :data-i="i">
@@ -811,7 +819,7 @@ const hasEmptySlot = computed(() => {
                     </template>
                 </ul>
 
-                <ol v-else-if="TypeOfTable.Ul" class="lkt-table-items-container" :class="itemsContainerClass">
+                <ol v-else-if="TableType.Ul" class="lkt-table-items-container" :class="itemsContainerClass">
                     <template
                         v-for="(item, i) in Items">
                         <li class="lkt-table-item" v-if="canDisplayItem(item, i)" :data-i="i">

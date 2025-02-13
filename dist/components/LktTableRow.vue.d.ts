@@ -1,0 +1,75 @@
+import { Column, LktObject, ValidTableRowTypeValue } from "lkt-vue-kernel";
+type __VLS_Props = {
+    modelValue: LktObject;
+    isDraggable: boolean;
+    sortable: boolean;
+    displayHiddenColumnsIndicator: boolean;
+    hiddenIsVisible: boolean;
+    addNavigation: boolean;
+    latestRow: boolean;
+    canDrop: boolean;
+    canEdit: boolean;
+    editModeEnabled: boolean;
+    hasInlineEditPerm: boolean;
+    i: number;
+    visibleColumns: Column[];
+    emptyColumns: string[];
+    dropConfirm: string;
+    dropText: string;
+    dropIcon: string;
+    dropResource: string;
+    editText: string;
+    editIcon: string;
+    editLink: string;
+    rowDisplayType: ValidTableRowTypeValue;
+    renderDrag?: boolean | Function;
+    disabledDrag?: boolean | Function;
+};
+declare function __VLS_template(): any;
+type __VLS_TemplateResult = ReturnType<typeof __VLS_template>;
+declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
+    show: (...args: any[]) => void;
+    click: (...args: any[]) => void;
+    "update:modelValue": (...args: any[]) => void;
+    "item-up": (...args: any[]) => void;
+    "item-down": (...args: any[]) => void;
+    "item-drop": (...args: any[]) => void;
+}, string, import("vue").PublicProps, Readonly<__VLS_Props> & Readonly<{
+    onShow?: ((...args: any[]) => any) | undefined;
+    onClick?: ((...args: any[]) => any) | undefined;
+    "onUpdate:modelValue"?: ((...args: any[]) => any) | undefined;
+    "onItem-up"?: ((...args: any[]) => any) | undefined;
+    "onItem-down"?: ((...args: any[]) => any) | undefined;
+    "onItem-drop"?: ((...args: any[]) => any) | undefined;
+}>, {
+    i: number;
+    sortable: boolean;
+    modelValue: LktObject;
+    rowDisplayType: ValidTableRowTypeValue;
+    renderDrag: boolean | Function;
+    disabledDrag: boolean | Function;
+    dropText: string;
+    dropIcon: string;
+    editText: string;
+    editIcon: string;
+    editLink: string;
+    dropConfirm: string;
+    dropResource: string;
+    addNavigation: boolean;
+    editModeEnabled: boolean;
+    isDraggable: boolean;
+    displayHiddenColumnsIndicator: boolean;
+    hiddenIsVisible: boolean;
+    latestRow: boolean;
+    canDrop: boolean;
+    canEdit: boolean;
+    visibleColumns: Column[];
+    emptyColumns: string[];
+}, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
+declare const _default: __VLS_WithTemplateSlots<typeof __VLS_component, __VLS_TemplateResult["slots"]>;
+export default _default;
+type __VLS_WithTemplateSlots<T, S> = T & {
+    new (): {
+        $slots: S;
+    };
+};

@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import {getColumnDisplayContent} from "../functions/table-functions";
 import {computed, ref, watch} from "vue";
-import {LktObject} from "lkt-ts-interfaces";
-import {Column, ColumnType} from "lkt-vue-kernel";
+import {Column, ColumnType, LktObject} from "lkt-vue-kernel";
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -69,6 +68,7 @@ const computedModalData = computed(() => {
     <template v-else-if="column.type === ColumnType.Button">
         <lkt-button
             v-bind="column.button"
+            :prop="item"
         >{{ getColumnDisplayContent(column, item, i) }}</lkt-button>
     </template>
     <template v-else-if="column.type === ColumnType.Field && hasInlineEditPerm">

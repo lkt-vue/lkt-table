@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed} from "vue";
 import {Settings} from "../settings/Settings";
-import {LktObject} from "lkt-ts-interfaces";
+import {LktObject} from "lkt-vue-kernel";
 
 const emit = defineEmits(['click']);
 

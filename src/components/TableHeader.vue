@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import {getColumnClasses, getVerticalColSpan} from "../functions/table-functions";
-import {Column} from "lkt-vue-kernel";
+import {Column, LktObject} from "lkt-vue-kernel";
 import {computed} from "vue";
-import {LktObject} from "lkt-ts-interfaces";
 import {__} from "lkt-i18n";
 
 const emit = defineEmits(['click']);

@@ -1,19 +1,18 @@
 <script lang="ts" setup>
 import {
     canRenderColumn,
-    colPreferSlot, getColumnClasses,
+    colPreferSlot,
+    getColumnClasses,
     getColumnDisplayContent,
     getHorizontalColSpan
 } from "../functions/table-functions";
 import LktTableCell from "./LktTableCell.vue";
 import {computed, ref, useSlots, watch} from "vue";
-import {LktObject} from "lkt-ts-interfaces";
 import {Settings} from "../settings/Settings";
 import DropButton from "./DropButton.vue";
 import EditButton from "./EditButton.vue";
 import {replaceAll} from "lkt-string-tools";
-import {RowDisplayType} from "../enums/RowDisplayType";
-import {Column} from "lkt-vue-kernel";
+import {Column, LktObject, TableRowType, ValidTableRowTypeValue} from "lkt-vue-kernel";
 
 const slots = useSlots();
 const emit = defineEmits(['update:modelValue', 'click', 'show', 'item-up', 'item-down', 'item-drop']);
@@ -40,7 +39,7 @@ const props = withDefaults(defineProps<{
     editText: string
     editIcon: string
     editLink: string
-    rowDisplayType: RowDisplayType | Function
+    rowDisplayType: ValidTableRowTypeValue
     renderDrag?: boolean | Function
     disabledDrag?: boolean | Function
 }>(), {
@@ -64,7 +63,7 @@ const props = withDefaults(defineProps<{
     editText: '',
     editIcon: '',
     editLink: '',
-    rowDisplayType: RowDisplayType.Auto,
+    rowDisplayType: TableRowType.Auto,
     renderDrag: true,
     disabledDrag: true,
 });
@@ -72,10 +71,10 @@ const props = withDefaults(defineProps<{
 const Item = ref(props.modelValue);
 
 let calculatedRowDisplayType = typeof props.rowDisplayType === 'function' ? props.rowDisplayType(Item.value, props.i) : props.rowDisplayType;
-if (!calculatedRowDisplayType) calculatedRowDisplayType = RowDisplayType.Auto;
+if (!calculatedRowDisplayType) calculatedRowDisplayType = TableRowType.Auto;
 
-const canCustomItem = [RowDisplayType.Auto, RowDisplayType.PreferCustomItem].includes(calculatedRowDisplayType);
-const canItem = [RowDisplayType.Auto, RowDisplayType.PreferItem].includes(calculatedRowDisplayType);
+const canCustomItem = [TableRowType.Auto, TableRowType.PreferCustomItem].includes(calculatedRowDisplayType);
+const canItem = [TableRowType.Auto, TableRowType.PreferItem].includes(calculatedRowDisplayType);
 
 const parsedEditLink = ref(props.editLink);
 for (let k in Item.value) parsedEditLink.value = replaceAll(parsedEditLink.value, ':' + k, Item.value[k]);

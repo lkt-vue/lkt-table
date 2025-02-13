@@ -2,8 +2,7 @@
 import {getColumnDisplayContent} from "../functions/table-functions";
 import LktTableCell from "./LktTableCell.vue";
 import {ref, watch} from "vue";
-import {LktObject} from "lkt-ts-interfaces";
-import {Column} from "lkt-vue-kernel";
+import {LktObject, Column} from "lkt-vue-kernel";
 
 const emit = defineEmits(['update:modelValue', 'click']);
 
@@ -17,6 +16,8 @@ const props = withDefaults(defineProps<{
     visibleColumns: Column[]
     hiddenColumns: Column[]
     emptyColumns: string[]
+    editModeEnabled: boolean
+    hasInlineEditPerm: boolean
 }>(), {
     modelValue: () => ({}),
     isDraggable: true,
@@ -27,6 +28,8 @@ const props = withDefaults(defineProps<{
     visibleColumns: () => [],
     hiddenColumns: () => [],
     emptyColumns: () => [],
+    editModeEnabled: false,
+    hasInlineEditPerm: false,
 });
 
 const item = ref(props.modelValue);
@@ -50,7 +53,7 @@ watch(item, () => emit('update:modelValue', item.value));
                     <td v-for="(column, i) in hiddenColumns"
                         v-bind:data-column="column.key"
                         v-bind:title="getColumnDisplayContent (column, item, i, hiddenColumns)"
-                        v-on:click="onClick($event, item, column)">
+                        v-on:click="onClick($event)">
                         <template v-if="!!$slots[column.key]">
                             <slot v-bind:name="column.key"
                                   v-bind:value="item[column.key]"
@@ -59,7 +62,14 @@ watch(item, () => emit('update:modelValue', item.value));
                                   v-bind:i="i"/>
                         </template>
                         <template v-else>
-                            <lkt-table-cell :column="column" :columns="hiddenColumns" v-model="item" :i="i"/>
+                            <lkt-table-cell
+                                :column="column"
+                                :columns="hiddenColumns"
+                                v-model="item"
+                                :i="i"
+                                :edit-mode-enabled="editModeEnabled"
+                                :has-inline-edit-perm="hasInlineEditPerm"
+                            />
                         </template>
                     </td>
                 </tr>
