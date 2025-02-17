@@ -1,5 +1,5 @@
 import {__} from "lkt-i18n";
-import {Column, ColumnConfig, LktObject} from "lkt-vue-kernel";
+import {Column, ColumnConfig, LktObject, SortDirection} from "lkt-vue-kernel";
 
 /**
  *
@@ -17,13 +17,13 @@ export const createColumn = (data: ColumnConfig): Column => {
  * @param sortDirection
  * @returns {number}
  */
-export const defaultTableSorter = (a: any, b: any, c: Column, sortDirection: string): number => {
+export const defaultTableSorter = (a: any, b: any, c: Column, sortDirection: SortDirection): number => {
     if (!c) return 0;
 
     let A = a[c.key],
         B = b[c.key];
 
-    if (sortDirection === 'asc') {
+    if (sortDirection === SortDirection.Asc) {
         if (A > B) return 1;
         if (B > A) return -1;
     } else {

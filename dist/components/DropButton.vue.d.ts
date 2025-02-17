@@ -12,11 +12,11 @@ declare const _default: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {
 }, string, import("vue").PublicProps, Readonly<__VLS_Props> & Readonly<{
     onClick?: ((...args: any[]) => any) | undefined;
 }>, {
-    text: string;
     disabled: boolean;
-    confirm: string;
-    icon: string;
     resource: string;
     resourceData: LktObject;
+    text: string;
+    icon: string;
+    confirm: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 export default _default;

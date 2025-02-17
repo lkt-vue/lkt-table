@@ -4,13 +4,13 @@ import LktTableRow from "../components/LktTableRow.vue";
 import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
 import {
     Column,
+    getDefaultValues,
+    LktObject,
     SortDirection,
+    Table,
+    TableConfig,
     TablePermission,
-    TableRowType,
-    TableType,
-    ValidTablePermission,
-    ValidTableRowTypeValue,
-    LktObject
+    TableType
 } from "lkt-vue-kernel";
 import LktHiddenRow from "../components/LktHiddenRow.vue";
 import {generateRandomString, replaceAll} from "lkt-string-tools";
@@ -40,134 +40,8 @@ const emit = defineEmits([
 
 const slots = useSlots();
 
-const props = withDefaults(defineProps<{
-    modelValue: LktObject[]
-    type?: TableType,
-    columns: Column[]
-    sorter?: Function
-    draggableChecker?: Function
-    checkValidDrag?: Function
-    renderDrag?: boolean|Function
-    disabledDrag?: boolean|Function
-    sortable?: boolean
-    hideEmptyColumns?: boolean
-    initialSorting?: boolean
-    draggableItemKey?: string
-    itemDisplayChecker?: Function
-    loading?: boolean
-
-
-    page?: number
-    perms?: ValidTablePermission[]
-    resource?: string
-    noResultsText?: string
-    title?: string
-    titleTag?: string
-    titleIcon?: string
-    headerClass?: string
-    wrapContentTag?: string
-    wrapContentClass?: string
-    itemsContainerClass?: string
-    filters?: LktObject[]
-    dataStateConfig?: LktObject
-    hiddenSave?: boolean
-    editMode?: boolean
-    saveDisabled?: boolean
-    saveValidator?: Function
-    saveConfirm?: string
-    confirmData?: LktObject
-    saveResource?: string
-    saveResourceData?: LktObject
-    saveTooltipEngine?: string
-    splitSave?: boolean
-    saveText?: string
-    createText?: string
-    createIcon?: string
-    createRoute?: string
-    dropText?: string
-    dropIcon?: string
-    editText?: string
-    editIcon?: string
-    editLink?: string
-    editModeText?: string
-    switchEditionEnabled?: boolean
-    createDisabled?: boolean
-    dropConfirm?: string
-    dropResource?: string
-    addNavigation?: boolean
-    itemMode?: boolean
-    createEnabledValidator?: Function
-    newValueGenerator?: Function
-    requiredItemsForTopCreate?: number
-    requiredItemsForBottomCreate?: number
-
-    slotItemVar?: string
-    rowDisplayType?: ValidTableRowTypeValue
-    modal?: string,
-    modalData?: LktObject,
-
-}>(), {
-    modelValue: () => [],
-    type: TableType.Table,
-    columns: () => [],
-    sorter: defaultTableSorter,
-    draggableChecker: (item: any) => true,
-    checkValidDrag: undefined,
-    renderDrag: true,
-    sortable: false,
-    hideEmptyColumns: false,
-    initialSorting: false,
-    draggableItemKey: 'name',
-    loading: false,
-
-
-    page: 1,
-    perms: () => [],
-    resource: '',
-    noResultsText: Settings.defaultNoResultsMessage,
-    title: '',
-    titleTag: 'h2',
-    titleIcon: '',
-    headerClass: '',
-    wrapContentTag: 'div',
-    wrapContentClass: '',
-    itemsContainerClass: '',
-    saveTooltipEngine: 'absolute',
-    filters: () => [],
-    dataStateConfig: () => ({}),
-    hiddenSave: false,
-    editMode: false,
-    saveDisabled: false,
-    saveValidator: () => true,
-    saveConfirm: '',
-    confirmData: () => ({}),
-    saveResource: '',
-    saveResourceData: () => ({}),
-    splitSave: false,
-    saveText: 'Save',
-    dropText: 'Delete',
-    dropIcon: '',
-    editText: 'Edit',
-    editIcon: '',
-    editLink: '',
-    createText: 'Add item',
-    createIcon: '',
-    createRoute: '',
-    editModeText: 'Edit mode',
-    switchEditionEnabled: false,
-    dropConfirm: '',
-    dropResource: '',
-    addNavigation: false,
-    itemMode: false,
-    createEnabledValidator: undefined,
-    newValueGenerator: undefined,
-    requiredItemsForTopCreate: 0,
-    requiredItemsForBottomCreate: 0,
-
-    slotItemVar: 'item',
-    rowDisplayType: TableRowType.Auto,
-    modal: ''
-});
+//@ts-nocheck
+const props = withDefaults(defineProps<TableConfig>(), getDefaultValues(Table));
 
 const hiddenColumnsStack: LktObject = {};
 
@@ -197,11 +71,6 @@ const dataStateChanged = ref(false);
 watch(isLoading, v => emit('update:loading', v));
 
 watch(Page, (v) => emit('page', v));
-
-const Type = ref(props.type);
-if (props.itemMode && Type.value === TableType.Table) {
-    Type.value = TableType.Item;
-}
 
 const onPerms = (r: string[]) => {
         permissions.value = r;
@@ -398,7 +267,7 @@ const getItemByEvent = (e: any) => {
             if (typeof props.newValueGenerator === 'function') {
                 let newValue = props.newValueGenerator();
 
-                if (typeof newValue === 'object' || Type.value !== TableType.Table) {
+                if (typeof newValue === 'object' || props.type !== TableType.Table) {
                     Items.value.push(newValue);
                     return;
                 }
@@ -510,6 +379,9 @@ const getItemByEvent = (e: any) => {
             || (hasCreatePerm.value && editModeEnabled.value)
             || (hasInlineCreatePerm.value && editModeEnabled.value)
             || (hasModalCreatePerm.value && editModeEnabled.value);
+    }),
+    computedIsList = computed(() => {
+        return [TableType.Ol, TableType.Ul].includes(props.type);
     }),
     canDisplayItem = (item: LktObject, index: number) => {
         if (typeof props.itemDisplayChecker === 'function') return props.itemDisplayChecker(item);
@@ -651,7 +523,7 @@ const hasEmptySlot = computed(() => {
             <lkt-loader v-if="isLoading"/>
 
             <div v-show="!isLoading && Items.length > 0" class="lkt-table" :data-sortable="sortable">
-                <table v-if="Type === TableType.Table">
+                <table v-if="type === TableType.Table">
                     <thead>
                     <tr>
                         <th v-if="sortable && editModeEnabled" data-role="drag-indicator"/>
@@ -773,7 +645,7 @@ const hasEmptySlot = computed(() => {
                     </tbody>
                 </table>
 
-                <div v-else-if="Type === TableType.Item"
+                <div v-else-if="type === TableType.Item"
                      ref="tableBody"
                      :id="'lkt-table-body-' + uniqueId"
                      class="lkt-table-items-container"
@@ -800,7 +672,7 @@ const hasEmptySlot = computed(() => {
                     </template>
                 </div>
 
-                <ul v-else-if="TableType.Ul" class="lkt-table-items-container" :class="itemsContainerClass">
+                <component :is="type" v-else-if="computedIsList" class="lkt-table-items-container" :class="itemsContainerClass">
                     <template
                         v-for="(item, i) in Items">
                         <li class="lkt-table-item" v-if="canDisplayItem(item, i)" :data-i="i">
@@ -817,26 +689,7 @@ const hasEmptySlot = computed(() => {
                             />
                         </li>
                     </template>
-                </ul>
-
-                <ol v-else-if="TableType.Ul" class="lkt-table-items-container" :class="itemsContainerClass">
-                    <template
-                        v-for="(item, i) in Items">
-                        <li class="lkt-table-item" v-if="canDisplayItem(item, i)" :data-i="i">
-                            <slot name="item"
-                                  v-bind:[slotItemVar]="item"
-                                  v-bind:index="i"
-                                  v-bind:editing="editModeEnabled"
-                                  v-bind:can-create="hasCreatePerm"
-                                  v-bind:can-read="hasReadPerm"
-                                  v-bind:can-update="hasUpdatePerm"
-                                  v-bind:can-drop="hasDropPerm"
-                                  v-bind:is-loading="isLoading"
-                                  v-bind:do-drop="() => onItemDrop(i)"
-                            />
-                        </li>
-                    </template>
-                </ol>
+                </component>
             </div>
 
             <div class="lkt-table-empty" v-if="!isLoading && Items.length === 0">

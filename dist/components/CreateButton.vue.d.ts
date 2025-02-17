@@ -14,10 +14,10 @@ declare const _default: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {
     onClick?: ((...args: any[]) => any) | undefined;
     onAppend?: ((...args: any[]) => any) | undefined;
 }>, {
-    text: string;
-    disabled: boolean;
     to: string;
-    icon: string;
+    disabled: boolean;
     modal: string;
+    text: string;
+    icon: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 export default _default;

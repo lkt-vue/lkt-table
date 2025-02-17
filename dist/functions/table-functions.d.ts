@@ -1,4 +1,4 @@
-import { Column, ColumnConfig, LktObject } from "lkt-vue-kernel";
+import { Column, ColumnConfig, LktObject, SortDirection } from "lkt-vue-kernel";
 /**
  *
  * @param data
@@ -12,7 +12,7 @@ export declare const createColumn: (data: ColumnConfig) => Column;
  * @param sortDirection
  * @returns {number}
  */
-export declare const defaultTableSorter: (a: any, b: any, c: Column, sortDirection: string) => number;
+export declare const defaultTableSorter: (a: any, b: any, c: Column, sortDirection: SortDirection) => number;
 /**
  *
  * @param column

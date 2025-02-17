@@ -25,15 +25,15 @@ declare function __VLS_template(): {
 };
 type __VLS_TemplateResult = ReturnType<typeof __VLS_template>;
 declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
-    click: (...args: any[]) => void;
     "update:modelValue": (...args: any[]) => void;
+    click: (...args: any[]) => void;
 }, string, import("vue").PublicProps, Readonly<__VLS_Props> & Readonly<{
-    onClick?: ((...args: any[]) => any) | undefined;
     "onUpdate:modelValue"?: ((...args: any[]) => any) | undefined;
+    onClick?: ((...args: any[]) => any) | undefined;
 }>, {
-    i: number;
     sortable: boolean;
     modelValue: LktObject;
+    i: number;
     editModeEnabled: boolean;
     hasInlineEditPerm: boolean;
     isDraggable: boolean;

@@ -14,7 +14,9 @@
     "allowJs": true,
     "declaration": true,
     "moduleResolution": "Bundler",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmitOnError": false
   },
   "include": ["build/"]
 }

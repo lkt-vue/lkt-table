@@ -1,12 +1,12 @@
-import { Column as zl } from "lkt-vue-kernel";
-declare function Nl(n: any): Re;
-declare namespace Ul {
-    function install(n: any): void;
+import { Column as Jl } from "lkt-vue-kernel";
+declare function Al(o: any): we;
+declare namespace Ol {
+    function install(o: any): void;
 }
-declare function Hl(n: any): boolean;
-declare function Ol(n: any): boolean;
-declare function Wl(n: any): void;
-declare function Al(n: any): boolean;
-declare function ql(n: any): void;
-import { Column as Re } from "lkt-vue-kernel";
-export { zl as Column, Nl as createColumn, Ul as default, Hl as setTableCreateButtonSlot, Ol as setTableDropButtonSlot, Wl as setTableEmptySlot, Al as setTableNavButtonSlot, ql as setTableSaveIcon };
+declare function ql(o: any): boolean;
+declare function Wl(o: any): boolean;
+declare function jl(o: any): void;
+declare function Hl(o: any): boolean;
+declare function Kl(o: any): void;
+import { Column as we } from "lkt-vue-kernel";
+export { Jl as Column, Al as createColumn, Ol as default, ql as setTableCreateButtonSlot, Wl as setTableDropButtonSlot, jl as setTableEmptySlot, Hl as setTableNavButtonSlot, Kl as setTableSaveIcon };
