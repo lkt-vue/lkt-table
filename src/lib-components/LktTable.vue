@@ -3,7 +3,9 @@ import {defaultTableSorter, getColumnByKey, getDefaultSortColumn} from "../funct
 import LktTableRow from "../components/LktTableRow.vue";
 import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
 import {
+    ButtonType,
     Column,
+    extractI18nValue,
     getDefaultValues,
     LktObject,
     SortDirection,
@@ -19,7 +21,6 @@ import {HTTPResponse} from "lkt-http-client";
 import CreateButton from "../components/CreateButton.vue";
 import Sortable from 'sortablejs';
 import TableHeader from "../components/TableHeader.vue";
-import {__} from "lkt-i18n";
 import {time} from "lkt-date-tools";
 import {Settings} from "../settings/Settings";
 
@@ -47,23 +48,23 @@ const hiddenColumnsStack: LktObject = {};
 
 const Sorter = ref(typeof props.sorter === 'function' ? props.sorter : defaultTableSorter),
     SortBy = ref(getDefaultSortColumn(props.columns)),
-    SortingDirection = ref(<SortDirection>SortDirection.Asc),
+    SortingDirection = ref(SortDirection.Asc),
     Items = ref(props.modelValue),
     Hidden = ref(hiddenColumnsStack),
-    tableBody = ref(<HTMLElement|null>null),
+    tableBody = ref(<HTMLElement | null>null),
     Columns = ref(props.columns);
 
-const Page = ref(props.page),
+const Page = ref(props.paginator?.modelValue),
     isLoading = ref(props.loading),
     firstLoadReady = ref(false),
     permissions = ref(props.perms),
-    paginator = ref(null),
+    paginatorRef = ref(null),
     element = ref(null),
     sortableObject = ref({}),
-    dataState = ref(new DataState({items: Items.value}, props.dataStateConfig)),
+    dataState = ref(<DataState>new DataState({items: Items.value}, props.dataStateConfig)),
     editModeEnabled = ref(props.editMode),
     updateTimeStamp = ref(0),
-    sortableContainer = ref(<HTMLElement|null>null)
+    sortableContainer = ref(<HTMLElement | null>null)
 ;
 
 const dataStateChanged = ref(false);
@@ -83,13 +84,14 @@ const onPerms = (r: string[]) => {
         dataState.value.store({items: Items.value}).turnStoredIntoOriginal();
         dataStateChanged.value = false;
         nextTick(() => {
+            saveIsDisabled.value; // Force calc call
             emit('read-response', r);
         })
     },
     onLoading = () => nextTick(() => isLoading.value = true),
     doRefresh = () => {
         //@ts-ignore
-        paginator.value.doRefresh();
+        paginatorRef.value.doRefresh();
     };
 
 
@@ -142,7 +144,7 @@ const emptyColumns = computed(() => {
     showSaveButton = computed(() => {
         if (props.hiddenSave) return false;
         if (isLoading.value) return false;
-        if (!props.saveResource) return false;
+        if (!(props.saveButton?.resource || props.saveButton.type)) return false;
         if (editModeEnabled.value && dataStateChanged.value) return true;
 
         return editModeEnabled.value;
@@ -152,10 +154,14 @@ const emptyColumns = computed(() => {
         if (props.switchEditionEnabled) return true;
         return showSaveButton.value || (editModeEnabled.value && hasCreatePerm.value);
     }),
-    ableToSave = computed(() => {
-        if (props.saveDisabled) return false;
-        if (typeof props.saveValidator === 'function' && !props.saveValidator(Items.value)) return false;
-        return dataStateChanged.value;
+    saveIsDisabled = computed(() => {
+        updateTimeStamp.value;
+        if (typeof props.saveButton?.disabled === 'function') return props.saveButton.disabled({
+            value: Items.value,
+            dataState: <DataState>dataState.value,
+        });
+        if (typeof props.saveButton?.disabled === 'boolean') return props.saveButton.disabled;
+        return !dataStateChanged.value;
     }),
     amountOfItems = computed(() => {
         return Items.value.length;
@@ -163,7 +169,7 @@ const emptyColumns = computed(() => {
     computedSaveResourceData = computed(() => {
         return {
             items: Items.value,
-            ...props.saveResourceData
+            ...props.saveButton?.resourceData
         }
     }),
     computedTitleTag = computed(() => {
@@ -175,22 +181,13 @@ const emptyColumns = computed(() => {
         return props.wrapContentTag;
     }),
     computedTitle = computed(() => {
-        if (props.title.startsWith('__:')) {
-            return __(props.title.substring(3));
-        }
-        return props.title;
-    }),
-    computedSaveText = computed(() => {
-        if (props.saveText.startsWith('__:')) {
-            return __(props.saveText.substring(3));
-        }
-        return props.saveText;
+        return extractI18nValue(props.title);
     }),
     computedEditModeText = computed(() => {
-        if (props.editModeText.startsWith('__:')) {
-            return __(props.editModeText.substring(3));
-        }
-        return props.editModeText;
+        return extractI18nValue(props.editModeText);
+    }),
+    computedDragModeEnabled = computed(() => {
+        return props.drag?.enabled;
     }),
     hasCreatePerm = computed(() => permissions.value.includes(TablePermission.Create)),
     hasReadPerm = computed(() => permissions.value.includes('read')),
@@ -248,13 +245,12 @@ const getItemByEvent = (e: any) => {
     },
     validDragChecker = (evt: any) => {
         let targetIndex = parseInt(evt?.originalEvent?.toElement?.closest('tr')?.dataset?.i);
-        if (typeof props.disabledDrag === 'function' && props.disabledDrag(Items.value[targetIndex])) return false;
-        if (typeof props.disabledDrag === 'boolean' && props.disabledDrag) return false;
-        if (typeof props.checkValidDrag === 'function') return props.checkValidDrag(evt);
+        if (typeof props.drag?.isValid === 'function' && !props.drag?.isValid(Items.value[targetIndex])) return false;
+        if (typeof props.drag?.isValid === 'boolean' && !props.drag?.isValid) return false;
         return true;
     },
     isDraggable = (element: any) => {
-        if (typeof props.draggableChecker === 'function') return props.draggableChecker(element);
+        if (typeof props.drag?.isDraggable === 'function') return props.drag?.isDraggable(element);
         return true;
     },
     onClickAddItem = () => {
@@ -280,15 +276,21 @@ const getItemByEvent = (e: any) => {
     onAppend = (data: LktObject) => {
         Items.value.push(data);
     },
-    onButtonLoading = () => {
-        isLoading.value = true;
-    },
-    onButtonLoaded = () => {
-        isLoading.value = false;
-    },
+    onButtonLoading = () => isLoading.value = true,
+    onButtonLoaded = () => isLoading.value = false,
     onSave = ($event: PointerEvent, r: HTTPResponse) => {
+        if (props.saveButton?.type) {
+            if ([
+                ButtonType.Split,
+                ButtonType.SplitEver,
+                ButtonType.SplitLazy,
+            ].includes(props.saveButton?.type)) {
+                return;
+            }
+        }
+
         emit('before-save');
-        if (props.saveResource) {
+        if (props.saveButton?.resource) {
             isLoading.value = false;
             if (!r.success) {
                 emit('error', r.httpStatus);
@@ -394,14 +396,14 @@ onMounted(() => {
     }
     dataState.value.store({items: Items.value}).turnStoredIntoOriginal();
     dataStateChanged.value = false;
-    if (props.sortable) {
+    if (props.drag?.enabled) {
         nextTick(() => {
             initSortable();
         })
     }
 })
 
-watch(() => props.sortable, (v) => {
+watch(() => props.drag?.enabled, (v) => {
     if (v) {
         initSortable();
     } else {
@@ -426,6 +428,12 @@ defineExpose({
     getRowByIndex,
     doRefresh,
     getHtml: () => element.value,
+    turnStoredIntoOriginal: () => {
+        dataState.value.turnStoredIntoOriginal();
+        nextTick(()=> {
+            updateTimeStamp.value = time();
+        })
+    },
 });
 
 const hasEmptySlot = computed(() => {
@@ -461,14 +469,9 @@ const hasEmptySlot = computed(() => {
                     class="lkt-table--save-button"
                     ref="saveButton"
                     v-show="showSaveButton"
-                    :icon="Settings.defaultSaveIcon"
-                    :disabled="!ableToSave"
-                    :confirm-modal="saveConfirm"
-                    :confirm-data="confirmData"
-                    :resource="saveResource"
-                    :resource-data="computedSaveResourceData"
-                    :split="splitSave"
-                    :tooltip-engine="saveTooltipEngine"
+                    v-bind="saveButton"
+                    :disabled="saveIsDisabled"
+                    :modal-data="computedSaveResourceData"
                     v-on:loading="onButtonLoading"
                     v-on:loaded="onButtonLoaded"
                     v-on:click="onSave">
@@ -476,8 +479,7 @@ const hasEmptySlot = computed(() => {
                           name="button-save"
                           :items="Items"
                           :edit-mode="editMode"
-                          :can-update="!saveDisabled"></slot>
-                    <span v-else>{{ computedSaveText }}</span>
+                          :can-update="!saveIsDisabled"/>
 
                     <template v-slot:split="{doClose, doRootClick}">
                         <slot name="button-save-split"
@@ -485,18 +487,14 @@ const hasEmptySlot = computed(() => {
                               :do-root-click="doRootClick"
                               :data-state="dataState"
                               :on-button-loading="onButtonLoading"
-                              :on-button-loaded="onButtonLoaded" />
+                              :on-button-loaded="onButtonLoaded"/>
                     </template>
                 </lkt-button>
 
                 <create-button
                     v-if="computedDisplayCreateButton && Items.length >= requiredItemsForTopCreate"
+                    :config="createButton"
                     :disabled="!createEnabled || createDisabled"
-                    :text="createText"
-                    :icon="createIcon"
-                    :to="createRoute"
-                    :modal="modal"
-                    :modal-data="modalData"
                     @click="onClickAddItem"
                     @append="onAppend"
                 />
@@ -522,11 +520,11 @@ const hasEmptySlot = computed(() => {
 
             <lkt-loader v-if="isLoading"/>
 
-            <div v-show="!isLoading && Items.length > 0" class="lkt-table" :data-sortable="sortable">
+            <div v-show="!isLoading && Items.length > 0" class="lkt-table">
                 <table v-if="type === TableType.Table">
                     <thead>
                     <tr>
-                        <th v-if="sortable && editModeEnabled" data-role="drag-indicator"/>
+                        <th v-if="computedDragModeEnabled && editModeEnabled" data-role="drag-indicator"/>
                         <th v-if="addNavigation && editModeEnabled"/>
                         <th v-if="displayHiddenColumnsIndicator"/>
                         <template v-for="column in visibleColumns">
@@ -554,94 +552,94 @@ const hasEmptySlot = computed(() => {
                         ref="tableBody"
                         :id="'lkt-table-body-' + uniqueId"
                     >
-                        <lkt-table-row
-                            v-for="(item, i) in Items"
-                            v-model="Items[i]"
-                            v-show="canDisplayItem(Items[i], i)"
-                            :key="getRowKey(item, i)"
-                            :i="i"
-                            :display-hidden-columns-indicator="displayHiddenColumnsIndicator"
-                            :is-draggable="isDraggable(item)"
-                            :sortable="sortable"
-                            :visible-columns="visibleColumns"
-                            :empty-columns="emptyColumns"
-                            :add-navigation="addNavigation"
-                            :hidden-is-visible="isVisible(i)"
-                            :latest-row="i+1 === amountOfItems"
-                            :can-drop="hasDropPerm && editModeEnabled"
-                            :drop-confirm="dropConfirm"
-                            :drop-resource="dropResource"
-                            :drop-text="dropText"
-                            :drop-icon="dropIcon"
-                            :can-edit="hasEditPerm && hasUpdatePerm && editModeEnabled"
-                            :edit-text="editText"
-                            :edit-icon="editIcon"
-                            :edit-link="editLink"
-                            :edit-mode-enabled="editModeEnabled"
-                            :has-inline-edit-perm="hasInlineEditPerm"
-                            :row-display-type="rowDisplayType"
-                            :render-drag="renderDrag"
-                            :disabled-drag="disabledDrag"
-                            v-on:click="onClick"
-                            v-on:show="show"
-                            v-on:item-up="onItemUp"
-                            v-on:item-down="onItemDown"
-                            v-on:item-drop="onItemDrop"
-                        >
-                            <template v-if="slots[`item-${i}`]" v-slot:[`item-${i}`]="row">
-                                <slot
-                                    :name="`item-${i}`"
-                                    :[slotItemVar]="row.item"
-                                    v-bind:index="i"
-                                />
-                            </template>
-                            <template v-else-if="slots.item" #item="row">
-                                <slot
-                                    name="item"
-                                    :[slotItemVar]="row.item"
-                                    v-bind:index="i"
-                                />
-                            </template>
-                            <template
-                                v-for="column in colSlots"
-                                v-slot:[column]="row">
-                                <slot
-                                    :name="column"
-                                    :[slotItemVar]="row.item"
-                                    :value="row.value"
-                                    :column="row.column"
-                                />
-                            </template>
-                        </lkt-table-row>
-                        <lkt-hidden-row
-                            v-if="hiddenColumns.length > 0"
-                            v-model="Items[i]"
-                            v-for="(item, i) in Items"
-                            :key="getRowKey(item, i, true)"
-                            :i="i"
-                            :hidden-columns="hiddenColumns"
-                            :hidden-columns-col-span="hiddenColumnsColSpan"
-                            :is-draggable="isDraggable(item)"
-                            :sortable="sortable"
-                            :visible-columns="visibleColumns"
-                            :empty-columns="emptyColumns"
-                            :hidden-is-visible="isVisible(i)"
-                            :edit-mode-enabled="editModeEnabled"
-                            :has-inline-edit-perm="hasInlineEditPerm"
-                            v-on:click="onClick"
-                            v-on:show="show"
-                        >
-                            <template
-                                v-for="column in colSlots"
-                                v-slot:[column]="row">
-                                <slot
-                                    :name="column"
-                                    :[slotItemVar]="row.item"
-                                    :value="row.value"
-                                    :column="row.column"
-                                />
-                            </template>
-                        </lkt-hidden-row>
+                    <lkt-table-row
+                        v-for="(item, i) in Items"
+                        v-model="Items[i]"
+                        v-show="canDisplayItem(Items[i], i)"
+                        :key="getRowKey(item, i)"
+                        :i="i"
+                        :display-hidden-columns-indicator="displayHiddenColumnsIndicator"
+                        :is-draggable="isDraggable(item)"
+                        :sortable="computedDragModeEnabled"
+                        :visible-columns="visibleColumns"
+                        :empty-columns="emptyColumns"
+                        :add-navigation="addNavigation"
+                        :hidden-is-visible="isVisible(i)"
+                        :latest-row="i+1 === amountOfItems"
+                        :can-drop="hasDropPerm && editModeEnabled"
+                        :drop-confirm="dropConfirm"
+                        :drop-resource="dropResource"
+                        :drop-text="dropText"
+                        :drop-icon="dropIcon"
+                        :can-edit="hasEditPerm && hasUpdatePerm && editModeEnabled"
+                        :edit-text="editText"
+                        :edit-icon="editIcon"
+                        :edit-link="editLink"
+                        :edit-mode-enabled="editModeEnabled"
+                        :has-inline-edit-perm="hasInlineEditPerm"
+                        :row-display-type="rowDisplayType"
+                        :render-drag="drag?.canRender"
+                        :disabled-drag="drag?.isDisabled"
+                        v-on:click="onClick"
+                        v-on:show="show"
+                        v-on:item-up="onItemUp"
+                        v-on:item-down="onItemDown"
+                        v-on:item-drop="onItemDrop"
+                    >
+                        <template v-if="slots[`item-${i}`]" v-slot:[`item-${i}`]="row">
+                            <slot
+                                :name="`item-${i}`"
+                                :[slotItemVar]="row.item"
+                                v-bind:index="i"
+                            />
+                        </template>
+                        <template v-else-if="slots.item" #item="row">
+                            <slot
+                                name="item"
+                                :[slotItemVar]="row.item"
+                                v-bind:index="i"
+                            />
+                        </template>
+                        <template
+                            v-for="column in colSlots"
+                            v-slot:[column]="row">
+                            <slot
+                                :name="column"
+                                :[slotItemVar]="row.item"
+                                :value="row.value"
+                                :column="row.column"
+                            />
+                        </template>
+                    </lkt-table-row>
+                    <lkt-hidden-row
+                        v-if="hiddenColumns.length > 0"
+                        v-model="Items[i]"
+                        v-for="(item, i) in Items"
+                        :key="getRowKey(item, i, true)"
+                        :i="i"
+                        :hidden-columns="hiddenColumns"
+                        :hidden-columns-col-span="hiddenColumnsColSpan"
+                        :is-draggable="isDraggable(item)"
+                        :sortable="computedDragModeEnabled"
+                        :visible-columns="visibleColumns"
+                        :empty-columns="emptyColumns"
+                        :hidden-is-visible="isVisible(i)"
+                        :edit-mode-enabled="editModeEnabled"
+                        :has-inline-edit-perm="hasInlineEditPerm"
+                        v-on:click="onClick"
+                        v-on:show="show"
+                    >
+                        <template
+                            v-for="column in colSlots"
+                            v-slot:[column]="row">
+                            <slot
+                                :name="column"
+                                :[slotItemVar]="row.item"
+                                :value="row.value"
+                                :column="row.column"
+                            />
+                        </template>
+                    </lkt-hidden-row>
                     </tbody>
                 </table>
 
@@ -672,7 +670,8 @@ const hasEmptySlot = computed(() => {
                     </template>
                 </div>
 
-                <component :is="type" v-else-if="computedIsList" class="lkt-table-items-container" :class="itemsContainerClass">
+                <component :is="type" v-else-if="computedIsList" class="lkt-table-items-container"
+                           :class="itemsContainerClass">
                     <template
                         v-for="(item, i) in Items">
                         <li class="lkt-table-item" v-if="canDisplayItem(item, i)" :data-i="i">
@@ -708,12 +707,8 @@ const hasEmptySlot = computed(() => {
                  class="lkt-table-page-buttons lkt-table-page-buttons-bottom">
                 <create-button
                     v-if="computedDisplayCreateButton && Items.length >= requiredItemsForBottomCreate"
+                    :config="createButton"
                     :disabled="!createEnabled || createDisabled"
-                    :text="createText"
-                    :icon="createIcon"
-                    :to="createRoute"
-                    :modal="modal"
-                    :modal-data="modalData"
                     @click="onClickAddItem"
                     @append="onAppend"
                 />
@@ -721,7 +716,7 @@ const hasEmptySlot = computed(() => {
             </div>
 
             <lkt-paginator
-                ref="paginator"
+                ref="paginatorRef"
                 v-if="resource.length > 0"
                 v-model="Page"
                 :resource="resource"

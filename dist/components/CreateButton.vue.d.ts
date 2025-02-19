@@ -1,11 +1,7 @@
-import { ModalConfig } from "lkt-vue-kernel";
+import { ButtonConfig } from "lkt-vue-kernel";
 type __VLS_Props = {
+    config?: ButtonConfig;
     disabled?: boolean;
-    text?: string;
-    icon?: string;
-    to?: string;
-    modal?: string;
-    modalData?: Partial<ModalConfig>;
 };
 declare const _default: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
     click: (...args: any[]) => void;
@@ -14,10 +10,7 @@ declare const _default: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {
     onClick?: ((...args: any[]) => any) | undefined;
     onAppend?: ((...args: any[]) => any) | undefined;
 }>, {
-    to: string;
     disabled: boolean;
-    modal: string;
-    text: string;
-    icon: string;
+    config: ButtonConfig;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 export default _default;

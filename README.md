@@ -197,3 +197,14 @@ Slot props:
     </template
 </lkt-table>
 ```
+
+
+
+                    :icon="Settings.defaultSaveIcon"
+                    :disabled="!ableToSave"
+                    :confirm-modal="saveConfirm"
+                    :confirm-data="confirmData"
+                    :resource="saveResource"
+                    :resource-data="computedSaveResourceData"
+                    :split="splitSave"
+                    :tooltip-engine="saveTooltipEngine"
