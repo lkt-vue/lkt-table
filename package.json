@@ -1,6 +1,6 @@
 {
   "name": "lkt-table",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "keywords": [
     "lkt",
@@ -16,7 +16,7 @@
     ".": {
       "import": "./dist/build.js"
     },
-    "./styles": "./dist/style.css",
+    "./styles": "./dist/build.css",
     "./theme": "./theme/default.css",
     "./theme/default": "./theme/default.css"
   },
@@ -38,16 +38,16 @@
     "@types/node": "^20.11.19",
     "@types/rollup": "^0.54.0",
     "@vitejs/plugin-vue": "^5.2.1",
-    "rollup": "^4.9.6",
-    "typescript": "^5.7",
-    "vite": "^5.4.14",
-    "vue-tsc": "^2.2"
+    "rollup": "^4.34.8",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.1",
+    "vue-tsc": "^2.2.0"
   },
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
-    "lkt-button": "^1.1.16",
+    "lkt-button": "^2.0",
     "lkt-data-state": "^1.0.10",
     "lkt-date-tools": "^1.0.4",
     "lkt-field": "^0.0.14",
@@ -56,7 +56,6 @@
     "lkt-loader": "^1.0.2",
     "lkt-paginator": "^1.1.4",
     "lkt-string-tools": "^1.0.3",
-    "lkt-ts-interfaces": "^1.0.2",
     "lkt-vue-kernel": "^1.0.4",
     "sortablejs": "^1.15.2",
     "vue": "^3.3",

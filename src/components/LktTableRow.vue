@@ -88,9 +88,11 @@ const onClick = ($event: any) => emit('click', $event),
 
         let disabledDrag = false;
         if (typeof props.disabledDrag === 'function') disabledDrag = props.disabledDrag(Item.value);
-        else disabledDrag = props.disabledDrag === true;
+        else disabledDrag = computedDisabledDrag.value === true;
+
         if (!disabledDrag && props.sortable && props.isDraggable) r.push('handle');
         else if (disabledDrag) r.push('disabled');
+
         return r.join(' ');
     }),
     hasNavButtonSlot = computed(() => {

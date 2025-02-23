@@ -5,9 +5,11 @@ import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
 import {
     ButtonType,
     Column,
+    ensureButtonConfig,
     extractI18nValue,
     getDefaultValues,
     LktObject,
+    LktSettings,
     SortDirection,
     Table,
     TableConfig,
@@ -60,12 +62,16 @@ const Page = ref(props.paginator?.modelValue),
     permissions = ref(props.perms),
     paginatorRef = ref(null),
     element = ref(null),
+    saveButtonRef = ref(null),
     sortableObject = ref({}),
     dataState = ref(<DataState>new DataState({items: Items.value}, props.dataStateConfig)),
     editModeEnabled = ref(props.editMode),
     updateTimeStamp = ref(0),
     sortableContainer = ref(<HTMLElement | null>null)
 ;
+
+const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton));
+const safeCreateButton = ref(ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton));
 
 const dataStateChanged = ref(false);
 
@@ -144,7 +150,7 @@ const emptyColumns = computed(() => {
     showSaveButton = computed(() => {
         if (props.hiddenSave) return false;
         if (isLoading.value) return false;
-        if (!(props.saveButton?.resource || props.saveButton.type)) return false;
+        if (!(safeSaveButton.value?.resource || safeSaveButton.value.type)) return false;
         if (editModeEnabled.value && dataStateChanged.value) return true;
 
         return editModeEnabled.value;
@@ -156,11 +162,11 @@ const emptyColumns = computed(() => {
     }),
     saveIsDisabled = computed(() => {
         updateTimeStamp.value;
-        if (typeof props.saveButton?.disabled === 'function') return props.saveButton.disabled({
+        if (typeof safeSaveButton.value?.disabled === 'function') return safeSaveButton.value.disabled({
             value: Items.value,
             dataState: <DataState>dataState.value,
         });
-        if (typeof props.saveButton?.disabled === 'boolean') return props.saveButton.disabled;
+        if (typeof safeSaveButton.value?.disabled === 'boolean') return safeSaveButton.value.disabled;
         return !dataStateChanged.value;
     }),
     amountOfItems = computed(() => {
@@ -169,7 +175,7 @@ const emptyColumns = computed(() => {
     computedSaveResourceData = computed(() => {
         return {
             items: Items.value,
-            ...props.saveButton?.resourceData
+            ...safeSaveButton.value?.resourceData
         }
     }),
     computedTitleTag = computed(() => {
@@ -279,18 +285,18 @@ const getItemByEvent = (e: any) => {
     onButtonLoading = () => isLoading.value = true,
     onButtonLoaded = () => isLoading.value = false,
     onSave = ($event: PointerEvent, r: HTTPResponse) => {
-        if (props.saveButton?.type) {
+        if (safeSaveButton.value?.type) {
             if ([
                 ButtonType.Split,
                 ButtonType.SplitEver,
                 ButtonType.SplitLazy,
-            ].includes(props.saveButton?.type)) {
+            ].includes(safeSaveButton.value?.type)) {
                 return;
             }
         }
 
         emit('before-save');
-        if (props.saveButton?.resource) {
+        if (safeSaveButton.value?.resource) {
             isLoading.value = false;
             if (!r.success) {
                 emit('error', r.httpStatus);
@@ -441,6 +447,18 @@ const hasEmptySlot = computed(() => {
     }),
     emptySlot = computed(() => {
         return Settings.defaultEmptySlot;
+    }),
+    computedRenderDrag = computed(() => {
+        if (!props.drag || Object.keys(props.drag).length === 0) return false;
+        if (!props.drag.enabled) return false;
+        if (typeof props.drag.canRender === 'undefined') return true;
+        return props.drag.canRender;
+    }),
+    computedDisabledDrag = computed(() => {
+        if (!props.drag || Object.keys(props.drag).length === 0) return false;
+        if (!props.drag.enabled) return false;
+        if (typeof props.drag.isDisabled === 'undefined') return false;
+        return props.drag.isDisabled;
     });
 
 </script>
@@ -467,9 +485,9 @@ const hasEmptySlot = computed(() => {
                 v-if="showEditionButtons">
                 <lkt-button
                     class="lkt-table--save-button"
-                    ref="saveButton"
+                    ref="saveButtonRef"
                     v-show="showSaveButton"
-                    v-bind="saveButton"
+                    v-bind="safeSaveButton"
                     :disabled="saveIsDisabled"
                     :modal-data="computedSaveResourceData"
                     v-on:loading="onButtonLoading"
@@ -493,7 +511,7 @@ const hasEmptySlot = computed(() => {
 
                 <create-button
                     v-if="computedDisplayCreateButton && Items.length >= requiredItemsForTopCreate"
-                    :config="createButton"
+                    :config="safeCreateButton"
                     :disabled="!createEnabled || createDisabled"
                     @click="onClickAddItem"
                     @append="onAppend"
@@ -578,8 +596,8 @@ const hasEmptySlot = computed(() => {
                         :edit-mode-enabled="editModeEnabled"
                         :has-inline-edit-perm="hasInlineEditPerm"
                         :row-display-type="rowDisplayType"
-                        :render-drag="drag?.canRender"
-                        :disabled-drag="drag?.isDisabled"
+                        :render-drag="computedRenderDrag"
+                        :disabled-drag="computedDisabledDrag"
                         v-on:click="onClick"
                         v-on:show="show"
                         v-on:item-up="onItemUp"
@@ -707,7 +725,7 @@ const hasEmptySlot = computed(() => {
                  class="lkt-table-page-buttons lkt-table-page-buttons-bottom">
                 <create-button
                     v-if="computedDisplayCreateButton && Items.length >= requiredItemsForBottomCreate"
-                    :config="createButton"
+                    :config="safeCreateButton"
                     :disabled="!createEnabled || createDisabled"
                     @click="onClickAddItem"
                     @append="onAppend"
