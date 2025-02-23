@@ -1,9 +1,4 @@
-import { Column, ColumnConfig, LktObject, SortDirection } from "lkt-vue-kernel";
-/**
- *
- * @param data
- */
-export declare const createColumn: (data: ColumnConfig) => Column;
+import { Column, LktObject, SortDirection } from "lkt-vue-kernel";
 /**
  *
  * @param a

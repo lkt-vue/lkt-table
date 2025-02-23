@@ -1,6 +1,5 @@
 import { Component, Plugin } from "vue";
-export { createColumn } from "./functions/table-functions";
-export { Column } from "lkt-vue-kernel";
+export { createColumn, Column } from "lkt-vue-kernel";
 import "./../lkt-table.css";
 declare const LktTable: Plugin;
 export default LktTable;

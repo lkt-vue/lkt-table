@@ -16,5 +16,5 @@ declare const _default: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {
     sortDirection: string;
     amountOfColumns: number;
     items: LktObject[];
-}, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, HTMLTableCellElement>;
+}, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 export default _default;

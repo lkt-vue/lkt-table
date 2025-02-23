@@ -1,13 +1,5 @@
 import {__} from "lkt-i18n";
-import {Column, ColumnConfig, LktObject, SortDirection} from "lkt-vue-kernel";
-
-/**
- *
- * @param data
- */
-export const createColumn = (data: ColumnConfig): Column => {
-    return new Column(data);
-}
+import {Column, LktObject, SortDirection} from "lkt-vue-kernel";
 
 /**
  *

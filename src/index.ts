@@ -3,10 +3,9 @@ import {default as table} from "./lib-components/LktTable.vue";
 import {App, Component, Plugin} from "vue";
 
 export {
-    createColumn
-} from "./functions/table-functions";
-
-export {Column} from "lkt-vue-kernel";
+    createColumn,
+    Column
+} from "lkt-vue-kernel";
 
 import "./../lkt-table.css"
 import {Settings} from "./settings/Settings";
