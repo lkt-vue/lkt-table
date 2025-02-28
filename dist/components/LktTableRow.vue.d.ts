@@ -2,12 +2,13 @@ import { canRenderColumn, colPreferSlot, getColumnClasses, getColumnDisplayConte
 import LktTableCell from "./LktTableCell.vue";
 import DropButton from "./DropButton.vue";
 import EditButton from "./EditButton.vue";
-import { Column, LktObject, ValidTableRowTypeValue } from "lkt-vue-kernel";
+import { ButtonConfig, Column, LktObject, ValidTableRowTypeValue } from "lkt-vue-kernel";
 declare const slots: Readonly<{
     [name: string]: import("vue").Slot<any> | undefined;
 }>;
 type __VLS_Props = {
     modelValue: LktObject;
+    dropButton: ButtonConfig;
     isDraggable: boolean;
     sortable: boolean;
     displayHiddenColumnsIndicator: boolean;
@@ -21,10 +22,6 @@ type __VLS_Props = {
     i: number;
     visibleColumns: Column[];
     emptyColumns: string[];
-    dropConfirm: string;
-    dropText: string;
-    dropIcon: string;
-    dropResource: string;
     editText: string;
     editIcon: string;
     editLink: string;
@@ -110,10 +107,6 @@ declare const __VLS_self: import("vue").DefineComponent<__VLS_Props, {
     canEdit: boolean;
     visibleColumns: Column[];
     emptyColumns: string[];
-    dropConfirm: string;
-    dropText: string;
-    dropIcon: string;
-    dropResource: string;
     editText: string;
     editIcon: string;
     editLink: string;
@@ -149,10 +142,6 @@ declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}
     canEdit: boolean;
     visibleColumns: Column[];
     emptyColumns: string[];
-    dropConfirm: string;
-    dropText: string;
-    dropIcon: string;
-    dropResource: string;
     editText: string;
     editIcon: string;
     editLink: string;

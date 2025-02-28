@@ -12,13 +12,14 @@ import {Settings} from "../settings/Settings";
 import DropButton from "./DropButton.vue";
 import EditButton from "./EditButton.vue";
 import {replaceAll} from "lkt-string-tools";
-import {Column, LktObject, TableRowType, ValidTableRowTypeValue} from "lkt-vue-kernel";
+import {ButtonConfig, Column, LktObject, TableRowType, ValidTableRowTypeValue} from "lkt-vue-kernel";
 
 const slots = useSlots();
 const emit = defineEmits(['update:modelValue', 'click', 'show', 'item-up', 'item-down', 'item-drop']);
 
 const props = withDefaults(defineProps<{
     modelValue: LktObject
+    dropButton: ButtonConfig
     isDraggable: boolean
     sortable: boolean
     displayHiddenColumnsIndicator: boolean
@@ -32,10 +33,6 @@ const props = withDefaults(defineProps<{
     i: number
     visibleColumns: Column[]
     emptyColumns: string[]
-    dropConfirm: string
-    dropText: string
-    dropIcon: string
-    dropResource: string
     editText: string
     editIcon: string
     editLink: string
@@ -56,10 +53,6 @@ const props = withDefaults(defineProps<{
     i: 0,
     visibleColumns: () => [],
     emptyColumns: () => [],
-    dropConfirm: '',
-    dropText: '',
-    dropIcon: '',
-    dropResource: '',
     editText: '',
     editIcon: '',
     editLink: '',
@@ -207,11 +200,7 @@ const canRenderDragIndicator = computed(() => {
         </template>
         <td v-if="canDrop && editModeEnabled" class="lkt-table-col-drop">
             <drop-button
-                :resource="dropResource"
-                :resource-data="Item"
-                :confirm="dropConfirm"
-                :text="dropText"
-                :icon="dropIcon"
+                :config="dropButton"
                 @click="onClickDrop"/>
         </td>
         <td v-if="canEdit && editModeEnabled" class="lkt-table-col-edit">

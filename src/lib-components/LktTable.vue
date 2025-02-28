@@ -9,7 +9,7 @@ import {
     extractI18nValue,
     getDefaultValues,
     LktObject,
-    LktSettings,
+    LktSettings, PaginatorType,
     SortDirection,
     Table,
     TableConfig,
@@ -83,13 +83,19 @@ const onPerms = (r: string[]) => {
         permissions.value = r;
     },
     onPaginatorResponse = (r: HTTPResponse) => {
-        //@ts-ignore
-        if (Array.isArray(r.data)) Items.value = r.data;
+        if (Array.isArray(r.data)) {
+            //@ts-ignore
+            if (!props.paginator || ![PaginatorType.LoadMore, PaginatorType.Infinite].includes(props.paginator?.type)) {
+                Items.value.splice(0, Items.value.length);
+            }
+            Items.value = [...Items.value, ...r.data];
+        }
         isLoading.value = false;
         firstLoadReady.value = true;
         dataState.value.store({items: Items.value}).turnStoredIntoOriginal();
         dataStateChanged.value = false;
         nextTick(() => {
+            updateTimeStamp.value = time();
             saveIsDisabled.value; // Force calc call
             emit('read-response', r);
         })
@@ -157,7 +163,7 @@ const emptyColumns = computed(() => {
     }),
     showEditionButtons = computed(() => {
         if (computedDisplayCreateButton.value && Items.value.length >= props.requiredItemsForTopCreate) return true;
-        if (props.switchEditionEnabled) return true;
+        if (showSwitchButton.value) return true;
         return showSaveButton.value || (editModeEnabled.value && hasCreatePerm.value);
     }),
     saveIsDisabled = computed(() => {
@@ -203,7 +209,26 @@ const emptyColumns = computed(() => {
     hasModalCreatePerm = computed(() => permissions.value.includes(TablePermission.ModalCreate)),
     hasInlineCreatePerm = computed(() => permissions.value.includes(TablePermission.InlineCreate)),
     hasInlineCreateEverPerm = computed(() => permissions.value.includes(TablePermission.InlineCreateEver)),
-    hasDropPerm = computed(() => permissions.value.includes(TablePermission.Drop));
+    hasDropPerm = computed(() => permissions.value.includes(TablePermission.Drop)),
+    canSwitchEditMode = computed(() => permissions.value.includes(TablePermission.SwitchEditMode)),
+
+    showSwitchButton = computed(() => {
+        if (!canSwitchEditMode.value) return false;
+        if (!hasUpdatePerm.value && !hasDropPerm.value) return false;
+        if (!hasUpdatePerm.value && hasDropPerm.value) return false;
+
+        return !isLoading.value;
+    }),
+    computedShowItems = computed(() => {
+        if (typeof props.paginator?.type !== 'undefined') {
+            if ([PaginatorType.LoadMore, PaginatorType.Infinite].includes(props.paginator.type)) {
+                return Items.value.length > 0;
+            }
+        }
+
+        return !isLoading.value && Items.value.length > 0;
+    })
+;
 
 
 const getItemByEvent = (e: any) => {
@@ -512,7 +537,7 @@ const hasEmptySlot = computed(() => {
                 <create-button
                     v-if="computedDisplayCreateButton && Items.length >= requiredItemsForTopCreate"
                     :config="safeCreateButton"
-                    :disabled="!createEnabled || createDisabled"
+                    :disabled="!createEnabled"
                     @click="onClickAddItem"
                     @append="onAppend"
                 />
@@ -520,7 +545,7 @@ const hasEmptySlot = computed(() => {
                 <div class="switch-edition-mode">
                     <lkt-field
                         type="switch"
-                        v-show="switchEditionEnabled"
+                        v-show="showSwitchButton"
                         v-model="editModeEnabled"
                         :label="computedEditModeText"/>
                 </div>
@@ -536,9 +561,7 @@ const hasEmptySlot = computed(() => {
                 <slot name="filters" :items="Items" :is-loading="isLoading"/>
             </div>
 
-            <lkt-loader v-if="isLoading"/>
-
-            <div v-show="!isLoading && Items.length > 0" class="lkt-table">
+            <div v-show="computedShowItems" class="lkt-table">
                 <table v-if="type === TableType.Table">
                     <thead>
                     <tr>
@@ -585,10 +608,6 @@ const hasEmptySlot = computed(() => {
                         :hidden-is-visible="isVisible(i)"
                         :latest-row="i+1 === amountOfItems"
                         :can-drop="hasDropPerm && editModeEnabled"
-                        :drop-confirm="dropConfirm"
-                        :drop-resource="dropResource"
-                        :drop-text="dropText"
-                        :drop-icon="dropIcon"
                         :can-edit="hasEditPerm && hasUpdatePerm && editModeEnabled"
                         :edit-text="editText"
                         :edit-icon="editIcon"
@@ -721,12 +740,14 @@ const hasEmptySlot = computed(() => {
                 </template>
             </div>
 
+            <lkt-loader v-if="isLoading"/>
+
             <div v-if="computedDisplayCreateButton || slots.bottomButtons"
                  class="lkt-table-page-buttons lkt-table-page-buttons-bottom">
                 <create-button
                     v-if="computedDisplayCreateButton && Items.length >= requiredItemsForBottomCreate"
                     :config="safeCreateButton"
-                    :disabled="!createEnabled || createDisabled"
+                    :disabled="!createEnabled"
                     @click="onClickAddItem"
                     @append="onAppend"
                 />
@@ -735,13 +756,12 @@ const hasEmptySlot = computed(() => {
 
             <lkt-paginator
                 ref="paginatorRef"
-                v-if="resource.length > 0"
+                v-if="paginator && Object.keys(paginator).length > 0"
+                v-bind="paginator"
                 v-model="Page"
-                :resource="resource"
-                :filters="filters"
-                v-on:loading="onLoading"
-                v-on:perms="onPerms"
-                v-on:response="onPaginatorResponse"
+                @loading="onLoading"
+                @perms="onPerms"
+                @response="onPaginatorResponse"
             />
 
         </component>
