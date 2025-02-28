@@ -9,7 +9,8 @@ import {
     extractI18nValue,
     getDefaultValues,
     LktObject,
-    LktSettings, PaginatorType,
+    LktSettings,
+    PaginatorType,
     SortDirection,
     Table,
     TableConfig,
@@ -72,6 +73,7 @@ const Page = ref(props.paginator?.modelValue),
 
 const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton));
 const safeCreateButton = ref(ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton));
+const safeEditModeButton = ref(ensureButtonConfig(props.editModeButton, LktSettings.defaultEditModeButton));
 
 const dataStateChanged = ref(false);
 
@@ -194,9 +196,6 @@ const emptyColumns = computed(() => {
     }),
     computedTitle = computed(() => {
         return extractI18nValue(props.title);
-    }),
-    computedEditModeText = computed(() => {
-        return extractI18nValue(props.editModeText);
     }),
     computedDragModeEnabled = computed(() => {
         return props.drag?.enabled;
@@ -544,10 +543,9 @@ const hasEmptySlot = computed(() => {
 
                 <div class="switch-edition-mode">
                     <lkt-field
-                        type="switch"
+                        v-bind="safeEditModeButton"
                         v-show="showSwitchButton"
-                        v-model="editModeEnabled"
-                        :label="computedEditModeText"/>
+                        v-model="editModeEnabled"/>
                 </div>
             </div>
 
@@ -599,6 +597,8 @@ const hasEmptySlot = computed(() => {
                         v-show="canDisplayItem(Items[i], i)"
                         :key="getRowKey(item, i)"
                         :i="i"
+                        :drop-button="dropButton"
+                        :edit-button="editButton"
                         :display-hidden-columns-indicator="displayHiddenColumnsIndicator"
                         :is-draggable="isDraggable(item)"
                         :sortable="computedDragModeEnabled"
@@ -609,9 +609,6 @@ const hasEmptySlot = computed(() => {
                         :latest-row="i+1 === amountOfItems"
                         :can-drop="hasDropPerm && editModeEnabled"
                         :can-edit="hasEditPerm && hasUpdatePerm && editModeEnabled"
-                        :edit-text="editText"
-                        :edit-icon="editIcon"
-                        :edit-link="editLink"
                         :edit-mode-enabled="editModeEnabled"
                         :has-inline-edit-perm="hasInlineEditPerm"
                         :row-display-type="rowDisplayType"

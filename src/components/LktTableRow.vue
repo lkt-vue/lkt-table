@@ -19,6 +19,7 @@ const emit = defineEmits(['update:modelValue', 'click', 'show', 'item-up', 'item
 
 const props = withDefaults(defineProps<{
     modelValue: LktObject
+    editButton: ButtonConfig
     dropButton: ButtonConfig
     isDraggable: boolean
     sortable: boolean
@@ -33,9 +34,6 @@ const props = withDefaults(defineProps<{
     i: number
     visibleColumns: Column[]
     emptyColumns: string[]
-    editText: string
-    editIcon: string
-    editLink: string
     rowDisplayType: ValidTableRowTypeValue
     renderDrag?: boolean | Function
     disabledDrag?: boolean | Function
@@ -53,9 +51,6 @@ const props = withDefaults(defineProps<{
     i: 0,
     visibleColumns: () => [],
     emptyColumns: () => [],
-    editText: '',
-    editIcon: '',
-    editLink: '',
     rowDisplayType: TableRowType.Auto,
     renderDrag: true,
     disabledDrag: true,
@@ -69,7 +64,7 @@ if (!calculatedRowDisplayType) calculatedRowDisplayType = TableRowType.Auto;
 const canCustomItem = [TableRowType.Auto, TableRowType.PreferCustomItem].includes(calculatedRowDisplayType);
 const canItem = [TableRowType.Auto, TableRowType.PreferItem].includes(calculatedRowDisplayType);
 
-const parsedEditLink = ref(props.editLink);
+const parsedEditLink = ref(props.editButton.anchor?.to);
 for (let k in Item.value) parsedEditLink.value = replaceAll(parsedEditLink.value, ':' + k, Item.value[k]);
 
 const onClick = ($event: any) => emit('click', $event),
@@ -205,10 +200,7 @@ const canRenderDragIndicator = computed(() => {
         </td>
         <td v-if="canEdit && editModeEnabled" class="lkt-table-col-edit">
             <edit-button
-                :resource-data="Item"
-                :text="editText"
-                :icon="editIcon"
-                :link="parsedEditLink"
+                :config="editButton"
                 @click="onClickEdit"/>
         </td>
     </tr>

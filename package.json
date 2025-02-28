@@ -1,6 +1,6 @@
 {
   "name": "lkt-table",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "",
   "keywords": [
     "lkt",
@@ -50,16 +50,16 @@
     "sortablejs": "^1.15.6"
   },
   "peerDependencies": {
-    "lkt-button": "^2.0",
-    "lkt-data-state": "^1.0.10",
+    "lkt-button": "^2.0.7",
+    "lkt-data-state": "^1.0.11",
     "lkt-date-tools": "^1.0.4",
     "lkt-field": "^0.0.34",
-    "lkt-http-client": "^1.0.19",
-    "lkt-i18n": "^1.0.4",
-    "lkt-loader": "^1.0.2",
-    "lkt-paginator": "^1.3.0",
-    "lkt-string-tools": "^1.0.3",
-    "lkt-vue-kernel": "^1.0.4",
+    "lkt-http-client": "^1.0.34",
+    "lkt-i18n": "^1.0.6",
+    "lkt-loader": "^1.2.0",
+    "lkt-paginator": "^1.3.3",
+    "lkt-string-tools": "^1.0.8",
+    "lkt-vue-kernel": "^1.0.31",
     "vue": "^3.3",
     "vue-router": "^4.2.5"
   }

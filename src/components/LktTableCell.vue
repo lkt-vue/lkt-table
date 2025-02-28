@@ -25,9 +25,6 @@ const item = ref(props.modelValue),
     value = ref(item.value[props.column.key]),
     inputElement = ref(null);
 
-let calculatedColumnType = props.column.type;
-if ([ColumnType.Integer, ColumnType.Float].includes(calculatedColumnType)) calculatedColumnType = ColumnType.Number;
-
 watch(value, (v) => {
     const payload = JSON.parse(JSON.stringify(item.value));
     payload[props.column.key] = v;

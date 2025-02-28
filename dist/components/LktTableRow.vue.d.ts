@@ -8,6 +8,7 @@ declare const slots: Readonly<{
 }>;
 type __VLS_Props = {
     modelValue: LktObject;
+    editButton: ButtonConfig;
     dropButton: ButtonConfig;
     isDraggable: boolean;
     sortable: boolean;
@@ -22,9 +23,6 @@ type __VLS_Props = {
     i: number;
     visibleColumns: Column[];
     emptyColumns: string[];
-    editText: string;
-    editIcon: string;
-    editLink: string;
     rowDisplayType: ValidTableRowTypeValue;
     renderDrag?: boolean | Function;
     disabledDrag?: boolean | Function;
@@ -32,7 +30,6 @@ type __VLS_Props = {
 declare const Item: import("vue").Ref<LktObject, LktObject>;
 declare const canCustomItem: boolean;
 declare const canItem: boolean;
-declare const parsedEditLink: import("vue").Ref<string, string>;
 declare const onClick: ($event: any) => void, onShow: ($event: any, i: any) => void, classes: import("vue").ComputedRef<string>, hasNavButtonSlot: import("vue").ComputedRef<boolean>, navButtonSlot: import("vue").ComputedRef<string | import("vue").Component>, onClickUp: () => void, onClickDown: () => void, onClickDrop: () => void, onClickEdit: () => void;
 declare const canRenderDragIndicator: import("vue").ComputedRef<any>;
 declare const __VLS_ctx: InstanceType<__VLS_PickNotAny<typeof __VLS_self, new () => {}>>;
@@ -68,7 +65,6 @@ declare const __VLS_self: import("vue").DefineComponent<__VLS_Props, {
     Item: typeof Item;
     canCustomItem: typeof canCustomItem;
     canItem: typeof canItem;
-    parsedEditLink: typeof parsedEditLink;
     onClick: typeof onClick;
     onShow: typeof onShow;
     classes: typeof classes;
@@ -107,9 +103,6 @@ declare const __VLS_self: import("vue").DefineComponent<__VLS_Props, {
     canEdit: boolean;
     visibleColumns: Column[];
     emptyColumns: string[];
-    editText: string;
-    editIcon: string;
-    editLink: string;
     rowDisplayType: ValidTableRowTypeValue;
     renderDrag: boolean | Function;
     disabledDrag: boolean | Function;
@@ -142,9 +135,6 @@ declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}
     canEdit: boolean;
     visibleColumns: Column[];
     emptyColumns: string[];
-    editText: string;
-    editIcon: string;
-    editLink: string;
     rowDisplayType: ValidTableRowTypeValue;
     renderDrag: boolean | Function;
     disabledDrag: boolean | Function;
