@@ -263,6 +263,7 @@ const getItemByEvent = (e: any) => {
             });
             SortingDirection.value = SortingDirection.value === SortDirection.Asc ? SortDirection.Desc : SortDirection.Asc;
             SortBy.value = column.key;
+            updateTimeStamp.value = time();
             emit('sort', [SortBy.value, SortingDirection.value]);
         }
     },
@@ -574,7 +575,7 @@ const hasEmptySlot = computed(() => {
                                 :sort-direction="SortingDirection"
                                 :amount-of-columns="columns.length"
                                 :items="Items"
-                                v-on:click="sort(column)"
+                                @click="sort(column)"
                             />
                         </template>
                         <th

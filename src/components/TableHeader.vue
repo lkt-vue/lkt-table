@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import {getColumnClasses, getVerticalColSpan} from "../functions/table-functions";
-import {Column, LktObject} from "lkt-vue-kernel";
+import {Column, extractI18nValue, LktObject, LktSettings, SortDirection} from "lkt-vue-kernel";
 import {computed} from "vue";
-import {__} from "lkt-i18n";
 
 const emit = defineEmits(['click']);
 
@@ -33,10 +32,16 @@ const computedColSpan = computed(() => {
         return '';
     }),
     computedLabel = computed(() => {
-        if (props.column.label.startsWith('__:')) {
-            return __(props.column.label.substring(3));
+        return extractI18nValue(props.column.label);
+    }),
+    computedSortableIcon = computed(() => {
+        if (!computedSortable.value) return '';
+        if (props.sortBy === props.column.key) {
+            if (props.sortDirection === SortDirection.Asc) return LktSettings.defaultTableSortAscIcon;
+            if (props.sortDirection === SortDirection.Desc) return LktSettings.defaultTableSortDescIcon;
+            return '';
         }
-        return props.column.label;
+        return '';
     });
 
 const onClick = () => emit('click', props.column)
@@ -51,6 +56,6 @@ const onClick = () => emit('click', props.column)
         :class="getColumnClasses(column)"
         v-on:click="onClick"
     >
-        <div>{{ computedLabel }}</div>
+        <div>{{ computedLabel }} <i v-if="computedSortableIcon" :class="computedSortableIcon"/> </div>
     </th>
 </template>

@@ -12,8 +12,8 @@ import {Column, LktObject, SortDirection} from "lkt-vue-kernel";
 export const defaultTableSorter = (a: any, b: any, c: Column, sortDirection: SortDirection): number => {
     if (!c) return 0;
 
-    let A = a[c.key],
-        B = b[c.key];
+    let A = String(a[c.key]).toLowerCase(),
+        B = String(b[c.key]).toLowerCase();
 
     if (sortDirection === SortDirection.Asc) {
         if (A > B) return 1;
