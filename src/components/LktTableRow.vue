@@ -9,8 +9,8 @@ import {
 import LktTableCell from "./LktTableCell.vue";
 import {computed, ref, useSlots, watch} from "vue";
 import {Settings} from "../settings/Settings";
-import DropButton from "./DropButton.vue";
-import EditButton from "./EditButton.vue";
+import DropButtonComponent from "./DropButtonComponent.vue";
+import EditButtonComponent from "./EditButtonComponent.vue";
 import {replaceAll} from "lkt-string-tools";
 import {ButtonConfig, Column, LktObject, TableRowType, ValidTableRowTypeValue} from "lkt-vue-kernel";
 
@@ -148,8 +148,8 @@ const canRenderDragIndicator = computed(() => {
             </div>
         </td>
         <td v-if="displayHiddenColumnsIndicator"
-            v-on:click="onShow($event, i)" data-role="show-more"
-            v-bind:class="hiddenIsVisible ? 'state-open' : ''"/>
+            @click="onShow($event, i)" data-role="show-more"
+            :class="hiddenIsVisible ? 'state-open' : ''"/>
         <template v-if="canCustomItem && slots[`item-${i}`]">
             <td :key="'td' + i" :colspan="visibleColumns.length">
                 <slot
@@ -173,7 +173,7 @@ const canRenderDragIndicator = computed(() => {
                 :colspan="getHorizontalColSpan(column,Item)"
                 :title="getColumnDisplayContent (column, Item, i, visibleColumns)"
                 :class="getColumnClasses(column)"
-                v-on:click="onClick($event)"
+                @click="onClick($event)"
             >
                 <template v-if="!!$slots[column.key] && colPreferSlot(column, Item)">
                     <slot :name="column.key"
@@ -194,13 +194,15 @@ const canRenderDragIndicator = computed(() => {
             </td>
         </template>
         <td v-if="canDrop && editModeEnabled" class="lkt-table-col-drop">
-            <drop-button
+            <drop-button-component
                 :config="dropButton"
+                :item="Item"
                 @click="onClickDrop"/>
         </td>
         <td v-if="canEdit && editModeEnabled" class="lkt-table-col-edit">
-            <edit-button
+            <edit-button-component
                 :config="editButton"
+                :item="Item"
                 @click="onClickEdit"/>
         </td>
     </tr>

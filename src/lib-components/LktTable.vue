@@ -74,6 +74,7 @@ const Page = ref(props.paginator?.modelValue),
 const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton));
 const safeCreateButton = ref(ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton));
 const safeEditModeButton = ref(ensureButtonConfig(props.editModeButton, LktSettings.defaultEditModeButton));
+const safeDropModeButton = ref(ensureButtonConfig(props.dropButton, LktSettings.defaultDropButton));
 
 const dataStateChanged = ref(false);
 
@@ -515,9 +516,9 @@ const hasEmptySlot = computed(() => {
                     v-bind="safeSaveButton"
                     :disabled="saveIsDisabled"
                     :modal-data="computedSaveResourceData"
-                    v-on:loading="onButtonLoading"
-                    v-on:loaded="onButtonLoaded"
-                    v-on:click="onSave">
+                    @loading="onButtonLoading"
+                    @loaded="onButtonLoaded"
+                    @click="onSave">
                     <slot v-if="!!slots['button-save']"
                           name="button-save"
                           :items="Items"
@@ -598,7 +599,7 @@ const hasEmptySlot = computed(() => {
                         v-show="canDisplayItem(Items[i], i)"
                         :key="getRowKey(item, i)"
                         :i="i"
-                        :drop-button="dropButton"
+                        :drop-button="safeDropModeButton"
                         :edit-button="editButton"
                         :display-hidden-columns-indicator="displayHiddenColumnsIndicator"
                         :is-draggable="isDraggable(item)"
@@ -615,11 +616,11 @@ const hasEmptySlot = computed(() => {
                         :row-display-type="rowDisplayType"
                         :render-drag="computedRenderDrag"
                         :disabled-drag="computedDisabledDrag"
-                        v-on:click="onClick"
-                        v-on:show="show"
-                        v-on:item-up="onItemUp"
-                        v-on:item-down="onItemDown"
-                        v-on:item-drop="onItemDrop"
+                        @click="onClick"
+                        @show="show"
+                        @item-up="onItemUp"
+                        @item-down="onItemDown"
+                        @item-drop="onItemDrop"
                     >
                         <template v-if="slots[`item-${i}`]" v-slot:[`item-${i}`]="row">
                             <slot
@@ -661,8 +662,8 @@ const hasEmptySlot = computed(() => {
                         :hidden-is-visible="isVisible(i)"
                         :edit-mode-enabled="editModeEnabled"
                         :has-inline-edit-perm="hasInlineEditPerm"
-                        v-on:click="onClick"
-                        v-on:show="show"
+                        @click="onClick"
+                        @show="show"
                     >
                         <template
                             v-for="column in colSlots"

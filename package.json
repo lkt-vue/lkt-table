@@ -1,6 +1,6 @@
 {
   "name": "lkt-table",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "",
   "keywords": [
     "lkt",
@@ -59,7 +59,7 @@
     "lkt-loader": "^1.2.0",
     "lkt-paginator": "^1.3.3",
     "lkt-string-tools": "^1.1.0",
-    "lkt-vue-kernel": "^1.0.35",
+    "lkt-vue-kernel": "^1.0.37",
     "vue": "^3.3",
     "vue-router": "^4.2.5"
   }

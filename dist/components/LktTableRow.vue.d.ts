@@ -1,7 +1,7 @@
 import { canRenderColumn, colPreferSlot, getColumnClasses, getColumnDisplayContent, getHorizontalColSpan } from "../functions/table-functions";
 import LktTableCell from "./LktTableCell.vue";
-import DropButton from "./DropButton.vue";
-import EditButton from "./EditButton.vue";
+import DropButtonComponent from "./DropButtonComponent.vue";
+import EditButtonComponent from "./EditButtonComponent.vue";
 import { ButtonConfig, Column, LktObject, ValidTableRowTypeValue } from "lkt-vue-kernel";
 declare const slots: Readonly<{
     [name: string]: import("vue").Slot<any> | undefined;
@@ -33,24 +33,24 @@ declare const canItem: boolean;
 declare const onClick: ($event: any) => void, onShow: ($event: any, i: any) => void, classes: import("vue").ComputedRef<string>, hasNavButtonSlot: import("vue").ComputedRef<boolean>, navButtonSlot: import("vue").ComputedRef<string | import("vue").Component>, onClickUp: () => void, onClickDown: () => void, onClickDrop: () => void, onClickEdit: () => void;
 declare const canRenderDragIndicator: import("vue").ComputedRef<any>;
 declare const __VLS_ctx: InstanceType<__VLS_PickNotAny<typeof __VLS_self, new () => {}>>;
-declare var __VLS_24: `item-${number}`, __VLS_25: {
+declare var __VLS_26: `item-${number}`, __VLS_27: {
     item: LktObject;
     index: number;
-}, __VLS_27: {
+}, __VLS_29: {
     item: LktObject;
     index: number;
-}, __VLS_30: string, __VLS_31: {
+}, __VLS_32: string, __VLS_33: {
     value: any;
     item: LktObject;
     column: Column;
     i: number;
 };
 type __VLS_Slots = __VLS_PrettifyGlobal<__VLS_OmitStringIndex<typeof __VLS_ctx.$slots> & {
-    [K in NonNullable<typeof __VLS_24>]?: (props: typeof __VLS_25) => any;
+    [K in NonNullable<typeof __VLS_26>]?: (props: typeof __VLS_27) => any;
 } & {
-    [K in NonNullable<typeof __VLS_30>]?: (props: typeof __VLS_31) => any;
+    [K in NonNullable<typeof __VLS_32>]?: (props: typeof __VLS_33) => any;
 } & {
-    item?: (props: typeof __VLS_27) => any;
+    item?: (props: typeof __VLS_29) => any;
 }>;
 declare const __VLS_self: import("vue").DefineComponent<__VLS_Props, {
     canRenderColumn: typeof canRenderColumn;
@@ -59,8 +59,8 @@ declare const __VLS_self: import("vue").DefineComponent<__VLS_Props, {
     getColumnDisplayContent: typeof getColumnDisplayContent;
     getHorizontalColSpan: typeof getHorizontalColSpan;
     LktTableCell: typeof LktTableCell;
-    DropButton: typeof DropButton;
-    EditButton: typeof EditButton;
+    DropButtonComponent: typeof DropButtonComponent;
+    EditButtonComponent: typeof EditButtonComponent;
     slots: typeof slots;
     Item: typeof Item;
     canCustomItem: typeof canCustomItem;
