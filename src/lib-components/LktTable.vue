@@ -70,7 +70,7 @@ const Page = ref(props.paginator?.modelValue),
     editModeEnabled = ref(props.editMode),
     updateTimeStamp = ref(0),
     sortableContainer = ref(<HTMLElement | null>null),
-    currentSlide = ref(1)
+    currentSlide = ref(props.carousel?.currentSlide || 0)
 ;
 
 const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton));
