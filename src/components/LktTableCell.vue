@@ -3,7 +3,9 @@ import {getColumnDisplayContent} from "../functions/table-functions";
 import {computed, ref, watch} from "vue";
 import {Column, ColumnType, LktObject} from "lkt-vue-kernel";
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits([
+    'update:modelValue'
+]);
 
 const props = withDefaults(defineProps<{
     modelValue: LktObject

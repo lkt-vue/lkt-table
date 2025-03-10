@@ -4,7 +4,10 @@ import LktTableCell from "./LktTableCell.vue";
 import {ref, watch} from "vue";
 import {LktObject, Column} from "lkt-vue-kernel";
 
-const emit = defineEmits(['update:modelValue', 'click']);
+const emit = defineEmits([
+    'update:modelValue',
+    'click'
+]);
 
 const props = withDefaults(defineProps<{
     modelValue: LktObject

@@ -3,7 +3,9 @@ import {getColumnClasses, getVerticalColSpan} from "../functions/table-functions
 import {Column, extractI18nValue, LktObject, LktSettings, SortDirection} from "lkt-vue-kernel";
 import {computed} from "vue";
 
-const emit = defineEmits(['click']);
+const emit = defineEmits([
+    'click'
+]);
 
 const props = withDefaults(defineProps<{
     column: Column,

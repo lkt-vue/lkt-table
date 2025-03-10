@@ -15,7 +15,14 @@ import {replaceAll} from "lkt-string-tools";
 import {ButtonConfig, Column, LktObject, TableRowType, ValidTableRowTypeValue} from "lkt-vue-kernel";
 
 const slots = useSlots();
-const emit = defineEmits(['update:modelValue', 'click', 'show', 'item-up', 'item-down', 'item-drop']);
+const emit = defineEmits([
+    'update:modelValue',
+    'click',
+    'show',
+    'item-up',
+    'item-down',
+    'item-drop'
+]);
 
 const props = withDefaults(defineProps<{
     modelValue: LktObject

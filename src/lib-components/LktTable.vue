@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import {Carousel, Slide, Navigation, Pagination} from "vue3-carousel";
 import {defaultTableSorter, getColumnByKey, getDefaultSortColumn} from "../functions/table-functions";
 import LktTableRow from "../components/LktTableRow.vue";
 import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
@@ -68,7 +69,8 @@ const Page = ref(props.paginator?.modelValue),
     dataState = ref(<DataState>new DataState({items: Items.value}, props.dataStateConfig)),
     editModeEnabled = ref(props.editMode),
     updateTimeStamp = ref(0),
-    sortableContainer = ref(<HTMLElement | null>null)
+    sortableContainer = ref(<HTMLElement | null>null),
+    currentSlide = ref(1)
 ;
 
 const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton));
@@ -154,6 +156,11 @@ const emptyColumns = computed(() => {
     colSlots = computed((): string[] => {
         let r: string[] = [];
         for (let k in slots) if (columnKeys.value.indexOf(k) !== -1) r.push(k);
+        return r;
+    }),
+    slides = computed((): LktObject => {
+        let r = [];
+        for (let k in slots) if (k.indexOf('slide-') !== -1) r.push(k);
         return r;
     }),
     showSaveButton = computed(() => {
@@ -725,6 +732,48 @@ const hasEmptySlot = computed(() => {
                         </li>
                     </template>
                 </component>
+
+                <div v-else-if="type === TableType.Carousel"
+                     ref="tableBody"
+                     :id="'lkt-table-body-' + uniqueId"
+                     class="lkt-table-items-container"
+                     :class="itemsContainerClass">
+                    <carousel
+                        v-model="currentSlide"
+                        v-bind="carousel"
+                    >
+                        <template v-for="(slide, i) in slides" :key="slide">
+                            <slide :index="i">
+                                <div class="lkt-carousel-slide">
+                                    <slot :name="slide"/>
+                                </div>
+                            </slide>
+                        </template>
+
+                        <template v-for="(item, i) in Items" :key="slide">
+                            <slide :index="i">
+                                <div class="lkt-carousel-slide">
+                                    <slot name="item"
+                                          v-bind:[slotItemVar]="item"
+                                          v-bind:index="i"
+                                          v-bind:editing="editModeEnabled"
+                                          v-bind:can-create="hasCreatePerm"
+                                          v-bind:can-read="hasReadPerm"
+                                          v-bind:can-update="hasUpdatePerm"
+                                          v-bind:can-drop="hasDropPerm"
+                                          v-bind:is-loading="isLoading"
+                                          v-bind:do-drop="() => onItemDrop(i)"
+                                    />
+                                </div>
+                            </slide>
+                        </template>
+
+                        <template #addons>
+                            <Navigation />
+                            <Pagination />
+                        </template>
+                    </carousel>
+                </div>
             </div>
 
             <div class="lkt-table-empty" v-if="!isLoading && Items.length === 0">

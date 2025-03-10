@@ -3,7 +3,10 @@ import {computed} from "vue";
 import {Settings} from "../settings/Settings";
 import {ButtonConfig, LktObject} from "lkt-vue-kernel";
 
-const emit = defineEmits(['click', 'append']);
+const emit = defineEmits([
+    'click',
+    'append'
+]);
 
 const props = withDefaults(defineProps<{
     config?: ButtonConfig
