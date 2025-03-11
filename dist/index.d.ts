@@ -1,5 +1,6 @@
 import { Component, Plugin } from "vue";
 export { createColumn, Column } from "lkt-vue-kernel";
+import 'vue3-carousel/dist/carousel.css';
 import "./../lkt-table.css";
 declare const LktTable: Plugin;
 export default LktTable;

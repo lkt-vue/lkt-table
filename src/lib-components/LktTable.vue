@@ -741,6 +741,7 @@ const hasEmptySlot = computed(() => {
                     <carousel
                         v-model="currentSlide"
                         v-bind="carousel"
+                        :wrap-around="carousel?.infinite === true"
                     >
                         <template v-for="(slide, i) in slides" :key="slide">
                             <slide :index="i">

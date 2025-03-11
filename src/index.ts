@@ -7,6 +7,7 @@ export {
     Column
 } from "lkt-vue-kernel";
 
+import 'vue3-carousel/dist/carousel.css'
 import "./../lkt-table.css"
 import {Settings} from "./settings/Settings";
 
