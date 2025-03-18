@@ -128,8 +128,12 @@ const canRenderDragIndicator = computed(() => {
 <template>
     <tr :data-i="i" :data-draggable="isDraggable" :class="{'type-custom-item': canCustomItem, 'type-item': canItem}">
         <td v-if="sortable && isDraggable && editModeEnabled && canRenderDragIndicator"
-            data-role="drag-indicator" :class="classes" :data-i="i"/>
-        <td v-else-if="sortable && editModeEnabled && canRenderDragIndicator" data-role="invalid-drag-indicator"/>
+            data-role="drag-indicator" :class="classes" :data-i="i">
+            <i class="lkt-icn-drag-indicator"/>
+        </td>
+        <td v-else-if="sortable && editModeEnabled && canRenderDragIndicator" data-role="invalid-drag-indicator">
+            <i class="lkt-icn-drag-indicator"/>
+        </td>
         <td v-if="addNavigation && editModeEnabled" class="lkt-table-nav-cell">
             <div class="lkt-table-nav-container">
                 <lkt-button palette="table-nav" :disabled="i === 0" @click="onClickUp">
