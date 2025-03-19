@@ -454,7 +454,9 @@ watch(() => props.perms, (v) => permissions.value = v);
 watch(permissions, (v) => emit('update:perms', v));
 watch(() => props.editMode, (v) => editModeEnabled.value = v);
 watch(() => props.columns, (v) => Columns.value = v, {deep: true});
-watch(() => props.modelValue, (v) => Items.value = v, {deep: true});
+watch(() => props.modelValue, (v) => {
+    Items.value = v;
+}, {deep: true});
 watch(Items, (v: any) => {
     dataState.value.increment({items: v});
     dataStateChanged.value = dataState.value.changed();
@@ -466,6 +468,10 @@ defineExpose({
     getItemByIndex,
     getRowByIndex,
     doRefresh,
+    doRemoveIndex: (index: number) => {
+        Items.value.splice(index, 1);
+        updateTimeStamp.value = time();
+    },
     getHtml: () => element.value,
     turnStoredIntoOriginal: () => {
         dataState.value.turnStoredIntoOriginal();
@@ -599,6 +605,7 @@ const hasEmptySlot = computed(() => {
                     <tbody
                         ref="tableBody"
                         :id="'lkt-table-body-' + uniqueId"
+                        :class="itemsContainerClass"
                     >
                     <lkt-table-row
                         v-for="(item, i) in Items"
