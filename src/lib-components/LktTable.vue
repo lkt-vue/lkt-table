@@ -570,7 +570,7 @@ const hasEmptySlot = computed(() => {
 
             <div v-show="computedShowItems" class="lkt-table">
                 <table v-if="type === TableType.Table">
-                    <thead>
+                    <thead v-if="!hideTableHeader">
                     <tr>
                         <th v-if="computedDragModeEnabled && editModeEnabled" data-role="drag-indicator"/>
                         <th v-if="addNavigation && editModeEnabled"/>
