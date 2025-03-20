@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {Carousel, Slide, Navigation, Pagination} from "vue3-carousel";
+import {Carousel, Navigation, Pagination, Slide} from "vue3-carousel";
 import {defaultTableSorter, getColumnByKey, getDefaultSortColumn} from "../functions/table-functions";
 import LktTableRow from "../components/LktTableRow.vue";
 import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
@@ -77,6 +77,11 @@ const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defa
 const safeCreateButton = ref(ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton));
 const safeEditModeButton = ref(ensureButtonConfig(props.editModeButton, LktSettings.defaultEditModeButton));
 const safeDropModeButton = ref(ensureButtonConfig(props.dropButton, LktSettings.defaultDropButton));
+
+watch(() => props.saveButton, (v) => safeSaveButton.value = ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton));
+watch(() => props.createButton, (v) => safeCreateButton.value = ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton));
+watch(() => props.editModeButton, (v) => safeEditModeButton.value = ensureButtonConfig(props.editModeButton, LktSettings.defaultEditModeButton));
+watch(() => props.dropButton, (v) => safeDropModeButton.value = ensureButtonConfig(props.dropButton, LktSettings.defaultDropButton));
 
 const dataStateChanged = ref(false);
 
@@ -544,7 +549,8 @@ const hasEmptySlot = computed(() => {
                               :do-root-click="doRootClick"
                               :data-state="dataState"
                               :on-button-loading="onButtonLoading"
-                              :on-button-loaded="onButtonLoaded"/>
+                              :on-button-loaded="onButtonLoaded"
+                        />
                     </template>
                 </lkt-button>
 
@@ -557,10 +563,10 @@ const hasEmptySlot = computed(() => {
                 />
 
                 <div class="switch-edition-mode">
-                    <lkt-field
+                    <lkt-button
                         v-bind="safeEditModeButton"
                         v-show="showSwitchButton"
-                        v-model="editModeEnabled"/>
+                        v-model:checked="editModeEnabled"/>
                 </div>
             </div>
 
@@ -625,11 +631,14 @@ const hasEmptySlot = computed(() => {
                         :latest-row="i+1 === amountOfItems"
                         :can-drop="hasDropPerm && editModeEnabled"
                         :can-edit="hasEditPerm && hasUpdatePerm && editModeEnabled"
+                        :can-read="hasReadPerm"
+                        :can-create="hasCreatePerm"
                         :edit-mode-enabled="editModeEnabled"
                         :has-inline-edit-perm="hasInlineEditPerm"
                         :row-display-type="rowDisplayType"
                         :render-drag="computedRenderDrag"
                         :disabled-drag="computedDisabledDrag"
+                        :is-loading="isLoading"
                         @click="onClick"
                         @show="show"
                         @item-up="onItemUp"
@@ -641,6 +650,13 @@ const hasEmptySlot = computed(() => {
                                 :name="`item-${i}`"
                                 :[slotItemVar]="row.item"
                                 v-bind:index="i"
+                                v-bind:editing="row.editing"
+                                v-bind:can-create="row.canCreate"
+                                v-bind:can-read="row.canRead"
+                                v-bind:can-update="row.canUpdate"
+                                v-bind:can-drop="row.canDrop"
+                                v-bind:is-loading="row.isLoading"
+                                v-bind:do-drop="row.doDrop"
                             />
                         </template>
                         <template v-else-if="slots.item" #item="row">
@@ -648,6 +664,13 @@ const hasEmptySlot = computed(() => {
                                 name="item"
                                 :[slotItemVar]="row.item"
                                 v-bind:index="i"
+                                v-bind:editing="row.editing"
+                                v-bind:can-create="row.canCreate"
+                                v-bind:can-read="row.canRead"
+                                v-bind:can-update="row.canUpdate"
+                                v-bind:can-drop="row.canDrop"
+                                v-bind:is-loading="row.isLoading"
+                                v-bind:do-drop="row.doDrop"
                             />
                         </template>
                         <template

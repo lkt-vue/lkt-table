@@ -14,10 +14,13 @@ type __VLS_Props = {
     sortable: boolean;
     displayHiddenColumnsIndicator: boolean;
     hiddenIsVisible: boolean;
+    isLoading: boolean;
     addNavigation: boolean;
     latestRow: boolean;
     canDrop: boolean;
     canEdit: boolean;
+    canCreate: boolean;
+    canRead: boolean;
     editModeEnabled: boolean;
     hasInlineEditPerm: boolean;
     i: number;
@@ -30,15 +33,29 @@ type __VLS_Props = {
 declare const Item: import("vue").Ref<LktObject, LktObject>;
 declare const canCustomItem: boolean;
 declare const canItem: boolean;
-declare const onClick: ($event: any) => void, onShow: ($event: any, i: any) => void, classes: import("vue").ComputedRef<string>, hasNavButtonSlot: import("vue").ComputedRef<boolean>, navButtonSlot: import("vue").ComputedRef<string | import("vue").Component>, onClickUp: () => void, onClickDown: () => void, onClickDrop: () => void, onClickEdit: () => void;
-declare const canRenderDragIndicator: import("vue").ComputedRef<any>;
+declare const onClick: ($event: any) => void, onShow: ($event: any, i: any) => void, classes: import("vue").ComputedRef<string>, hasNavButtonSlot: import("vue").ComputedRef<boolean>, navButtonSlot: import("vue").ComputedRef<string | import("vue").Component>, onClickUp: () => void, onClickDown: () => void, onClickDrop: () => void;
+declare const canRenderDragIndicator: import("vue").ComputedRef<any>, computedDragIndicatorRole: import("vue").ComputedRef<"drag-indicator" | "invalid-drag-indicator">;
 declare const __VLS_ctx: InstanceType<__VLS_PickNotAny<typeof __VLS_self, new () => {}>>;
 declare var __VLS_26: `item-${number}`, __VLS_27: {
     item: LktObject;
     index: number;
+    editing: boolean;
+    canCreate: boolean;
+    canRead: boolean;
+    canUpdate: boolean;
+    canDrop: boolean;
+    isLoading: boolean;
+    doDrop: () => void;
 }, __VLS_29: {
     item: LktObject;
     index: number;
+    editing: boolean;
+    canCreate: boolean;
+    canRead: boolean;
+    canUpdate: boolean;
+    canDrop: boolean;
+    isLoading: boolean;
+    doDrop: () => void;
 }, __VLS_32: string, __VLS_33: {
     value: any;
     item: LktObject;
@@ -73,8 +90,8 @@ declare const __VLS_self: import("vue").DefineComponent<__VLS_Props, {
     onClickUp: typeof onClickUp;
     onClickDown: typeof onClickDown;
     onClickDrop: typeof onClickDrop;
-    onClickEdit: typeof onClickEdit;
     canRenderDragIndicator: typeof canRenderDragIndicator;
+    computedDragIndicatorRole: typeof computedDragIndicatorRole;
 }, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
     "update:modelValue": (...args: any[]) => void;
     click: (...args: any[]) => void;

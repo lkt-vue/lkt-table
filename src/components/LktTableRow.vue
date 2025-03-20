@@ -32,10 +32,13 @@ const props = withDefaults(defineProps<{
     sortable: boolean
     displayHiddenColumnsIndicator: boolean
     hiddenIsVisible: boolean
+    isLoading: boolean
     addNavigation: boolean
     latestRow: boolean
     canDrop: boolean
     canEdit: boolean
+    canCreate: boolean
+    canRead: boolean
     editModeEnabled: boolean
     hasInlineEditPerm: boolean
     i: number
@@ -104,10 +107,6 @@ const onClick = ($event: any) => emit('click', $event),
     },
     onClickDrop = () => {
         emit('item-drop', props.i);
-    },
-    onClickEdit = () => {
-
-        // emit('item-drop', props.i);
     };
 
 watch(() => props.modelValue, (v) => Item.value = v);
@@ -122,16 +121,17 @@ const canRenderDragIndicator = computed(() => {
     computedDisabledDrag = computed(() => {
         if (typeof props.disabledDrag === 'function') return props.disabledDrag(Item.value);
         return props.disabledDrag === true;
+    }),
+    computedDragIndicatorRole = computed(() => {
+        if (classes.value.includes('handle')) return 'drag-indicator';
+        return 'invalid-drag-indicator';
     })
 </script>
 
 <template>
     <tr :data-i="i" :data-draggable="isDraggable" :class="{'type-custom-item': canCustomItem, 'type-item': canItem}">
-        <td v-if="sortable && isDraggable && editModeEnabled && canRenderDragIndicator"
-            data-role="drag-indicator" :class="classes" :data-i="i">
-            <i class="lkt-icn-drag-indicator"/>
-        </td>
-        <td v-else-if="sortable && editModeEnabled && canRenderDragIndicator" data-role="invalid-drag-indicator">
+        <td v-if="sortable && editModeEnabled && canRenderDragIndicator"
+            :data-role="computedDragIndicatorRole" :class="classes" :data-i="i">
             <i class="lkt-icn-drag-indicator"/>
         </td>
         <td v-if="addNavigation && editModeEnabled" class="lkt-table-nav-cell">
@@ -143,7 +143,7 @@ const canRenderDragIndicator = computed(() => {
                             direction="up"/>
                     </template>
                     <template v-else>
-                        <i class=""/> UP
+                        <i class="lkt-icn-arrow-top"/>
                     </template>
                 </lkt-button>
                 <lkt-button palette="table-nav" :disabled="latestRow" @click="onClickDown">
@@ -153,7 +153,7 @@ const canRenderDragIndicator = computed(() => {
                             direction="down"/>
                     </template>
                     <template v-else>
-                        <i class=""/> DOWN
+                        <i class="lkt-icn-arrow-bottom"/>
                     </template>
                 </lkt-button>
             </div>
@@ -166,7 +166,15 @@ const canRenderDragIndicator = computed(() => {
                 <slot
                     :name="`item-${i}`"
                     :item="Item"
-                    v-bind:index="i"/>
+                    v-bind:index="i"
+                    v-bind:editing="editModeEnabled"
+                    v-bind:can-create="canCreate"
+                    v-bind:can-read="canRead"
+                    v-bind:can-update="canEdit"
+                    v-bind:can-drop="canDrop"
+                    v-bind:is-loading="isLoading"
+                    v-bind:do-drop="() => onClickDrop()"
+                />
             </td>
         </template>
         <template v-else-if="canItem && slots.item">
@@ -174,7 +182,15 @@ const canRenderDragIndicator = computed(() => {
                 <slot
                     name="item"
                     :item="Item"
-                    v-bind:index="i"/>
+                    v-bind:index="i"
+                    v-bind:editing="editModeEnabled"
+                    v-bind:can-create="canCreate"
+                    v-bind:can-read="canRead"
+                    v-bind:can-update="canEdit"
+                    v-bind:can-drop="canDrop"
+                    v-bind:is-loading="isLoading"
+                    v-bind:do-drop="() => onClickDrop()"
+                />
             </td>
         </template>
         <template v-else v-for="column in visibleColumns">
@@ -191,7 +207,8 @@ const canRenderDragIndicator = computed(() => {
                           :value="Item[column.key]"
                           :item="Item"
                           :column="column"
-                          :i="i"/>
+                          :i="i"
+                    />
                 </template>
                 <template v-else-if="Item">
                     <lkt-table-cell
@@ -200,7 +217,8 @@ const canRenderDragIndicator = computed(() => {
                         :columns="visibleColumns"
                         :edit-mode-enabled="editModeEnabled"
                         :has-inline-edit-perm="hasInlineEditPerm"
-                        :i="i"/>
+                        :i="i"
+                    />
                 </template>
             </td>
         </template>
@@ -213,8 +231,7 @@ const canRenderDragIndicator = computed(() => {
         <td v-if="canEdit && editModeEnabled" class="lkt-table-col-edit">
             <edit-button-component
                 :config="editButton"
-                :item="Item"
-                @click="onClickEdit"/>
+                :item="Item"/>
         </td>
     </tr>
 </template>
