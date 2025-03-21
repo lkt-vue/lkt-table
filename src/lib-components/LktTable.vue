@@ -4,6 +4,7 @@ import {defaultTableSorter, getColumnByKey, getDefaultSortColumn} from "../funct
 import LktTableRow from "../components/LktTableRow.vue";
 import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
 import {
+    ButtonConfig,
     ButtonType,
     Column,
     ensureButtonConfig,
@@ -526,14 +527,16 @@ const hasEmptySlot = computed(() => {
         >
             <div
                 class="lkt-table-page-buttons"
-                v-if="showEditionButtons">
+                v-show="showEditionButtons">
                 <lkt-button
                     class="lkt-table--save-button"
                     ref="saveButtonRef"
                     v-show="showSaveButton"
-                    v-bind="safeSaveButton"
-                    :disabled="saveIsDisabled"
-                    :modal-data="computedSaveResourceData"
+                    v-bind="<ButtonConfig>{
+                        ...safeSaveButton,
+                        disabled: saveIsDisabled,
+                        resourceData: computedSaveResourceData
+                    }"
                     @loading="onButtonLoading"
                     @loaded="onButtonLoaded"
                     @click="onSave">
