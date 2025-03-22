@@ -1,35 +1,43 @@
-:root {
-    --lkt-table-border-collapse: separate;
-    --lkt-table-border-spacing: 0;
-    --lkt-table-page-gap: 15px;
+.lkt-table-page {
+    --lkt-table--border-collapse: separate;
+    --lkt-table--border-spacing: 0;
+    --lkt-table--width: 100%;
+    --lkt-table--font-family: system-ui, Helvetica;
+    --lkt-table--border-radius: 5px;
+    --lkt-table--text-align: left;
 
-    --lkt-table-width: 100%;
-    --lkt-table-font-family: system-ui, Helvetica;
-    --lkt-table-font-family-header: system-ui, Helvetica;
+    /** Element: Page Container */
+    --lkt-table--page--gap: 15px;
 
-    --lkt-table-border-radius: 5px;
-    --lkt-table-text-align: left;
+    /** Element: Table Header */
+    --lkt-table--header--font-family: system-ui, Helvetica;
+    --lkt-table--header--padding: 15px;
+    --lkt-table--header--background: #ffffff;
 
-    --lkt-table-padding-row: 15px;
-    --lkt-table-padding-header: 15px;
+    /** Element: Table Row */
+    --lkt-table--row--padding: 15px;
+    --lkt-table--row--font-size: 16px;
+    --lkt-table--row--color: #444444;
+    --lkt-table--row--background: #ffffff;
+    --lkt-table--row-odd--background: #f1f1f1;
 
-    --lkt-table-font-size-row: 16px;
-    --lkt-table-color-row: #444444;
-    --lkt-table-bg-header: #ffffff;
-    --lkt-table-bg-row: #ffffff;
-    --lkt-table-bg-row-odd: #f1f1f1;
+    /** Element: Drag indicator */
+    --lkt-table--drag--width: 20px;
 
-    --lkt-table-font-family-sort-icon: Verdana, Arial, Helvetica, sans-serif;
-    --lkt-table-font-size-sort-icon: 11px;
+    /** Element: Drop Column */
+    --lkt-table--drop-column--width: auto;
+    --lkt-table--drop-column--text-align: right;
 
-    --lkt-table-sort-icon-content-asc: '';
-    --lkt-table-sort-icon-content-desc: '';
+    /** Element: Sort Icon */
+    --lkt-table--sort-icon--font-family: Verdana, Arial, Helvetica, sans-serif;
+    --lkt-table--sort-icon--font-size: 11px;
+    --lkt-table--sort-icon--content-asc: '';
+    --lkt-table--sort-icon--content-desc: '';
 
-    --lkt-table-width-drag: 20px;
-    --lkt-table-border-sortable-chosen: 3px dashed #cccccc;
-    --lkt-table-bg-sortable-chosen-ghost: #aaaaaa;
+    /** Element: Draggable chosen item */
+    --lkt-table--drag-chosen--border: 3px dashed #cccccc;
+    --lkt-table--drag-chosen-ghost--background: #aaaaaa;
 
-    --lkt-table-gap-buttons: 15px;
-    --lkt-table-width-col-drop: auto;
-    --lkt-table-text-align-col-drop: right;
+    /** Element: Buttons */
+    --lkt-table--buttons--gap: 15px;
 }
