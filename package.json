@@ -1,6 +1,6 @@
 {
   "name": "lkt-table",
-  "version": "2.0.16",
+  "version": "2.0.17",
   "description": "",
   "keywords": [
     "lkt",
@@ -50,10 +50,10 @@
     "sortablejs": "^1.15.6"
   },
   "peerDependencies": {
-    "lkt-button": "2.0.13",
+    "lkt-button": "^2.0.16",
     "lkt-data-state": "^1.0.11",
     "lkt-date-tools": "^1.0.4",
-    "lkt-field": "^1.2.7",
+    "lkt-field": "^2.0.0",
     "lkt-http-client": "^1.0.34",
     "lkt-i18n": "^1.1.0",
     "lkt-loader": "^1.2.0",
