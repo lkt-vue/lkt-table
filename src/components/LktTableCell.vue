@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {getColumnDisplayContent} from "../functions/table-functions";
 import {computed, ref, watch} from "vue";
-import {Column, ColumnType, LktObject} from "lkt-vue-kernel";
+import {Column, ColumnType, extractPropValue, LktObject} from "lkt-vue-kernel";
 
 const emit = defineEmits([
     'update:modelValue'
@@ -56,6 +56,13 @@ const computedModalData = computed(() => {
     }
     return props.column.field?.modalData;
 });
+
+const computedFieldConfig = computed(() => {
+    if (typeof props.column.field === 'string' && props.column.field.startsWith('prop:')) {
+        return extractPropValue(props.column.field, item.value);
+    }
+    return props.column.field;
+})
 </script>
 
 <template>
@@ -72,7 +79,7 @@ const computedModalData = computed(() => {
     </template>
     <template v-else-if="column.type === ColumnType.Field && hasInlineEditPerm">
         <lkt-field
-            v-bind="column.field"
+            v-bind="computedFieldConfig"
             :read-mode="!column.editable || !editModeEnabled"
             :ref="(el:any) => inputElement = el"
             :slot-data="slotData"
@@ -83,7 +90,7 @@ const computedModalData = computed(() => {
     </template>
     <template v-else-if="column.type === ColumnType.Field">
         <lkt-field
-            v-bind="column.field"
+            v-bind="computedFieldConfig"
             read-mode
             :ref="(el:any) => inputElement = el"
             :slot-data="slotData"
