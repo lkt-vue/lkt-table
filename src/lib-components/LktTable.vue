@@ -106,7 +106,7 @@ const onPerms = (r: string[]) => {
         dataState.value.store({items: Items.value}).turnStoredIntoOriginal();
         dataStateChanged.value = false;
         nextTick(() => {
-            updateTimeStamp.value = time();
+            reRender();
             saveIsDisabled.value; // Force calc call
             emit('read-response', r);
         })
@@ -260,6 +260,9 @@ const getItemByEvent = (e: any) => {
 
         return undefined;
     },
+    reRender = () => {
+        updateTimeStamp.value = time();
+    },
     getItemByIndex = (index: number) => {
         return Items.value[index];
     },
@@ -277,7 +280,7 @@ const getItemByEvent = (e: any) => {
             });
             SortingDirection.value = SortingDirection.value === SortDirection.Asc ? SortDirection.Desc : SortDirection.Asc;
             SortBy.value = column.key;
-            updateTimeStamp.value = time();
+            reRender();
             emit('sort', [SortBy.value, SortingDirection.value]);
         }
     },
@@ -304,7 +307,7 @@ const getItemByEvent = (e: any) => {
             return;
         }
 
-        if (!hasInlineCreateEverPerm.value) {
+        if (hasInlineCreatePerm.value || hasInlineCreateEverPerm.value) {
             if (typeof props.newValueGenerator === 'function') {
                 let newValue = props.newValueGenerator();
 
@@ -357,15 +360,15 @@ const getItemByEvent = (e: any) => {
     },
     onItemUp = (i) => {
         moveArrayPosition(Items.value, i, i - 1);
-        updateTimeStamp.value = time();
+        reRender();
     },
     onItemDown = (i) => {
         moveArrayPosition(Items.value, i, i + 1);
-        updateTimeStamp.value = time();
+        reRender();
     },
     onItemDrop = (i) => {
         Items.value.splice(i, 1);
-        updateTimeStamp.value = time();
+        reRender();
     },
     stopSortable = () => {
         //@ts-ignore
@@ -391,7 +394,7 @@ const getItemByEvent = (e: any) => {
                 //@ts-ignore
                 let newIndex = evt.newIndex;
                 Items.value.splice(newIndex, 0, Items.value.splice(oldIndex, 1)[0]);
-                updateTimeStamp.value = time();
+                reRender();
                 emit('drag-end', Items.value[newIndex]);
             },
             onMove: function (evt, originalEvent) {
@@ -476,13 +479,14 @@ defineExpose({
     doRefresh,
     doRemoveIndex: (index: number) => {
         Items.value.splice(index, 1);
-        updateTimeStamp.value = time();
+        reRender();
     },
     getHtml: () => element.value,
+    reRender,
     turnStoredIntoOriginal: () => {
         dataState.value.turnStoredIntoOriginal();
         nextTick(()=> {
-            updateTimeStamp.value = time();
+            reRender();
         })
     },
 });
