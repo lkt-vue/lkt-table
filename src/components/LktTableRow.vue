@@ -47,6 +47,7 @@ const props = withDefaults(defineProps<{
     rowDisplayType: ValidTableRowTypeValue
     renderDrag?: boolean | Function
     disabledDrag?: boolean | Function
+    itemContainerClass?: string | Function
 }>(), {
     modelValue: () => ({}),
     isDraggable: true,
@@ -64,6 +65,7 @@ const props = withDefaults(defineProps<{
     rowDisplayType: TableRowType.Auto,
     renderDrag: true,
     disabledDrag: true,
+    itemContainerClass: '',
 });
 
 const Item = ref(props.modelValue);
@@ -125,11 +127,23 @@ const canRenderDragIndicator = computed(() => {
     computedDragIndicatorRole = computed(() => {
         if (classes.value.includes('handle')) return 'drag-indicator';
         return 'invalid-drag-indicator';
-    })
+    }),
+    computedContainerClasses = computed(() => {
+        let r: string[] = [];
+
+        if (canCustomItem) r.push('type-custom-item');
+        if (canItem) r.push('type-item');
+
+        if (typeof props.itemContainerClass === 'function') r.push(props.itemContainerClass(Item.value));
+        else if (props.itemContainerClass !== '') r.push(props.itemContainerClass);
+
+
+        return r.join(' ');
+    });
 </script>
 
 <template>
-    <tr :data-i="i" :data-draggable="isDraggable" :class="{'type-custom-item': canCustomItem, 'type-item': canItem}">
+    <tr :data-i="i" :data-draggable="isDraggable" :class="computedContainerClasses">
         <td v-if="sortable && editModeEnabled && canRenderDragIndicator"
             :data-role="computedDragIndicatorRole" :class="classes" :data-i="i">
             <i class="lkt-icn-drag-indicator"/>

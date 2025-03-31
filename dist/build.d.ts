@@ -1,11 +1,11 @@
-import { Column as fn } from "lkt-vue-kernel";
-import { createColumn as pn } from "lkt-vue-kernel";
-declare namespace nn {
+import { Column as pn } from "lkt-vue-kernel";
+import { createColumn as mn } from "lkt-vue-kernel";
+declare namespace on {
     function install(e: any): void;
 }
+declare function sn(e: any): boolean;
 declare function un(e: any): boolean;
-declare function rn(e: any): boolean;
-declare function sn(e: any): void;
-declare function on(e: any): boolean;
 declare function dn(e: any): void;
-export { fn as Column, pn as createColumn, nn as default, un as setTableCreateButtonSlot, rn as setTableDropButtonSlot, sn as setTableEmptySlot, on as setTableNavButtonSlot, dn as setTableSaveIcon };
+declare function rn(e: any): boolean;
+declare function cn(e: any): void;
+export { pn as Column, mn as createColumn, on as default, sn as setTableCreateButtonSlot, un as setTableDropButtonSlot, dn as setTableEmptySlot, rn as setTableNavButtonSlot, cn as setTableSaveIcon };

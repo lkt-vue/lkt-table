@@ -29,12 +29,13 @@ type __VLS_Props = {
     rowDisplayType: ValidTableRowTypeValue;
     renderDrag?: boolean | Function;
     disabledDrag?: boolean | Function;
+    itemContainerClass?: string | Function;
 };
 declare const Item: import("vue").Ref<LktObject, LktObject>;
 declare const canCustomItem: boolean;
 declare const canItem: boolean;
 declare const onClick: ($event: any) => void, onShow: ($event: any, i: any) => void, classes: import("vue").ComputedRef<string>, hasNavButtonSlot: import("vue").ComputedRef<boolean>, navButtonSlot: import("vue").ComputedRef<string | import("vue").Component>, onClickUp: () => void, onClickDown: () => void, onClickDrop: () => void;
-declare const canRenderDragIndicator: import("vue").ComputedRef<any>, computedDragIndicatorRole: import("vue").ComputedRef<"drag-indicator" | "invalid-drag-indicator">;
+declare const canRenderDragIndicator: import("vue").ComputedRef<any>, computedDragIndicatorRole: import("vue").ComputedRef<"drag-indicator" | "invalid-drag-indicator">, computedContainerClasses: import("vue").ComputedRef<string>;
 declare const __VLS_ctx: InstanceType<__VLS_PickNotAny<typeof __VLS_self, new () => {}>>;
 declare var __VLS_26: `item-${number}`, __VLS_27: {
     item: LktObject;
@@ -92,6 +93,7 @@ declare const __VLS_self: import("vue").DefineComponent<__VLS_Props, {
     onClickDrop: typeof onClickDrop;
     canRenderDragIndicator: typeof canRenderDragIndicator;
     computedDragIndicatorRole: typeof computedDragIndicatorRole;
+    computedContainerClasses: typeof computedContainerClasses;
 }, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
     "update:modelValue": (...args: any[]) => void;
     click: (...args: any[]) => void;
@@ -123,6 +125,7 @@ declare const __VLS_self: import("vue").DefineComponent<__VLS_Props, {
     rowDisplayType: ValidTableRowTypeValue;
     renderDrag: boolean | Function;
     disabledDrag: boolean | Function;
+    itemContainerClass: string | Function;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
     "update:modelValue": (...args: any[]) => void;
@@ -155,6 +158,7 @@ declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}
     rowDisplayType: ValidTableRowTypeValue;
     renderDrag: boolean | Function;
     disabledDrag: boolean | Function;
+    itemContainerClass: string | Function;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: __VLS_WithSlots<typeof __VLS_component, __VLS_Slots>;
 export default _default;

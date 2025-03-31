@@ -436,6 +436,10 @@ const getItemByEvent = (e: any) => {
     canDisplayItem = (item: LktObject, index: number) => {
         if (typeof props.itemDisplayChecker === 'function') return props.itemDisplayChecker(item);
         return true;
+    },
+    getItemContainerClass = (item: LktObject) => {
+        if (typeof props.itemContainerClass === 'function') return props.itemContainerClass(item);
+        return props.itemContainerClass;
     };
 
 onMounted(() => {
@@ -646,6 +650,7 @@ const hasEmptySlot = computed(() => {
                         :render-drag="computedRenderDrag"
                         :disabled-drag="computedDisabledDrag"
                         :is-loading="isLoading"
+                        :item-container-class="itemContainerClass"
                         @click="onClick"
                         @show="show"
                         @item-up="onItemUp"
@@ -732,6 +737,7 @@ const hasEmptySlot = computed(() => {
                         v-for="(item, i) in Items">
                         <div
                             class="lkt-table-item"
+                            :class="getItemContainerClass(item)"
                             v-if="canDisplayItem(item, i)"
                             :data-i="i"
                             :key="getRowKey(item, i)">
@@ -754,7 +760,8 @@ const hasEmptySlot = computed(() => {
                            :class="itemsContainerClass">
                     <template
                         v-for="(item, i) in Items">
-                        <li class="lkt-table-item" v-if="canDisplayItem(item, i)" :data-i="i">
+                        <li class="lkt-table-item"
+                            :class="getItemContainerClass(item)" v-if="canDisplayItem(item, i)" :data-i="i">
                             <slot name="item"
                                   v-bind:[slotItemVar]="item"
                                   v-bind:index="i"
