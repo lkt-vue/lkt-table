@@ -553,6 +553,23 @@ const hasEmptySlot = computed(() => {
                                     v-model:checked="editModeEnabled"/>
                             </div>
 
+
+                            <template v-if="slots['prev-buttons-ever']" v-show="!isLoading">
+                                <slot name="prev-buttons-ever"
+                                      :can-update="hasUpdatePerm"
+                                      :can-drop="hasDropPerm"
+                                      :perms="perms"
+                                />
+                            </template>
+
+                            <template v-if="slots['prev-buttons']" v-show="isEditing && !isLoading">
+                                <slot name="prev-buttons"
+                                      :can-update="hasUpdatePerm"
+                                      :can-drop="hasDropPerm"
+                                      :perms="perms"
+                                />
+                            </template>
+
                             <lkt-button
                                 class="lkt-table--save-button"
                                 ref="saveButtonRef"
@@ -593,6 +610,24 @@ const hasEmptySlot = computed(() => {
                     </lkt-button>
 
                 </template>
+
+
+                <template v-if="slots['prev-buttons-ever']" v-show="!isLoading">
+                    <slot name="prev-buttons-ever"
+                          :can-update="hasUpdatePerm"
+                          :can-drop="hasDropPerm"
+                          :perms="perms"
+                    />
+                </template>
+
+                <template v-if="slots['prev-buttons']" v-show="isEditing && !isLoading">
+                    <slot name="prev-buttons"
+                          :can-update="hasUpdatePerm"
+                          :can-drop="hasDropPerm"
+                          :perms="perms"
+                    />
+                </template>
+
                 <lkt-button
                     class="lkt-table--save-button"
                     ref="saveButtonRef"
