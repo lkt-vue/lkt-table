@@ -134,7 +134,7 @@ const canRenderDragIndicator = computed(() => {
         if (canCustomItem) r.push('type-custom-item');
         if (canItem) r.push('type-item');
 
-        if (typeof props.itemContainerClass === 'function') r.push(props.itemContainerClass(Item.value));
+        if (typeof props.itemContainerClass === 'function') r.push(props.itemContainerClass(Item.value, props.i));
         else if (props.itemContainerClass !== '') r.push(props.itemContainerClass);
 
 

@@ -74,10 +74,11 @@ const Page = ref(props.paginator?.modelValue),
     currentSlide = ref(props.carousel?.currentSlide || 0)
 ;
 
-const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton));
-const safeCreateButton = ref(ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton));
-const safeEditModeButton = ref(ensureButtonConfig(props.editModeButton, LktSettings.defaultEditModeButton));
-const safeDropModeButton = ref(ensureButtonConfig(props.dropButton, LktSettings.defaultDropButton));
+const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton)),
+    safeCreateButton = ref(ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton)),
+    safeEditModeButton = ref(ensureButtonConfig(props.editModeButton, LktSettings.defaultEditModeButton)),
+    safeDropModeButton = ref(ensureButtonConfig(props.dropButton, LktSettings.defaultDropButton)),
+    safeGroupButton = ref(ensureButtonConfig(props.groupButton, LktSettings.defaultGroupButton));
 
 watch(() => props.saveButton, (v) => safeSaveButton.value = ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton));
 watch(() => props.createButton, (v) => safeCreateButton.value = ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton));
@@ -437,8 +438,8 @@ const getItemByEvent = (e: any) => {
         if (typeof props.itemDisplayChecker === 'function') return props.itemDisplayChecker(item);
         return true;
     },
-    getItemContainerClass = (item: LktObject) => {
-        if (typeof props.itemContainerClass === 'function') return props.itemContainerClass(item);
+    getItemContainerClass = (item: LktObject, index: number) => {
+        if (typeof props.itemContainerClass === 'function') return props.itemContainerClass(item, index);
         return props.itemContainerClass;
     };
 
@@ -536,6 +537,62 @@ const hasEmptySlot = computed(() => {
             <div
                 class="lkt-table-page-buttons"
                 v-show="showEditionButtons">
+
+                <template v-if="groupButton !== false">
+                    <lkt-button
+                        ref="groupButton"
+                        v-bind="safeGroupButton"
+                        class="lkt-item-crud-group-button"
+                    >
+                        <template #split>
+
+                            <div class="switch-edition-mode">
+                                <lkt-button
+                                    v-bind="safeEditModeButton"
+                                    v-show="showSwitchButton"
+                                    v-model:checked="editModeEnabled"/>
+                            </div>
+
+                            <lkt-button
+                                class="lkt-table--save-button"
+                                ref="saveButtonRef"
+                                v-show="showSaveButton"
+                                v-bind="<ButtonConfig>{
+                                    ...safeSaveButton,
+                                    disabled: saveIsDisabled,
+                                    resourceData: computedSaveResourceData
+                                }"
+                                @loading="onButtonLoading"
+                                @loaded="onButtonLoaded"
+                                @click="onSave">
+                                <slot v-if="!!slots['button-save']"
+                                      name="button-save"
+                                      :items="Items"
+                                      :edit-mode="editMode"
+                                      :can-update="!saveIsDisabled"/>
+
+                                <template v-slot:split="{doClose, doRootClick}">
+                                    <slot name="button-save-split"
+                                          :do-close="doClose"
+                                          :do-root-click="doRootClick"
+                                          :data-state="dataState"
+                                          :on-button-loading="onButtonLoading"
+                                          :on-button-loaded="onButtonLoaded"
+                                    />
+                                </template>
+                            </lkt-button>
+
+                            <create-button
+                                v-if="computedDisplayCreateButton && Items.length >= requiredItemsForTopCreate"
+                                :config="safeCreateButton"
+                                :disabled="!createEnabled"
+                                @click="onClickAddItem"
+                                @append="onAppend"
+                            />
+                        </template>
+                    </lkt-button>
+
+                </template>
                 <lkt-button
                     class="lkt-table--save-button"
                     ref="saveButtonRef"
@@ -737,7 +794,7 @@ const hasEmptySlot = computed(() => {
                         v-for="(item, i) in Items">
                         <div
                             class="lkt-table-item"
-                            :class="getItemContainerClass(item)"
+                            :class="getItemContainerClass(item, i)"
                             v-if="canDisplayItem(item, i)"
                             :data-i="i"
                             :key="getRowKey(item, i)">
@@ -761,7 +818,7 @@ const hasEmptySlot = computed(() => {
                     <template
                         v-for="(item, i) in Items">
                         <li class="lkt-table-item"
-                            :class="getItemContainerClass(item)" v-if="canDisplayItem(item, i)" :data-i="i">
+                            :class="getItemContainerClass(item, i)" v-if="canDisplayItem(item, i)" :data-i="i">
                             <slot name="item"
                                   v-bind:[slotItemVar]="item"
                                   v-bind:index="i"
