@@ -33,6 +33,7 @@ const emit = defineEmits([
     'update:modelValue',
     'update:perms',
     'update:loading',
+    'update:editMode',
     'sort',
     'click',
     'save',
@@ -464,8 +465,19 @@ watch(() => props.drag?.enabled, (v) => {
     }
 })
 
+watch(() => props.type, (v) => {
+    if (props.drag?.enabled) {
+        initSortable();
+    } else {
+        stopSortable();
+    }
+})
+
 watch(() => props.perms, (v) => permissions.value = v);
 watch(permissions, (v) => emit('update:perms', v));
+watch(editModeEnabled, (v) => {
+    emit('update:editMode', v);
+});
 watch(() => props.editMode, (v) => editModeEnabled.value = v);
 watch(() => props.columns, (v) => Columns.value = v, {deep: true});
 watch(() => props.modelValue, (v) => {
