@@ -4,6 +4,7 @@ import {defaultTableSorter, getColumnByKey, getDefaultSortColumn} from "../funct
 import LktTableRow from "../components/LktTableRow.vue";
 import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
 import {
+    AccordionConfig,
     ButtonConfig,
     ButtonType,
     Column,
@@ -28,6 +29,7 @@ import Sortable from 'sortablejs';
 import TableHeader from "../components/TableHeader.vue";
 import {time} from "lkt-date-tools";
 import {Settings} from "../settings/Settings";
+import LktTableCell from "../components/LktTableCell.vue";
 
 const emit = defineEmits([
     'update:modelValue',
@@ -242,6 +244,10 @@ const emptyColumns = computed(() => {
         }
 
         return !isLoading.value && Items.value.length > 0;
+    }),
+
+    computedAccordionHeaderColumn = computed(() => {
+        return Columns.value.find(c => c.isForAccordionHeader);
     })
 ;
 
@@ -442,6 +448,16 @@ const getItemByEvent = (e: any) => {
     getItemContainerClass = (item: LktObject, index: number) => {
         if (typeof props.itemContainerClass === 'function') return props.itemContainerClass(item, index);
         return props.itemContainerClass;
+    },
+    getAccordionHeaderText = (item: LktObject, index: number) => {
+        if (!computedAccordionHeaderColumn.value) return '';
+
+        return item[computedAccordionHeaderColumn.value.key];
+    },
+    getAccordionHeaderIcon = (item: LktObject, index: number) => {
+        if (!computedAccordionHeaderColumn.value) return '';
+
+        return computedAccordionHeaderColumn.value?.field?.icon;
     };
 
 onMounted(() => {
@@ -840,9 +856,9 @@ const hasEmptySlot = computed(() => {
                     <template
                         v-for="(item, i) in Items">
                         <div
+                            v-if="canDisplayItem(item, i)"
                             class="lkt-table-item"
                             :class="getItemContainerClass(item, i)"
-                            v-if="canDisplayItem(item, i)"
                             :data-i="i"
                             :key="getRowKey(item, i)">
                             <slot name="item"
@@ -857,6 +873,40 @@ const hasEmptySlot = computed(() => {
                                   v-bind:do-drop="() => onItemDrop(i)"
                             />
                         </div>
+                    </template>
+                </div>
+
+                <div v-else-if="type === TableType.Accordion"
+                     ref="tableBody"
+                     :id="'lkt-table-body-' + uniqueId"
+                     class="lkt-table-items-container"
+                     :class="itemsContainerClass">
+                    <template
+                        v-for="(item, i) in Items">
+                        <lkt-accordion
+                            v-if="canDisplayItem(item, i)"
+                            class="lkt-table-item"
+                            :class="getItemContainerClass(item, i)"
+                            :data-i="i"
+                            :key="getRowKey(item, i)"
+                            v-bind="<AccordionConfig>{
+                                ...accordion,
+                                title: getAccordionHeaderText(item, i),
+                                icon: getAccordionHeaderIcon(item, i),
+                            }"
+                        >
+                            <template v-for="column in visibleColumns">
+                                <lkt-table-cell
+                                    v-if="column.key !== computedAccordionHeaderColumn?.key"
+                                    v-model="Items[i]"
+                                    :i="i"
+                                    :column="column"
+                                    :columns="visibleColumns"
+                                    :edit-mode-enabled="editModeEnabled"
+                                    :has-inline-edit-perm="hasInlineEditPerm"
+                                />
+                            </template>
+                        </lkt-accordion>
                     </template>
                 </div>
 

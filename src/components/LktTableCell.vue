@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {getColumnDisplayContent} from "../functions/table-functions";
 import {computed, ref, watch} from "vue";
-import {Column, ColumnType, extractPropValue, LktObject} from "lkt-vue-kernel";
+import {Column, ColumnType, extractPropValue, FieldType, LktObject} from "lkt-vue-kernel";
 
 const emit = defineEmits([
     'update:modelValue'
@@ -63,6 +63,20 @@ const computedFieldConfig = computed(() => {
     }
     return props.column.field;
 })
+
+const computedFieldLabel = computed(() => {
+    if (props.column.type === ColumnType.Field) {
+        if (!props.column?.field?.label && [
+            FieldType.Switch,
+            FieldType.Check,
+        ].includes(props.column.field?.type)) {
+            return props.column.label;
+        }
+
+        return props.column.field?.label;
+    }
+    return '';
+})
 </script>
 
 <template>
@@ -83,7 +97,7 @@ const computedFieldConfig = computed(() => {
             :read-mode="!column.editable || !editModeEnabled"
             :ref="(el:any) => inputElement = el"
             :slot-data="slotData"
-            :label="column.field?.type === 'switch' || column.field?.type === 'check' ? column.label : ''"
+            :label="computedFieldLabel"
             :modal-data="computedModalData"
             :prop="item"
             v-model="value"/>
@@ -94,7 +108,7 @@ const computedFieldConfig = computed(() => {
             read-mode
             :ref="(el:any) => inputElement = el"
             :slot-data="slotData"
-            :label="column.field?.type === 'switch' || column.field?.type === 'check' ? column.label : ''"
+            :label="computedFieldLabel"
             :modal-data="computedModalData"
             :prop="item"
             :model-value="value"/>
