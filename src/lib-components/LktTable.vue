@@ -146,6 +146,7 @@ const emptyColumns = computed(() => {
         return Columns.value.filter((c: Column) => !c.hidden);
     }),
     hiddenColumns = computed(() => {
+        return [];
         return Columns.value.filter((c: Column) => c.hidden);
     }),
     hiddenColumnsColSpan = computed(() => {
@@ -453,11 +454,6 @@ const getItemByEvent = (e: any) => {
         if (!computedAccordionHeaderColumn.value) return '';
 
         return item[computedAccordionHeaderColumn.value.key];
-    },
-    getAccordionHeaderIcon = (item: LktObject, index: number) => {
-        if (!computedAccordionHeaderColumn.value) return '';
-
-        return computedAccordionHeaderColumn.value?.field?.icon;
     };
 
 onMounted(() => {
@@ -892,9 +888,19 @@ const hasEmptySlot = computed(() => {
                             v-bind="<AccordionConfig>{
                                 ...accordion,
                                 title: getAccordionHeaderText(item, i),
-                                icon: getAccordionHeaderIcon(item, i),
                             }"
                         >
+                            <template #header>
+                                <lkt-table-cell
+                                    v-model="Items[i]"
+                                    :i="i"
+                                    :column="computedAccordionHeaderColumn"
+                                    :columns="visibleColumns"
+                                    :edit-mode-enabled="editModeEnabled"
+                                    :has-inline-edit-perm="hasInlineEditPerm"
+                                />
+                            </template>
+
                             <template v-for="column in visibleColumns">
                                 <lkt-table-cell
                                     v-if="column.key !== computedAccordionHeaderColumn?.key"
