@@ -1,4 +1,4 @@
-import { defineComponent as re, computed as s, ref as I, shallowReactive as qt, watch as F, watchEffect as Pt, onMounted as Yt, onBeforeUnmount as Aa, reactive as Ft, provide as ia, h as K, useId as Va, inject as kt, getCurrentInstance as Ra, onUnmounted as Ma, onUpdated as La, cloneVNode as Na, resolveComponent as ye, createBlock as $, createElementBlock as k, unref as B, openBlock as v, normalizeProps as Re, mergeProps as ae, withCtx as P, createTextVNode as ot, toDisplayString as Xe, Fragment as q, withModifiers as ra, createCommentVNode as D, resolveDynamicComponent as Le, useSlots as ua, normalizeClass as Z, createElementVNode as x, createVNode as se, renderSlot as O, renderList as ie, withDirectives as Oe, vShow as Ue, mergeDefaults as $a, nextTick as Tt, createSlots as Zt } from "vue";
+import { defineComponent as re, computed as s, ref as I, shallowReactive as qt, watch as F, watchEffect as Pt, onMounted as Yt, onBeforeUnmount as Aa, reactive as Ft, provide as ia, h as K, useId as Va, inject as kt, getCurrentInstance as Ra, onUnmounted as Ma, onUpdated as La, cloneVNode as Na, resolveComponent as ye, createBlock as $, createElementBlock as k, unref as B, openBlock as v, mergeProps as ae, withCtx as P, createTextVNode as ot, toDisplayString as Xe, Fragment as q, withModifiers as ra, createCommentVNode as D, resolveDynamicComponent as Me, useSlots as ua, normalizeClass as Z, createElementVNode as x, createVNode as se, renderSlot as O, renderList as ie, withDirectives as Oe, vShow as Ue, mergeDefaults as $a, nextTick as Tt, createSlots as Zt, normalizeProps as _e } from "vue";
 import { __ as _a } from "lkt-i18n";
 import { SortDirection as Ge, Column as sa, extractPropValue as Oa, ColumnType as ht, FieldType as xt, prepareResourceData as da, TableRowType as nt, extractI18nValue as ca, LktSettings as be, ensureButtonConfig as Ee, TablePermission as Ae, PaginatorType as Et, TableType as qe, getDefaultValues as Ua, Table as Pa, ButtonType as jt } from "lkt-vue-kernel";
 import { Column as Cn, createColumn as wn } from "lkt-vue-kernel";
@@ -348,7 +348,7 @@ const el = re({
     const a = Ga(i), f = a.getSlides(), y = s(() => f.length), b = I(null), T = I(null), u = I(0), m = s(() => Object.assign(Object.assign(Object.assign({}, H), Ka(t, ["breakpoints", "modelValue"])), { i18n: Object.assign(Object.assign({}, H.i18n), t.i18n) })), c = qt(Object.assign({}, m.value)), S = I((l = t.modelValue) !== null && l !== void 0 ? l : 0), V = I(S.value);
     F(S, (d) => V.value = d);
     const E = I(0), le = s(() => Math.ceil((y.value - 1) / 2)), j = s(() => y.value - 1), de = s(() => 0);
-    let ce = null, Ne = null, ue = null;
+    let ce = null, Le = null, ue = null;
     const Y = s(() => u.value + c.gap), r = s(() => {
       const d = c.dir || "ltr";
       return d in Vt ? Vt[d] : d;
@@ -363,7 +363,7 @@ const el = re({
     const rt = zt(() => {
       he(), Ke(), ke();
     }), Pe = qt(/* @__PURE__ */ new Set()), ne = I([]);
-    function $e({ widthMultiplier: d, heightMultiplier: h }) {
+    function Ne({ widthMultiplier: d, heightMultiplier: h }) {
       ne.value = f.map((C) => {
         var A;
         const L = (A = C.exposed) === null || A === void 0 ? void 0 : A.getBoundingRect();
@@ -389,7 +389,7 @@ const el = re({
       if (!T.value)
         return;
       const d = Qa(Pe);
-      if (Mt(d), $e(d), U.value)
+      if (Mt(d), Ne(d), U.value)
         u.value = Xa(ne.value.map((h) => h[M.value]));
       else {
         const h = Number(c.itemsToShow), C = (h - 1) * c.gap;
@@ -431,14 +431,14 @@ const el = re({
     }), Yt(() => {
       Je.value = !0, he(), Ze(), b.value && (ue = new ResizeObserver(rt), ue.observe(b.value)), i("init");
     }), Aa(() => {
-      Je.value = !1, a.cleanup(), Ne && clearTimeout(Ne), Se && cancelAnimationFrame(Se), ce && clearInterval(ce), ue && (ue.disconnect(), ue = null), typeof document < "u" && dt(), b.value && (b.value.removeEventListener("transitionend", ke), b.value.removeEventListener("animationiteration", ke));
+      Je.value = !1, a.cleanup(), Le && clearTimeout(Le), Se && cancelAnimationFrame(Se), ce && clearInterval(ce), ue && (ue.disconnect(), ue = null), typeof document < "u" && dt(), b.value && (b.value.removeEventListener("transitionend", ke), b.value.removeEventListener("animationiteration", ke));
     });
     let De = !1;
     const je = { x: 0, y: 0 }, fe = Ft({ x: 0, y: 0 }), ze = I(!1), ut = I(!1), st = () => {
       ze.value = !0;
     }, Lt = () => {
       ze.value = !1;
-    }, _e = zt((d) => {
+    }, $e = zt((d) => {
       if (!d.ctrlKey)
         switch (d.key) {
           case "ArrowLeft":
@@ -451,9 +451,9 @@ const el = re({
             break;
         }
     }, 200), Nt = () => {
-      document.addEventListener("keydown", _e);
+      document.addEventListener("keydown", $e);
     }, dt = () => {
-      document.removeEventListener("keydown", _e);
+      document.removeEventListener("keydown", $e);
     };
     function St(d) {
       const h = d.target.tagName;
@@ -519,7 +519,7 @@ const el = re({
         currentSlideIndex: S.value,
         prevSlideIndex: E.value,
         slidesCount: y.value
-      }), pe(), z.value = !0, S.value = C, A !== C && vt.pause(), i("update:modelValue", A), Ne = setTimeout(() => {
+      }), pe(), z.value = !0, S.value = C, A !== C && vt.pause(), i("update:modelValue", A), Le = setTimeout(() => {
         c.wrapAround && A !== C && (vt.resume(), S.value = A, i("loop", {
           currentSlideIndex: S.value,
           slidingToIndex: d
@@ -1018,12 +1018,12 @@ const la = (t) => t && nl(t), na = re({
     });
     return (m, c) => {
       const S = ye("lkt-anchor"), V = ye("lkt-button"), E = ye("lkt-field");
-      return m.column.type === B(ht).Anchor ? (v(), $(S, Re(ae({ key: 0 }, m.column.anchor)), {
+      return m.column.type === B(ht).Anchor ? (v(), $(S, ae({ key: 0 }, m.column.anchor, { prop: l.value }), {
         default: P(() => [
           ot(Xe(B(it)(m.column, l.value, m.i)), 1)
         ]),
         _: 1
-      }, 16)) : m.column.type === B(ht).Button ? (v(), $(V, ae({ key: 1 }, m.column.button, { prop: l.value }), {
+      }, 16, ["prop"])) : m.column.type === B(ht).Button ? (v(), $(V, ae({ key: 1 }, m.column.button, { prop: l.value }), {
         default: P(() => [
           ot(Xe(B(it)(m.column, l.value, m.i)), 1)
         ]),
@@ -1050,10 +1050,10 @@ const la = (t) => t && nl(t), na = re({
       ], 64));
     };
   }
-}), Me = class Me {
+}), Re = class Re {
 };
-Me.navButtonSlot = "", Me.dropButtonSlot = "", Me.editButtonSlot = "", Me.createButtonSlot = "", Me.defaultEmptySlot = void 0, Me.defaultSaveIcon = "", Me.defaultNoResultsMessage = "No results";
-let W = Me;
+Re.navButtonSlot = "", Re.dropButtonSlot = "", Re.editButtonSlot = "", Re.createButtonSlot = "", Re.defaultEmptySlot = void 0, Re.defaultSaveIcon = "", Re.defaultNoResultsMessage = "No results";
+let W = Re;
 const fl = /* @__PURE__ */ re({
   __name: "DropButtonComponent",
   props: {
@@ -1074,7 +1074,7 @@ const fl = /* @__PURE__ */ re({
         onClick: b[0] || (b[0] = ra((u) => i("click", u), ["prevent", "stop"]))
       }), {
         default: P(() => [
-          l.value ? (v(), $(Le(a.value), { key: 0 })) : D("", !0)
+          l.value ? (v(), $(Me(a.value), { key: 0 })) : D("", !0)
         ]),
         _: 1
       }, 16, ["disabled", "resource-data"]);
@@ -1100,7 +1100,7 @@ const fl = /* @__PURE__ */ re({
         onClick: b[0] || (b[0] = ra((u) => i("click"), ["prevent", "stop"]))
       }), {
         default: P(() => [
-          l.value ? (v(), $(Le(a.value), { key: 0 })) : D("", !0)
+          l.value ? (v(), $(Me(a.value), { key: 0 })) : D("", !0)
         ]),
         _: 1
       }, 16, ["disabled", "resource-data"]);
@@ -1178,7 +1178,7 @@ const fl = /* @__PURE__ */ re({
     F(() => l.modelValue, (r) => a.value = r), F(a, (r) => {
       n("update:modelValue", r);
     }, { deep: !0 });
-    const de = s(() => typeof l.renderDrag == "function" ? l.renderDrag(a.value) : l.renderDrag === !0), ce = s(() => typeof l.disabledDrag == "function" ? l.disabledDrag(a.value) : l.disabledDrag === !0), Ne = s(() => c.value.includes("handle") ? "drag-indicator" : "invalid-drag-indicator"), ue = s(() => {
+    const de = s(() => typeof l.renderDrag == "function" ? l.renderDrag(a.value) : l.renderDrag === !0), ce = s(() => typeof l.disabledDrag == "function" ? l.disabledDrag(a.value) : l.disabledDrag === !0), Le = s(() => c.value.includes("handle") ? "drag-indicator" : "invalid-drag-indicator"), ue = s(() => {
       let r = [];
       return y && r.push("type-custom-item"), b && r.push("type-item"), typeof l.itemContainerClass == "function" ? r.push(l.itemContainerClass(a.value, l.i)) : l.itemContainerClass !== "" && r.push(l.itemContainerClass), r.join(" ");
     });
@@ -1191,7 +1191,7 @@ const fl = /* @__PURE__ */ re({
       }, [
         r.sortable && r.editModeEnabled && de.value ? (v(), k("td", {
           key: 0,
-          "data-role": Ne.value,
+          "data-role": Le.value,
           class: Z(c.value),
           "data-i": r.i
         }, _[3] || (_[3] = [
@@ -1205,7 +1205,7 @@ const fl = /* @__PURE__ */ re({
               onClick: E
             }, {
               default: P(() => [
-                S.value ? (v(), $(Le(V.value), {
+                S.value ? (v(), $(Me(V.value), {
                   key: 0,
                   direction: "up"
                 })) : (v(), k("i", hl))
@@ -1218,7 +1218,7 @@ const fl = /* @__PURE__ */ re({
               onClick: le
             }, {
               default: P(() => [
-                S.value ? (v(), $(Le(V.value), {
+                S.value ? (v(), $(Me(V.value), {
                   key: 0,
                   direction: "down"
                 })) : (v(), k("i", kl))
@@ -1402,7 +1402,7 @@ const fl = /* @__PURE__ */ re({
         onClick: b
       }), {
         default: P(() => [
-          l.value ? (v(), $(Le(a.value), { key: 0 })) : D("", !0)
+          l.value ? (v(), $(Me(a.value), { key: 0 })) : D("", !0)
         ]),
         _: 1
       }, 16, ["disabled"]);
@@ -1525,16 +1525,16 @@ const fl = /* @__PURE__ */ re({
   ],
   setup(t, { expose: o, emit: i }) {
     var Jt, Qt;
-    const n = i, l = ua(), a = t, f = {}, y = I(typeof a.sorter == "function" ? a.sorter : rl), b = I(cl(a.columns)), T = I(Ge.Asc), u = I(a.modelValue), m = I(f), c = I(null), S = I(a.columns), V = I((Jt = a.paginator) == null ? void 0 : Jt.modelValue), E = I(a.loading), le = I(!1), j = I(a.perms), de = I(null), ce = I(null), Ne = I(null), ue = I({}), Y = I(new ja({ items: u.value }, a.dataStateConfig)), r = I(a.editMode), _ = I(0), ee = I(null), U = I(((Qt = a.carousel) == null ? void 0 : Qt.currentSlide) || 0), M = I(Ee(a.saveButton, be.defaultSaveButton)), he = I(Ee(a.createButton, be.defaultCreateButton)), rt = I(Ee(a.editModeButton, be.defaultEditModeButton)), Pe = I(Ee(a.dropButton, be.defaultDropButton)), ne = I(Ee(a.groupButton, be.defaultGroupButton));
+    const n = i, l = ua(), a = t, f = {}, y = I(typeof a.sorter == "function" ? a.sorter : rl), b = I(cl(a.columns)), T = I(Ge.Asc), u = I(a.modelValue), m = I(f), c = I(null), S = I(a.columns), V = I((Jt = a.paginator) == null ? void 0 : Jt.modelValue), E = I(a.loading), le = I(!1), j = I(a.perms), de = I(null), ce = I(null), Le = I(null), ue = I({}), Y = I(new ja({ items: u.value }, a.dataStateConfig)), r = I(a.editMode), _ = I(0), ee = I(null), U = I(((Qt = a.carousel) == null ? void 0 : Qt.currentSlide) || 0), M = I(Ee(a.saveButton, be.defaultSaveButton)), he = I(Ee(a.createButton, be.defaultCreateButton)), rt = I(Ee(a.editModeButton, be.defaultEditModeButton)), Pe = I(Ee(a.dropButton, be.defaultDropButton)), ne = I(Ee(a.groupButton, be.defaultGroupButton));
     F(() => a.saveButton, (e) => M.value = Ee(a.saveButton, be.defaultSaveButton)), F(() => a.createButton, (e) => he.value = Ee(a.createButton, be.defaultCreateButton)), F(() => a.editModeButton, (e) => rt.value = Ee(a.editModeButton, be.defaultEditModeButton)), F(() => a.dropButton, (e) => Pe.value = Ee(a.dropButton, be.defaultDropButton));
-    const $e = I(!1);
+    const Ne = I(!1);
     F(E, (e) => n("update:loading", e)), F(V, (e) => n("page", e));
     const Fe = (e) => {
       j.value = e;
     }, Mt = (e) => {
       var p;
-      Array.isArray(e.data) && ((!a.paginator || ![Et.LoadMore, Et.Infinite].includes((p = a.paginator) == null ? void 0 : p.type)) && u.value.splice(0, u.value.length), u.value = [...u.value, ...e.data]), E.value = !1, le.value = !0, Y.value.store({ items: u.value }).turnStoredIntoOriginal(), $e.value = !1, Tt(() => {
-        me(), _e.value, n("read-response", e);
+      Array.isArray(e.data) && ((!a.paginator || ![Et.LoadMore, Et.Infinite].includes((p = a.paginator) == null ? void 0 : p.type)) && u.value.splice(0, u.value.length), u.value = [...u.value, ...e.data]), E.value = !1, le.value = !0, Y.value.store({ items: u.value }).turnStoredIntoOriginal(), Ne.value = !1, Tt(() => {
+        me(), $e.value, n("read-response", e);
       });
     }, ke = () => Tt(() => E.value = !0), Ke = () => {
       de.value.doRefresh();
@@ -1562,13 +1562,13 @@ const fl = /* @__PURE__ */ re({
       return e;
     }), st = s(() => {
       var e;
-      return a.hiddenSave || E.value || !((e = M.value) != null && e.resource || M.value.type) ? !1 : r.value && $e.value ? !0 : r.value;
-    }), Lt = s(() => gt.value && u.value.length >= a.requiredItemsForTopCreate || He.value ? !0 : st.value || r.value && pe.value), _e = s(() => {
+      return a.hiddenSave || E.value || !((e = M.value) != null && e.resource || M.value.type) ? !1 : r.value && Ne.value ? !0 : r.value;
+    }), Lt = s(() => gt.value && u.value.length >= a.requiredItemsForTopCreate || He.value ? !0 : st.value || r.value && pe.value), $e = s(() => {
       var e, p;
       return _.value, typeof ((e = M.value) == null ? void 0 : e.disabled) == "function" ? M.value.disabled({
         value: u.value,
         dataState: Y.value
-      }) : typeof ((p = M.value) == null ? void 0 : p.disabled) == "boolean" ? M.value.disabled : !$e.value;
+      }) : typeof ((p = M.value) == null ? void 0 : p.disabled) == "boolean" ? M.value.disabled : !Ne.value;
     }), Nt = s(() => u.value.length), dt = s(() => {
       var e;
       return {
@@ -1637,7 +1637,7 @@ const fl = /* @__PURE__ */ re({
           n("error", p.httpStatus);
           return;
         }
-        Y.value.turnStoredIntoOriginal(), $e.value = !1, n("save", p);
+        Y.value.turnStoredIntoOriginal(), Ne.value = !1, n("save", p);
       }
     }, Dt = (e, p, N) => {
       if (N >= e.length) {
@@ -1676,7 +1676,7 @@ const fl = /* @__PURE__ */ re({
     }, Ut = s(() => typeof a.createEnabledValidator == "function" ? a.createEnabledValidator({ items: u.value }) : !0), gt = s(() => vt.value || pe.value && r.value || Ct.value && r.value || xe.value && r.value), Ca = s(() => [qe.Ol, qe.Ul].includes(a.type)), bt = (e, p) => typeof a.itemDisplayChecker == "function" ? a.itemDisplayChecker(e) : !0, It = (e, p) => typeof a.itemContainerClass == "function" ? a.itemContainerClass(e, p) : a.itemContainerClass, wa = (e, p) => tt.value ? e[tt.value.key] : "";
     Yt(() => {
       var e;
-      a.initialSorting && d(vl(a.columns, b.value)), Y.value.store({ items: u.value }).turnStoredIntoOriginal(), $e.value = !1, (e = a.drag) != null && e.enabled && Tt(() => {
+      a.initialSorting && d(vl(a.columns, b.value)), Y.value.store({ items: u.value }).turnStoredIntoOriginal(), Ne.value = !1, (e = a.drag) != null && e.enabled && Tt(() => {
         Ot();
       });
     }), F(() => {
@@ -1692,7 +1692,7 @@ const fl = /* @__PURE__ */ re({
     }), F(() => a.editMode, (e) => r.value = e), F(() => a.columns, (e) => S.value = e, { deep: !0 }), F(() => a.modelValue, (e) => {
       u.value = e;
     }, { deep: !0 }), F(u, (e) => {
-      Y.value.increment({ items: e }), $e.value = Y.value.changed(), n("update:modelValue", e);
+      Y.value.increment({ items: e }), Ne.value = Y.value.changed(), n("update:modelValue", e);
     }, { deep: !0 }), o({
       getItemByEvent: $t,
       getItemByIndex: wt,
@@ -1722,7 +1722,7 @@ const fl = /* @__PURE__ */ re({
           key: 0,
           class: Z(e.headerClass)
         }, [
-          Qe.value ? (v(), $(Le(St.value), { key: 0 }, {
+          Qe.value ? (v(), $(Me(St.value), { key: 0 }, {
             default: P(() => [
               e.titleIcon ? (v(), k("i", {
                 key: 0,
@@ -1734,7 +1734,7 @@ const fl = /* @__PURE__ */ re({
           })) : D("", !0),
           B(l).title ? O(e.$slots, "title", { key: 1 }) : D("", !0)
         ], 2)) : D("", !0),
-        (v(), $(Le(ct.value), {
+        (v(), $(Me(ct.value), {
           class: Z(["lkt-table-page-content-wrapper", e.wrapContentClass])
         }, {
           default: P(() => {
@@ -1769,10 +1769,10 @@ const fl = /* @__PURE__ */ re({
                     Oe(se(N, ae({
                       class: "lkt-table--save-button",
                       ref_key: "saveButtonRef",
-                      ref: Ne
+                      ref: Le
                     }, {
                       ...M.value,
-                      disabled: _e.value,
+                      disabled: $e.value,
                       resourceData: dt.value
                     }, {
                       onLoading: J,
@@ -1793,7 +1793,7 @@ const fl = /* @__PURE__ */ re({
                           key: 0,
                           items: u.value,
                           editMode: e.editMode,
-                          canUpdate: !_e.value
+                          canUpdate: !$e.value
                         }) : D("", !0)
                       ]),
                       _: 3
@@ -1825,10 +1825,10 @@ const fl = /* @__PURE__ */ re({
                 Oe(se(N, ae({
                   class: "lkt-table--save-button",
                   ref_key: "saveButtonRef",
-                  ref: Ne
+                  ref: Le
                 }, {
                   ...M.value,
-                  disabled: _e.value,
+                  disabled: $e.value,
                   resourceData: dt.value
                 }, {
                   onLoading: J,
@@ -1849,7 +1849,7 @@ const fl = /* @__PURE__ */ re({
                       key: 0,
                       items: u.value,
                       editMode: e.editMode,
-                      canUpdate: !_e.value
+                      canUpdate: !$e.value
                     }) : D("", !0)
                   ]),
                   _: 3
@@ -1946,7 +1946,7 @@ const fl = /* @__PURE__ */ re({
                       B(l)[`item-${g}`] ? {
                         name: `item-${g}`,
                         fn: P((R) => [
-                          O(e.$slots, `item-${g}`, Re({
+                          O(e.$slots, `item-${g}`, _e({
                             [e.slotItemVar || ""]: R.item,
                             index: g,
                             editing: R.editing,
@@ -1962,7 +1962,7 @@ const fl = /* @__PURE__ */ re({
                       } : B(l).item ? {
                         name: "item",
                         fn: P((R) => [
-                          O(e.$slots, "item", Re({
+                          O(e.$slots, "item", _e({
                             [e.slotItemVar || ""]: R.item,
                             index: g,
                             editing: R.editing,
@@ -1979,7 +1979,7 @@ const fl = /* @__PURE__ */ re({
                       ie(ze.value, (R) => ({
                         name: R,
                         fn: P((Be) => [
-                          O(e.$slots, R, Re({
+                          O(e.$slots, R, _e({
                             [e.slotItemVar || ""]: Be.item,
                             value: Be.value,
                             column: Be.column
@@ -2009,7 +2009,7 @@ const fl = /* @__PURE__ */ re({
                       ie(ze.value, (R) => ({
                         name: R,
                         fn: P((Be) => [
-                          O(e.$slots, R, Re({
+                          O(e.$slots, R, _e({
                             [e.slotItemVar || ""]: Be.item,
                             value: Be.value,
                             column: Be.column
@@ -2031,7 +2031,7 @@ const fl = /* @__PURE__ */ re({
                       "data-i": g,
                       key: mt(w, g)
                     }, [
-                      O(e.$slots, "item", Re({
+                      O(e.$slots, "item", _e({
                         [e.slotItemVar || ""]: w,
                         index: g,
                         editing: r.value,
@@ -2042,7 +2042,7 @@ const fl = /* @__PURE__ */ re({
                         isLoading: E.value,
                         doDrop: () => pt(g)
                       }))
-                    ], 10, Ql)) : bt(w) ? O(e.$slots, "item", Re({
+                    ], 10, Ql)) : bt(w) ? O(e.$slots, "item", _e({
                       class: It(w, g),
                       dataI: g,
                       key: mt(w, g),
@@ -2105,7 +2105,7 @@ const fl = /* @__PURE__ */ re({
                       _: 2
                     }, 1040, ["class", "data-i"])) : D("", !0)
                   ], 64))), 256))
-                ], 10, Zl)) : Ca.value ? (v(), $(Le(e.type), {
+                ], 10, Zl)) : Ca.value ? (v(), $(Me(e.type), {
                   key: 3,
                   class: Z(["lkt-table-items-container", e.itemsContainerClass])
                 }, {
@@ -2116,7 +2116,7 @@ const fl = /* @__PURE__ */ re({
                         class: Z(["lkt-table-item", It(w, g)]),
                         "data-i": g
                       }, [
-                        O(e.$slots, "item", Re({
+                        O(e.$slots, "item", _e({
                           [e.slotItemVar || ""]: w,
                           index: g,
                           editing: r.value,
@@ -2166,7 +2166,7 @@ const fl = /* @__PURE__ */ re({
                       }, {
                         default: P(() => [
                           x("div", an, [
-                            O(e.$slots, "item", Re({
+                            O(e.$slots, "item", _e({
                               [e.slotItemVar || ""]: w,
                               index: g,
                               editing: r.value,
@@ -2189,7 +2189,7 @@ const fl = /* @__PURE__ */ re({
                 [Ue, et.value]
               ]),
               !E.value && u.value.length === 0 ? (v(), k("div", ln, [
-                B(l).empty ? O(e.$slots, "empty", { key: 0 }) : Ba.value ? (v(), $(Le(Da.value), {
+                B(l).empty ? O(e.$slots, "empty", { key: 0 }) : Ba.value ? (v(), $(Me(Da.value), {
                   key: 1,
                   message: e.noResultsText
                 }, null, 8, ["message"])) : e.noResultsText ? (v(), k(q, { key: 2 }, [

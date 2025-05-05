@@ -83,6 +83,7 @@ const computedFieldLabel = computed(() => {
     <template v-if="column.type === ColumnType.Anchor">
         <lkt-anchor
             v-bind="column.anchor"
+            :prop="item"
         >{{ getColumnDisplayContent(column, item, i) }}</lkt-anchor>
     </template>
     <template v-else-if="column.type === ColumnType.Button">
