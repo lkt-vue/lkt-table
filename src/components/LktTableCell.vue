@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {getColumnDisplayContent} from "../functions/table-functions";
 import {computed, ref, watch} from "vue";
-import {Column, ColumnType, extractPropValue, FieldType, LktObject} from "lkt-vue-kernel";
+import {Column, ColumnType, extractPropValue, FieldType, LktObject, TableType} from "lkt-vue-kernel";
 
 const emit = defineEmits([
     'update:modelValue'
@@ -14,6 +14,7 @@ const props = withDefaults(defineProps<{
     i: number
     editModeEnabled: boolean
     hasInlineEditPerm: boolean
+    tableType: TableType
 }>(), {
     modelValue: () => ({}),
     column: () => (new Column()),
@@ -66,11 +67,13 @@ const computedFieldConfig = computed(() => {
 
 const computedFieldLabel = computed(() => {
     if (props.column.type === ColumnType.Field) {
-        if (!props.column?.field?.label && [
-            FieldType.Switch,
-            FieldType.Check,
-        ].includes(props.column.field?.type)) {
-            return props.column.label;
+        if (!props.column?.field?.label) {
+            if (props.column.ensureFieldLabel || [
+                FieldType.Switch,
+                FieldType.Check,
+            ].includes(props.column.field?.type)) {
+                return props.column.label;
+            }
         }
 
         return props.column.field?.label;

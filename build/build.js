@@ -986,7 +986,8 @@ const la = (t) => t && nl(t), na = re({
     columns: { default: () => [] },
     i: { default: 0 },
     editModeEnabled: { type: Boolean, default: !1 },
-    hasInlineEditPerm: { type: Boolean, default: !1 }
+    hasInlineEditPerm: { type: Boolean, default: !1 },
+    tableType: {}
   },
   emits: [
     "update:modelValue"
@@ -1011,10 +1012,10 @@ const la = (t) => t && nl(t), na = re({
       return (V = n.column.field) == null ? void 0 : V.modalData;
     }), T = s(() => typeof n.column.field == "string" && n.column.field.startsWith("prop:") ? Oa(n.column.field, l.value) : n.column.field), u = s(() => {
       var m, c, S, V;
-      return n.column.type === ht.Field ? !((c = (m = n.column) == null ? void 0 : m.field) != null && c.label) && [
+      return n.column.type === ht.Field ? !((c = (m = n.column) == null ? void 0 : m.field) != null && c.label) && (n.column.ensureFieldLabel || [
         xt.Switch,
         xt.Check
-      ].includes((S = n.column.field) == null ? void 0 : S.type) ? n.column.label : (V = n.column.field) == null ? void 0 : V.label : "";
+      ].includes((S = n.column.field) == null ? void 0 : S.type)) ? n.column.label : (V = n.column.field) == null ? void 0 : V.label : "";
     });
     return (m, c) => {
       const S = ye("lkt-anchor"), V = ye("lkt-button"), E = ye("lkt-field");
