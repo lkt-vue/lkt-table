@@ -5,7 +5,5 @@ import "./../lkt-table.css";
 declare const LktTable: Plugin;
 export default LktTable;
 export declare const setTableNavButtonSlot: (component: string | Component) => boolean;
-export declare const setTableDropButtonSlot: (component: string | Component) => boolean;
 export declare const setTableCreateButtonSlot: (component: string | Component) => boolean;
 export declare const setTableEmptySlot: (component?: string | Component) => void;
-export declare const setTableSaveIcon: (icon: string) => void;

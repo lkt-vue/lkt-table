@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed} from "vue";
 import {Settings} from "../settings/Settings";
-import {ButtonConfig, LktObject} from "lkt-vue-kernel";
+import {ButtonConfig, LktObject, ModalConfig} from "lkt-vue-kernel";
 
 const emit = defineEmits([
     'click',
@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<{
 const hasCreateButtonSlot = computed(() => Settings.createButtonSlot !== ''),
     createButtonSlot = computed(() => Settings.createButtonSlot);
 
-const calculatedModalData = {
+const calculatedModalData = <ModalConfig>{
     ...props.config?.modalData,
     beforeClose: (data: LktObject) => {
         // Checks lkt-item-crud as modal flow

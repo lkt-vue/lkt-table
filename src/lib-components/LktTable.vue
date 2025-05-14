@@ -20,7 +20,6 @@ import {
     TablePermission,
     TableType
 } from "lkt-vue-kernel";
-import LktHiddenRow from "../components/LktHiddenRow.vue";
 import {generateRandomString, replaceAll} from "lkt-string-tools";
 import {DataState} from "lkt-data-state";
 import {HTTPResponse} from "lkt-http-client";
@@ -52,13 +51,10 @@ const slots = useSlots();
 //@ts-nocheck
 const props = withDefaults(defineProps<TableConfig>(), getDefaultValues(Table));
 
-const hiddenColumnsStack: LktObject = {};
-
 const Sorter = ref(typeof props.sorter === 'function' ? props.sorter : defaultTableSorter),
     SortBy = ref(getDefaultSortColumn(props.columns)),
     SortingDirection = ref(SortDirection.Asc),
     Items = ref(props.modelValue),
-    Hidden = ref(hiddenColumnsStack),
     tableBody = ref(<HTMLElement | null>null),
     Columns = ref(props.columns);
 
@@ -80,13 +76,11 @@ const Page = ref(props.paginator?.modelValue),
 const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton)),
     safeCreateButton = ref(ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton)),
     safeEditModeButton = ref(ensureButtonConfig(props.editModeButton, LktSettings.defaultEditModeButton)),
-    safeDropModeButton = ref(ensureButtonConfig(props.dropButton, LktSettings.defaultDropButton)),
     safeGroupButton = ref(ensureButtonConfig(props.groupButton, LktSettings.defaultGroupButton));
 
 watch(() => props.saveButton, (v) => safeSaveButton.value = ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton));
 watch(() => props.createButton, (v) => safeCreateButton.value = ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton));
 watch(() => props.editModeButton, (v) => safeEditModeButton.value = ensureButtonConfig(props.editModeButton, LktSettings.defaultEditModeButton));
-watch(() => props.dropButton, (v) => safeDropModeButton.value = ensureButtonConfig(props.dropButton, LktSettings.defaultDropButton));
 
 const dataStateChanged = ref(false);
 
@@ -145,20 +139,8 @@ const emptyColumns = computed(() => {
     visibleColumns = computed(() => {
         return Columns.value.filter((c: Column) => !c.hidden);
     }),
-    hiddenColumns = computed(() => {
-        return [];
-        return Columns.value.filter((c: Column) => c.hidden);
-    }),
-    hiddenColumnsColSpan = computed(() => {
-        let r = visibleColumns.value.length + 1;
-        if (props.sortable) ++r;
-        return r;
-    }),
     rowKeyColumns = computed(() => {
         return Columns.value.filter((c: Column) => c.isForRowKey);
-    }),
-    displayHiddenColumnsIndicator = computed(() => {
-        return hiddenColumns.value.length > 0 && !props.sortable;
     }),
     columnKeys = computed((): string[] => {
         return Columns.value.map(c => c.key);
@@ -278,9 +260,6 @@ const getItemByEvent = (e: any) => {
     getRowByIndex = (index: number) => {
         return tableBody.value?.querySelector(`[data-i="${index}"]`);
     },
-    isVisible = (index: number) => {
-        return Hidden.value['tr_' + index] === true;
-    },
     sort = (column: Column | null) => {
         if (!column) return;
         if (column.sortable) {
@@ -295,10 +274,6 @@ const getItemByEvent = (e: any) => {
     },
     onClick = ($event: any) => {
         emit('click', $event);
-    },
-    show = ($event: any, i: number) => {
-        let k = 'tr_' + i;
-        Hidden.value[k] = typeof Hidden.value[k] === 'undefined' ? true : !Hidden.value[k];
     },
     validDragChecker = (evt: any) => {
         let targetIndex = parseInt(evt?.originalEvent?.toElement?.closest('tr')?.dataset?.i);
@@ -713,7 +688,6 @@ const hasEmptySlot = computed(() => {
                     <tr>
                         <th v-if="computedDragModeEnabled && editModeEnabled" data-role="drag-indicator"/>
                         <th v-if="addNavigation && editModeEnabled"/>
-                        <th v-if="displayHiddenColumnsIndicator"/>
                         <template v-for="column in visibleColumns">
                             <table-header
                                 v-if="emptyColumns.indexOf(column.key) === -1"
@@ -725,14 +699,6 @@ const hasEmptySlot = computed(() => {
                                 @click="sort(column)"
                             />
                         </template>
-                        <th
-                            v-if="hasDropPerm && editModeEnabled"
-                            class="lkt-table-col-drop"
-                        />
-                        <th
-                            v-if="hasEditPerm && hasUpdatePerm && editModeEnabled"
-                            class="lkt-table-col-edit"
-                        />
                     </tr>
                     </thead>
                     <tbody
@@ -746,15 +712,11 @@ const hasEmptySlot = computed(() => {
                         v-show="canDisplayItem(Items[i], i)"
                         :key="getRowKey(item, i)"
                         :i="i"
-                        :drop-button="safeDropModeButton"
-                        :edit-button="editButton"
-                        :display-hidden-columns-indicator="displayHiddenColumnsIndicator"
                         :is-draggable="isDraggable(item)"
                         :sortable="computedDragModeEnabled"
                         :visible-columns="visibleColumns"
                         :empty-columns="emptyColumns"
                         :add-navigation="addNavigation"
-                        :hidden-is-visible="isVisible(i)"
                         :latest-row="i+1 === amountOfItems"
                         :can-drop="hasDropPerm && editModeEnabled"
                         :can-edit="hasEditPerm && hasUpdatePerm && editModeEnabled"
@@ -768,7 +730,6 @@ const hasEmptySlot = computed(() => {
                         :is-loading="isLoading"
                         :item-container-class="itemContainerClass"
                         @click="onClick"
-                        @show="show"
                         @item-up="onItemUp"
                         @item-down="onItemDown"
                         @item-drop="onItemDrop"
@@ -812,35 +773,6 @@ const hasEmptySlot = computed(() => {
                             />
                         </template>
                     </lkt-table-row>
-                    <lkt-hidden-row
-                        v-if="hiddenColumns.length > 0"
-                        v-model="Items[i]"
-                        v-for="(item, i) in Items"
-                        :key="getRowKey(item, i, true)"
-                        :i="i"
-                        :hidden-columns="hiddenColumns"
-                        :hidden-columns-col-span="hiddenColumnsColSpan"
-                        :is-draggable="isDraggable(item)"
-                        :sortable="computedDragModeEnabled"
-                        :visible-columns="visibleColumns"
-                        :empty-columns="emptyColumns"
-                        :hidden-is-visible="isVisible(i)"
-                        :edit-mode-enabled="editModeEnabled"
-                        :has-inline-edit-perm="hasInlineEditPerm"
-                        @click="onClick"
-                        @show="show"
-                    >
-                        <template
-                            v-for="column in colSlots"
-                            v-slot:[column]="row">
-                            <slot
-                                :name="column"
-                                :[slotItemVar]="row.item"
-                                :value="row.value"
-                                :column="row.column"
-                            />
-                        </template>
-                    </lkt-hidden-row>
                     </tbody>
                 </table>
 

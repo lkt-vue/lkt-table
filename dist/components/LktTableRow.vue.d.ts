@@ -1,12 +1,8 @@
-import { ButtonConfig, Column, LktObject, ValidTableRowTypeValue } from "lkt-vue-kernel";
+import { Column, LktObject, ValidTableRowTypeValue } from "lkt-vue-kernel";
 type __VLS_Props = {
     modelValue: LktObject;
-    editButton: ButtonConfig;
-    dropButton: ButtonConfig;
     isDraggable: boolean;
     sortable: boolean;
-    displayHiddenColumnsIndicator: boolean;
-    hiddenIsVisible: boolean;
     isLoading: boolean;
     addNavigation: boolean;
     latestRow: boolean;
@@ -60,14 +56,12 @@ type __VLS_Slots = {} & {
 declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
     "update:modelValue": (...args: any[]) => void;
     click: (...args: any[]) => void;
-    show: (...args: any[]) => void;
     "item-up": (...args: any[]) => void;
     "item-down": (...args: any[]) => void;
     "item-drop": (...args: any[]) => void;
 }, string, import("vue").PublicProps, Readonly<__VLS_Props> & Readonly<{
     "onUpdate:modelValue"?: ((...args: any[]) => any) | undefined;
     onClick?: ((...args: any[]) => any) | undefined;
-    onShow?: ((...args: any[]) => any) | undefined;
     "onItem-up"?: ((...args: any[]) => any) | undefined;
     "onItem-down"?: ((...args: any[]) => any) | undefined;
     "onItem-drop"?: ((...args: any[]) => any) | undefined;
@@ -77,8 +71,6 @@ declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}
     editModeEnabled: boolean;
     isDraggable: boolean;
     sortable: boolean;
-    displayHiddenColumnsIndicator: boolean;
-    hiddenIsVisible: boolean;
     addNavigation: boolean;
     latestRow: boolean;
     canDrop: boolean;

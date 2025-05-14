@@ -132,9 +132,9 @@ export const getColumnByKey = (columns: Column[], key: string): Column | null =>
     return null;
 }
 
-export const getColumnClasses = (column: Column) => {
-    if (column.type) {
-        return `is-${column.type}`;
-    }
-    return '';
+export const getColumnClasses = (column: Column): string => {
+    let r = <Array<string>>[];
+    if (column.class) r.push(column.class);
+    if (column.type) r.push(`is-${column.type}`);
+    return r.join(' ');
 }

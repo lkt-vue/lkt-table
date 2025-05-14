@@ -9,16 +9,12 @@ import {
 import LktTableCell from "./LktTableCell.vue";
 import {computed, ref, useSlots, watch} from "vue";
 import {Settings} from "../settings/Settings";
-import DropButtonComponent from "./DropButtonComponent.vue";
-import EditButtonComponent from "./EditButtonComponent.vue";
-import {replaceAll} from "lkt-string-tools";
-import {ButtonConfig, Column, LktObject, TableRowType, ValidTableRowTypeValue} from "lkt-vue-kernel";
+import {Column, LktObject, TableRowType, ValidTableRowTypeValue} from "lkt-vue-kernel";
 
 const slots = useSlots();
 const emit = defineEmits([
     'update:modelValue',
     'click',
-    'show',
     'item-up',
     'item-down',
     'item-drop'
@@ -26,12 +22,8 @@ const emit = defineEmits([
 
 const props = withDefaults(defineProps<{
     modelValue: LktObject
-    editButton: ButtonConfig
-    dropButton: ButtonConfig
     isDraggable: boolean
     sortable: boolean
-    displayHiddenColumnsIndicator: boolean
-    hiddenIsVisible: boolean
     isLoading: boolean
     addNavigation: boolean
     latestRow: boolean
@@ -52,8 +44,6 @@ const props = withDefaults(defineProps<{
     modelValue: () => ({}),
     isDraggable: true,
     sortable: true,
-    displayHiddenColumnsIndicator: false,
-    hiddenIsVisible: false,
     addNavigation: false,
     latestRow: false,
     canDrop: false,
@@ -76,13 +66,7 @@ if (!calculatedRowDisplayType) calculatedRowDisplayType = TableRowType.Auto;
 const canCustomItem = [TableRowType.Auto, TableRowType.PreferCustomItem].includes(calculatedRowDisplayType);
 const canItem = [TableRowType.Auto, TableRowType.PreferItem].includes(calculatedRowDisplayType);
 
-const parsedEditLink = ref(props.editButton.anchor?.to);
-for (let k in Item.value) parsedEditLink.value = replaceAll(parsedEditLink.value, ':' + k, Item.value[k]);
-
 const onClick = ($event: any) => emit('click', $event),
-    onShow = ($event: any, i: any) => {
-        emit('show', $event, i)
-    },
     classes = computed(() => {
         let r: string[] = [];
 
@@ -172,9 +156,6 @@ const canRenderDragIndicator = computed(() => {
                 </lkt-button>
             </div>
         </td>
-        <td v-if="displayHiddenColumnsIndicator"
-            @click="onShow($event, i)" data-role="show-more"
-            :class="hiddenIsVisible ? 'state-open' : ''"/>
         <template v-if="canCustomItem && slots[`item-${i}`]">
             <td :key="'td' + i" :colspan="visibleColumns.length">
                 <slot
@@ -236,16 +217,5 @@ const canRenderDragIndicator = computed(() => {
                 </template>
             </td>
         </template>
-        <td v-if="canDrop && editModeEnabled" class="lkt-table-col-drop">
-            <drop-button-component
-                :config="dropButton"
-                :item="Item"
-                @click="onClickDrop"/>
-        </td>
-        <td v-if="canEdit && editModeEnabled" class="lkt-table-col-edit">
-            <edit-button-component
-                :config="editButton"
-                :item="Item"/>
-        </td>
     </tr>
 </template>

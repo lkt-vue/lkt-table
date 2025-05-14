@@ -25,11 +25,6 @@ export const setTableNavButtonSlot = (component: string|Component) => {
     return true;
 }
 
-export const setTableDropButtonSlot = (component: string|Component) => {
-    Settings.dropButtonSlot = component;
-    return true;
-}
-
 export const setTableCreateButtonSlot = (component: string|Component) => {
     Settings.createButtonSlot = component;
     return true;
@@ -37,8 +32,4 @@ export const setTableCreateButtonSlot = (component: string|Component) => {
 
 export const setTableEmptySlot = (component?: string|Component) => {
     Settings.defaultEmptySlot = component;
-}
-
-export const setTableSaveIcon = (icon: string) => {
-    Settings.defaultSaveIcon = icon;
 }
