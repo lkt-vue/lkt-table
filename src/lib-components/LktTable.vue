@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {Carousel, Navigation, Pagination, Slide} from "vue3-carousel";
-import {defaultTableSorter, getColumnByKey, getDefaultSortColumn} from "../functions/table-functions";
+import {colPreferSlot, defaultTableSorter, getColumnByKey, getDefaultSortColumn} from "../functions/table-functions";
 import LktTableRow from "../components/LktTableRow.vue";
 import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
 import {
@@ -17,7 +17,7 @@ import {
     SortDirection,
     Table,
     TableConfig,
-    TablePermission,
+    TablePermission, TableRowType,
     TableType
 } from "lkt-vue-kernel";
 import {generateRandomString, replaceAll} from "lkt-string-tools";
@@ -233,6 +233,11 @@ const emptyColumns = computed(() => {
         return Columns.value.find(c => c.isForAccordionHeader);
     })
 ;
+
+const getCustomSlotName = (item: LktObject, i: number) => {
+    if (typeof props.customItemSlotName === 'function') return props.customItemSlotName(item, i);
+    return '';
+}
 
 
 const getItemByEvent = (e: any) => {
@@ -828,40 +833,70 @@ const hasEmptySlot = computed(() => {
                      :class="itemsContainerClass">
                     <template
                         v-for="(item, i) in Items">
-                        <lkt-accordion
-                            v-if="canDisplayItem(item, i)"
-                            class="lkt-table-item"
-                            :class="getItemContainerClass(item, i)"
-                            :data-i="i"
-                            :key="getRowKey(item, i)"
-                            v-bind="<AccordionConfig>{
+                        <template v-if="[TableRowType.Auto, TableRowType.PreferCustomItem].includes(rowDisplayType) && slots[getCustomSlotName(item, i)]">
+                            <slot
+                                :name="getCustomSlotName(item, i)"
+                                :item="item"
+                                v-bind:index="i"
+                                v-bind:editing="editModeEnabled"
+                                v-bind:is-loading="isLoading"
+                            />
+                        </template>
+                        <template v-else-if="[TableRowType.Auto, TableRowType.PreferCustomItem].includes(rowDisplayType) && slots[`item-${i}`]">
+                            <slot
+                                :name="`item-${i}`"
+                                :item="item"
+                                v-bind:index="i"
+                                v-bind:editing="editModeEnabled"
+                                v-bind:is-loading="isLoading"
+                            />
+                        </template>
+                        <template v-else>
+                            <lkt-accordion
+                                v-if="canDisplayItem(item, i)"
+                                class="lkt-table-item"
+                                :class="getItemContainerClass(item, i)"
+                                :data-i="i"
+                                :key="getRowKey(item, i)"
+                                v-bind="<AccordionConfig>{
                                 ...accordion,
                                 title: getAccordionHeaderText(item, i),
                             }"
-                        >
-                            <template #header>
-                                <lkt-table-cell
-                                    v-model="Items[i]"
-                                    :i="i"
-                                    :column="computedAccordionHeaderColumn"
-                                    :columns="visibleColumns"
-                                    :edit-mode-enabled="editModeEnabled"
-                                    :has-inline-edit-perm="hasInlineEditPerm"
-                                />
-                            </template>
+                            >
+                                <template #header>
+                                    <lkt-table-cell
+                                        v-model="Items[i]"
+                                        :i="i"
+                                        :column="computedAccordionHeaderColumn"
+                                        :columns="visibleColumns"
+                                        :edit-mode-enabled="editModeEnabled"
+                                        :has-inline-edit-perm="hasInlineEditPerm"
+                                    />
+                                </template>
 
-                            <template v-for="column in visibleColumns">
-                                <lkt-table-cell
-                                    v-if="column.key !== computedAccordionHeaderColumn?.key"
-                                    v-model="Items[i]"
-                                    :i="i"
-                                    :column="column"
-                                    :columns="visibleColumns"
-                                    :edit-mode-enabled="editModeEnabled"
-                                    :has-inline-edit-perm="hasInlineEditPerm"
-                                />
-                            </template>
-                        </lkt-accordion>
+                                <template v-for="column in visibleColumns">
+                                    <template v-if="column.key !== computedAccordionHeaderColumn?.key && !!$slots[column.key] && colPreferSlot(column, Items[i])">
+                                        <slot :name="column.key"
+                                              :value="Items[i][column.key]"
+                                              :item="Items[i]"
+                                              :column="column"
+                                              :i="i"
+                                        />
+                                    </template>
+                                    <template v-else>
+                                        <lkt-table-cell
+                                            v-if="column.key !== computedAccordionHeaderColumn?.key"
+                                            v-model="Items[i]"
+                                            :i="i"
+                                            :column="column"
+                                            :columns="visibleColumns"
+                                            :edit-mode-enabled="editModeEnabled"
+                                            :has-inline-edit-perm="hasInlineEditPerm"
+                                        />
+                                    </template>
+                                </template>
+                            </lkt-accordion>
+                        </template>
                     </template>
                 </div>
 
