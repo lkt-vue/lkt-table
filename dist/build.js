@@ -1832,11 +1832,13 @@ const ol = ["data-i", "data-draggable"], il = ["data-role", "data-i"], rl = {
                   id: "lkt-table-body-" + h(Se),
                   class: K(["lkt-table-items-container", e.itemsContainerClass])
                 }, [
-                  (v(!0), w(q, null, be(d.value, (S, m) => (v(), w(q, null, [
+                  (v(!0), w(q, null, be(d.value, (S, m) => (v(), w(q, {
+                    key: Qe(S, m)
+                  }, [
                     !e.skipTableItemsContainer && pt(S) ? (v(), w("div", {
+                      key: 0,
                       class: K(["lkt-table-item", It(S, m)]),
-                      "data-i": m,
-                      key: Qe(S, m)
+                      "data-i": m
                     }, [
                       O(e.$slots, "item", je({
                         [e.slotItemVar || ""]: S,
@@ -1850,9 +1852,9 @@ const ol = ["data-i", "data-draggable"], il = ["data-role", "data-i"], rl = {
                         doDrop: () => x(m)
                       }))
                     ], 10, Vl)) : pt(S) ? O(e.$slots, "item", je({
+                      key: 1,
                       class: It(S, m),
                       dataI: m,
-                      key: Qe(S, m),
                       [e.slotItemVar || ""]: S,
                       index: m,
                       editing: I.value,
@@ -1863,7 +1865,7 @@ const ol = ["data-i", "data-draggable"], il = ["data-role", "data-i"], rl = {
                       isLoading: g.value,
                       doDrop: () => x(m)
                     })) : R("", !0)
-                  ], 64))), 256))
+                  ], 64))), 128))
                 ], 10, El)) : e.type === h(He).Accordion ? (v(), w("div", {
                   key: 2,
                   ref_key: "tableBody",
@@ -1939,7 +1941,9 @@ const ol = ["data-i", "data-draggable"], il = ["data-role", "data-i"], rl = {
                   class: K(["lkt-table-items-container", e.itemsContainerClass])
                 }, {
                   default: P(() => [
-                    (v(!0), w(q, null, be(d.value, (S, m) => (v(), w(q, null, [
+                    (v(!0), w(q, null, be(d.value, (S, m) => (v(), w(q, {
+                      key: Qe(S, m)
+                    }, [
                       pt(S) ? (v(), w("li", {
                         key: 0,
                         class: K(["lkt-table-item", It(S, m)]),
@@ -1957,7 +1961,7 @@ const ol = ["data-i", "data-draggable"], il = ["data-role", "data-i"], rl = {
                           doDrop: () => x(m)
                         }))
                       ], 10, Rl)) : R("", !0)
-                    ], 64))), 256))
+                    ], 64))), 128))
                   ]),
                   _: 3
                 }, 8, ["class"])) : e.type === h(He).Carousel ? (v(), w("div", {

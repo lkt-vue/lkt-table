@@ -787,13 +787,12 @@ const hasEmptySlot = computed(() => {
                      class="lkt-table-items-container"
                      :class="itemsContainerClass">
                     <template
-                        v-for="(item, i) in Items">
+                        v-for="(item, i) in Items" :key="getRowKey(item, i)">
                         <div
                             v-if="!skipTableItemsContainer && canDisplayItem(item, i)"
                             class="lkt-table-item"
                             :class="getItemContainerClass(item, i)"
-                            :data-i="i"
-                            :key="getRowKey(item, i)">
+                            :data-i="i">
                             <slot name="item"
                                   v-bind:[slotItemVar]="item"
                                   v-bind:index="i"
@@ -811,7 +810,6 @@ const hasEmptySlot = computed(() => {
                             name="item"
                             :class="getItemContainerClass(item, i)"
                             :data-i="i"
-                            :key="getRowKey(item, i)"
 
                               v-bind:[slotItemVar]="item"
                               v-bind:index="i"
@@ -903,7 +901,7 @@ const hasEmptySlot = computed(() => {
                 <component :is="type" v-else-if="computedIsList" class="lkt-table-items-container"
                            :class="itemsContainerClass">
                     <template
-                        v-for="(item, i) in Items">
+                        v-for="(item, i) in Items" :key="getRowKey(item, i)">
                         <li class="lkt-table-item"
                             :class="getItemContainerClass(item, i)" v-if="canDisplayItem(item, i)" :data-i="i">
                             <slot name="item"
