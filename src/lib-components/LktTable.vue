@@ -517,13 +517,18 @@ const hasEmptySlot = computed(() => {
         if (!props.drag.enabled) return false;
         if (typeof props.drag.isDisabled === 'undefined') return false;
         return props.drag.isDisabled;
+    }),
+    displayLktHeader = computed(() => {
+        return typeof props.header === 'object'
+            && Object.keys(props.header).length > 0;
     });
 
 </script>
 
 <template>
     <section ref="element" class="lkt-table-page" :id="'lkt-table-page-' + uniqueId">
-        <header v-if="computedTitle || slots.title" :class="headerClass">
+        <lkt-header v-if="displayLktHeader" v-bind="header"/>
+        <header v-else-if="computedTitle || slots.title" :class="headerClass">
             <component :is="computedTitleTag" v-if="computedTitle">
                 <i v-if="titleIcon" :class="titleIcon"/>
                 {{ computedTitle }}
