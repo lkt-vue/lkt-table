@@ -10,7 +10,7 @@ import {
     Column,
     ensureButtonConfig,
     extractI18nValue,
-    getDefaultValues,
+    getDefaultValues, ItemSlotComponentConfig,
     LktObject,
     LktSettings,
     PaginatorType,
@@ -423,7 +423,7 @@ const getItemByEvent = (e: any) => {
         return [TableType.Ol, TableType.Ul].includes(props.type);
     }),
     canDisplayItem = (item: LktObject, index: number) => {
-        if (typeof props.itemDisplayChecker === 'function') return props.itemDisplayChecker(item);
+        if (typeof props.itemDisplayChecker === 'function') return props.itemDisplayChecker(item, index);
         return true;
     },
     getItemContainerClass = (item: LktObject, index: number) => {
@@ -435,6 +435,15 @@ const getItemByEvent = (e: any) => {
 
         return item[computedAccordionHeaderColumn.value.key];
     };
+
+const computedItemSlotComponent = computed(() => {
+    if (typeof props.itemSlotComponent === 'function') return props.itemSlotComponent();
+    return props.itemSlotComponent;
+})
+const computedItemSlotData = computed(() => {
+    if (typeof props.itemSlotData === 'function') return props.itemSlotData();
+    return props.itemSlotData;
+})
 
 onMounted(() => {
     if (props.initialSorting) {
@@ -494,7 +503,7 @@ defineExpose({
     reRender,
     turnStoredIntoOriginal: () => {
         dataState.value.turnStoredIntoOriginal();
-        nextTick(()=> {
+        nextTick(() => {
             reRender();
         })
     },
@@ -798,16 +807,30 @@ const hasEmptySlot = computed(() => {
                             class="lkt-table-item"
                             :class="getItemContainerClass(item, i)"
                             :data-i="i">
-                            <slot name="item"
-                                  v-bind:[slotItemVar]="item"
-                                  v-bind:index="i"
-                                  v-bind:editing="editModeEnabled"
-                                  v-bind:can-create="hasCreatePerm"
-                                  v-bind:can-read="hasReadPerm"
-                                  v-bind:can-update="hasUpdatePerm"
-                                  v-bind:can-drop="hasDropPerm"
-                                  v-bind:is-loading="isLoading"
-                                  v-bind:do-drop="() => onItemDrop(i)"
+                            <template v-if="computedItemSlotComponent">
+                                <component
+                                    :is="computedItemSlotComponent"
+                                    v-bind="<ItemSlotComponentConfig>{
+                                        item,
+                                        index: i,
+                                        editing: editModeEnabled,
+                                        perms: permissions,
+                                        data: computedItemSlotData,
+                                    }"
+                                />
+                            </template>
+                            <slot
+                                v-else
+                                name="item"
+                                v-bind:[slotItemVar]="item"
+                                v-bind:index="i"
+                                v-bind:editing="editModeEnabled"
+                                v-bind:can-create="hasCreatePerm"
+                                v-bind:can-read="hasReadPerm"
+                                v-bind:can-update="hasUpdatePerm"
+                                v-bind:can-drop="hasDropPerm"
+                                v-bind:is-loading="isLoading"
+                                v-bind:do-drop="() => onItemDrop(i)"
                             />
                         </div>
                         <slot
@@ -816,15 +839,15 @@ const hasEmptySlot = computed(() => {
                             :class="getItemContainerClass(item, i)"
                             :data-i="i"
 
-                              v-bind:[slotItemVar]="item"
-                              v-bind:index="i"
-                              v-bind:editing="editModeEnabled"
-                              v-bind:can-create="hasCreatePerm"
-                              v-bind:can-read="hasReadPerm"
-                              v-bind:can-update="hasUpdatePerm"
-                              v-bind:can-drop="hasDropPerm"
-                              v-bind:is-loading="isLoading"
-                              v-bind:do-drop="() => onItemDrop(i)"
+                            v-bind:[slotItemVar]="item"
+                            v-bind:index="i"
+                            v-bind:editing="editModeEnabled"
+                            v-bind:can-create="hasCreatePerm"
+                            v-bind:can-read="hasReadPerm"
+                            v-bind:can-update="hasUpdatePerm"
+                            v-bind:can-drop="hasDropPerm"
+                            v-bind:is-loading="isLoading"
+                            v-bind:do-drop="() => onItemDrop(i)"
                         />
                     </template>
                 </div>
@@ -836,7 +859,8 @@ const hasEmptySlot = computed(() => {
                      :class="itemsContainerClass">
                     <template
                         v-for="(item, i) in Items">
-                        <template v-if="[TableRowType.Auto, TableRowType.PreferCustomItem].includes(rowDisplayType) && slots[getCustomSlotName(item, i)]">
+                        <template
+                            v-if="[TableRowType.Auto, TableRowType.PreferCustomItem].includes(rowDisplayType) && slots[getCustomSlotName(item, i)]">
                             <slot
                                 :name="getCustomSlotName(item, i)"
                                 :item="item"
@@ -845,7 +869,8 @@ const hasEmptySlot = computed(() => {
                                 v-bind:is-loading="isLoading"
                             />
                         </template>
-                        <template v-else-if="[TableRowType.Auto, TableRowType.PreferCustomItem].includes(rowDisplayType) && slots[`item-${i}`]">
+                        <template
+                            v-else-if="[TableRowType.Auto, TableRowType.PreferCustomItem].includes(rowDisplayType) && slots[`item-${i}`]">
                             <slot
                                 :name="`item-${i}`"
                                 :item="item"
@@ -878,7 +903,8 @@ const hasEmptySlot = computed(() => {
                                 </template>
 
                                 <template v-for="column in visibleColumns">
-                                    <template v-if="column.key !== computedAccordionHeaderColumn?.key && !!$slots[column.key] && colPreferSlot(column, Items[i])">
+                                    <template
+                                        v-if="column.key !== computedAccordionHeaderColumn?.key && !!$slots[column.key] && colPreferSlot(column, Items[i])">
                                         <slot :name="column.key"
                                               :value="Items[i][column.key]"
                                               :item="Items[i]"
@@ -945,24 +971,39 @@ const hasEmptySlot = computed(() => {
                         <template v-for="(item, i) in Items" :key="slide">
                             <slide :index="i">
                                 <div class="lkt-carousel-slide">
-                                    <slot name="item"
-                                          v-bind:[slotItemVar]="item"
-                                          v-bind:index="i"
-                                          v-bind:editing="editModeEnabled"
-                                          v-bind:can-create="hasCreatePerm"
-                                          v-bind:can-read="hasReadPerm"
-                                          v-bind:can-update="hasUpdatePerm"
-                                          v-bind:can-drop="hasDropPerm"
-                                          v-bind:is-loading="isLoading"
-                                          v-bind:do-drop="() => onItemDrop(i)"
+
+                                    <template v-if="computedItemSlotComponent">
+                                        <component
+                                            :is="computedItemSlotComponent"
+                                            v-bind="<ItemSlotComponentConfig>{
+                                                item,
+                                                index: i,
+                                                editing: editModeEnabled,
+                                                perms: permissions,
+                                                data: computedItemSlotData,
+                                            }"
+                                        />
+                                    </template>
+                                    <slot
+                                        v-else
+                                        name="item"
+                                        v-bind:[slotItemVar]="item"
+                                        v-bind:index="i"
+                                        v-bind:editing="editModeEnabled"
+                                        v-bind:can-create="hasCreatePerm"
+                                        v-bind:can-read="hasReadPerm"
+                                        v-bind:can-update="hasUpdatePerm"
+                                        v-bind:can-drop="hasDropPerm"
+                                        v-bind:is-loading="isLoading"
+                                        v-bind:do-drop="() => onItemDrop(i)"
                                     />
                                 </div>
                             </slide>
                         </template>
 
                         <template #addons>
-                            <Navigation />
-                            <Pagination />
+                            <Navigation/>
+                            <Pagination/>
                         </template>
                     </carousel>
                 </div>
@@ -1003,6 +1044,10 @@ const hasEmptySlot = computed(() => {
                 @perms="onPerms"
                 @response="onPaginatorResponse"
             />
+
+            <template v-if="slots['web-element-actions']">
+                <slot name="web-element-actions"/>
+            </template>
 
         </component>
     </section>

@@ -1,9 +1,9 @@
-import { Column as en } from "lkt-vue-kernel";
-import { createColumn as tn } from "lkt-vue-kernel";
-declare namespace Yl {
+import { Column as an } from "lkt-vue-kernel";
+import { createColumn as ln } from "lkt-vue-kernel";
+declare namespace Wl {
     function install(t: any): void;
 }
-declare function Wl(t: any): boolean;
-declare function Jl(t: any): void;
-declare function Kl(t: any): boolean;
-export { en as Column, tn as createColumn, Yl as default, Wl as setTableCreateButtonSlot, Jl as setTableEmptySlot, Kl as setTableNavButtonSlot };
+declare function Ql(t: any): boolean;
+declare function Zl(t: any): void;
+declare function Jl(t: any): boolean;
+export { an as Column, ln as createColumn, Wl as default, Ql as setTableCreateButtonSlot, Zl as setTableEmptySlot, Jl as setTableNavButtonSlot };
