@@ -414,6 +414,7 @@ const getItemByEvent = (e: any) => {
         return true;
     }),
     computedDisplayCreateButton = computed(() => {
+        if (props.createButton === false) return false;
         return hasInlineCreateEverPerm.value
             || (hasCreatePerm.value && editModeEnabled.value)
             || (hasInlineCreatePerm.value && editModeEnabled.value)
