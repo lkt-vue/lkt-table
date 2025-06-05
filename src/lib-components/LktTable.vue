@@ -58,6 +58,15 @@ const Sorter = ref(typeof props.sorter === 'function' ? props.sorter : defaultTa
     tableBody = ref(<HTMLElement | null>null),
     Columns = ref(props.columns);
 
+// if (Items.value.length > 0) {
+//     if (typeof props.events?.parseResults === 'function') {
+//         let temporalItems = props.events.parseResults(Items.value);
+//         Items.value.splice(0, Items.value.length);
+//         Items.value = [...temporalItems];
+//
+//     }
+// }
+
 const Page = ref(props.paginator?.modelValue),
     isLoading = ref(props.loading),
     firstLoadReady = ref(false),
@@ -93,23 +102,28 @@ const onPerms = (r: string[]) => {
     },
     onPaginatorResponse = (r: HTTPResponse) => {
         if (Array.isArray(r.data)) {
-            //@ts-ignore
-            if (!props.paginator || ![PaginatorType.LoadMore, PaginatorType.Infinite].includes(props.paginator?.type)) {
-                Items.value.splice(0, Items.value.length);
+            let rawItems = r.data;
+            if (typeof props.events?.parseResults === 'function') {
+                rawItems = props.events.parseResults(rawItems);
             }
-            Items.value = [...Items.value, ...r.data];
+            Items.value = [...Items.value, ...rawItems];
         }
         isLoading.value = false;
         firstLoadReady.value = true;
         dataState.value.store({items: Items.value}).turnStoredIntoOriginal();
         dataStateChanged.value = false;
         nextTick(() => {
-            reRender();
+            // reRender();
             saveIsDisabled.value; // Force calc call
             emit('read-response', r);
         })
     },
-    onLoading = () => nextTick(() => isLoading.value = true),
+    onLoading = () => nextTick(() => {
+        if (!props.paginator || ![PaginatorType.LoadMore, PaginatorType.Infinite].includes(props.paginator?.type)) {
+            Items.value.splice(0, Items.value.length);
+        }
+        isLoading.value = true
+    }),
     doRefresh = () => {
         //@ts-ignore
         paginatorRef.value.doRefresh();
