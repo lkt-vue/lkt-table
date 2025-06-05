@@ -817,6 +817,7 @@ const hasEmptySlot = computed(() => {
                                         editing: editModeEnabled,
                                         perms: permissions,
                                         data: computedItemSlotData,
+                                        events: itemSlotEvents
                                     }"
                                 />
                             </template>
@@ -936,7 +937,20 @@ const hasEmptySlot = computed(() => {
                         v-for="(item, i) in Items" :key="getRowKey(item, i)">
                         <li class="lkt-table-item"
                             :class="getItemContainerClass(item, i)" v-if="canDisplayItem(item, i)" :data-i="i">
-                            <slot name="item"
+                            <template v-if="computedItemSlotComponent">
+                                <component
+                                    :is="computedItemSlotComponent"
+                                    v-bind="<ItemSlotComponentConfig>{
+                                        item,
+                                        index: i,
+                                        editing: editModeEnabled,
+                                        perms: permissions,
+                                        data: computedItemSlotData,
+                                        events: itemSlotEvents
+                                    }"
+                                />
+                            </template>
+                            <slot v-else name="item"
                                   v-bind:[slotItemVar]="item"
                                   v-bind:index="i"
                                   v-bind:editing="editModeEnabled"
@@ -982,6 +996,7 @@ const hasEmptySlot = computed(() => {
                                                 editing: editModeEnabled,
                                                 perms: permissions,
                                                 data: computedItemSlotData,
+                                                events: itemSlotEvents
                                             }"
                                         />
                                     </template>
