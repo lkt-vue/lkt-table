@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {getColumnDisplayContent} from "../functions/table-functions";
 import {computed, ref, watch} from "vue";
-import {Column, ColumnType, extractPropValue, FieldType, LktObject, TableType} from "lkt-vue-kernel";
+import {Column, ColumnType, extractPropValue, FieldConfig, FieldType, LktObject, TableType} from "lkt-vue-kernel";
 
 const emit = defineEmits([
     'update:modelValue'
@@ -25,8 +25,7 @@ const props = withDefaults(defineProps<{
 });
 
 const item = ref(props.modelValue),
-    value = ref(item.value[props.column.key]),
-    inputElement = ref(null);
+    value = ref(item.value[props.column.key]);
 
 watch(value, (v) => {
     const payload = JSON.parse(JSON.stringify(item.value));
@@ -58,11 +57,12 @@ const computedModalData = computed(() => {
     return props.column.field?.modalData;
 });
 
-const computedFieldConfig = computed(() => {
+const computedFieldConfig = computed((): FieldConfig => {
+    //@ts-ignore
     if (typeof props.column.field === 'string' && props.column.field.startsWith('prop:')) {
-        return extractPropValue(props.column.field, item.value);
+        return <FieldConfig>extractPropValue(props.column.field, item.value);
     }
-    return props.column.field;
+    return <FieldConfig>props.column.field;
 })
 
 const computedFieldLabel = computed(() => {
@@ -83,40 +83,28 @@ const computedFieldLabel = computed(() => {
 </script>
 
 <template>
-    <template v-if="column.type === ColumnType.Anchor">
-        <lkt-anchor
-            v-bind="column.anchor"
-            :prop="item"
-        >{{ getColumnDisplayContent(column, item, i) }}</lkt-anchor>
-    </template>
-    <template v-else-if="column.type === ColumnType.Button">
-        <lkt-button
-            v-bind="column.button"
-            :prop="item"
-        >{{ getColumnDisplayContent(column, item, i) }}</lkt-button>
-    </template>
-    <template v-else-if="column.type === ColumnType.Field && hasInlineEditPerm">
-        <lkt-field
-            v-bind="computedFieldConfig"
-            :read-mode="!column.editable || !editModeEnabled"
-            :ref="(el:any) => inputElement = el"
-            :slot-data="slotData"
-            :label="computedFieldLabel"
-            :modal-data="computedModalData"
-            :prop="item"
-            v-model="value"/>
-    </template>
-    <template v-else-if="column.type === ColumnType.Field">
-        <lkt-field
-            v-bind="computedFieldConfig"
-            read-mode
-            :ref="(el:any) => inputElement = el"
-            :slot-data="slotData"
-            :label="computedFieldLabel"
-            :modal-data="computedModalData"
-            :prop="item"
-            :model-value="value"/>
-    </template>
+    <lkt-anchor
+        v-if="column.type === ColumnType.Anchor"
+        v-bind="column.anchor"
+        :prop="item"
+    >{{ getColumnDisplayContent(column, item, i) }}</lkt-anchor>
+    <lkt-button
+        v-else-if="column.type === ColumnType.Button"
+        v-bind="column.button"
+        :prop="item"
+    >{{ getColumnDisplayContent(column, item, i) }}</lkt-button>
+    <lkt-field
+        v-else-if="column.type === ColumnType.Field"
+        v-model="value"
+        v-bind="<FieldConfig>{
+            ...computedFieldConfig,
+            readMode: !hasInlineEditPerm || computedFieldConfig.readMode,
+            slotData,
+            label: computedFieldLabel,
+            modalData: computedModalData,
+            prop: item
+        }"
+    />
     <template v-else>
         {{ getColumnDisplayContent(column, item, i, columns) }}
     </template>
