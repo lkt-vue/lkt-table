@@ -70,9 +70,9 @@ const onClick = ($event: any) => emit('click', $event),
     classes = computed(() => {
         let r: string[] = [];
 
-        let disabledDrag = false;
-        if (typeof props.disabledDrag === 'function') disabledDrag = props.disabledDrag(Item.value);
-        else disabledDrag = computedDisabledDrag.value === true;
+        let disabledDrag = typeof props.disabledDrag === 'function'
+            ? props.disabledDrag(Item.value)
+            : computedDisabledDrag.value === true;
 
         if (!disabledDrag && props.sortable && props.isDraggable) r.push('handle');
         else if (disabledDrag) r.push('disabled');

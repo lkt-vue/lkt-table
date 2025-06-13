@@ -58,15 +58,6 @@ const Sorter = ref(typeof props.sorter === 'function' ? props.sorter : defaultTa
     tableBody = ref(<HTMLElement | null>null),
     Columns = ref(props.columns);
 
-// if (Items.value.length > 0) {
-//     if (typeof props.events?.parseResults === 'function') {
-//         let temporalItems = props.events.parseResults(Items.value);
-//         Items.value.splice(0, Items.value.length);
-//         Items.value = [...temporalItems];
-//
-//     }
-// }
-
 const Page = ref(props.paginator?.modelValue),
     isLoading = ref(props.loading),
     firstLoadReady = ref(false),

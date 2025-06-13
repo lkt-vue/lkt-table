@@ -24,19 +24,15 @@ const props = withDefaults(defineProps<{
     hasInlineEditPerm: false,
 });
 
-const item = ref(props.modelValue),
-    value = ref(item.value[props.column.key]);
-
-watch(value, (v) => {
-    const payload = JSON.parse(JSON.stringify(item.value));
-    payload[props.column.key] = v;
-    emit('update:modelValue', payload);
-})
+const item = ref(props.modelValue);
 
 watch(() => props.modelValue, (v) => {
-    item.value = v
-    value.value = item.value[props.column.key];
+    item.value = v;
 });
+
+watch(item, (v) => {
+    emit('update:modelValue', v);
+})
 
 const slotData = computed(() => {
     return {...props.column.slotData, item: item.value};
@@ -95,7 +91,7 @@ const computedFieldLabel = computed(() => {
     >{{ getColumnDisplayContent(column, item, i) }}</lkt-button>
     <lkt-field
         v-else-if="column.type === ColumnType.Field"
-        v-model="value"
+        v-model="item[column.key]"
         v-bind="<FieldConfig>{
             ...computedFieldConfig,
             readMode: !hasInlineEditPerm || computedFieldConfig.readMode,
