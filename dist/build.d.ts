@@ -1,9 +1,10 @@
-import { Column as nl } from "lkt-vue-kernel";
-import { createColumn as ll } from "lkt-vue-kernel";
-declare namespace Jn {
+import { Column as ll } from "lkt-vue-kernel";
+import { createColumn as ol } from "lkt-vue-kernel";
+declare namespace Qn {
     function install(t: any): void;
 }
+declare function on(t: any, o: any, i: any, l: any): 0 | 1 | -1;
+declare function el(t: any): boolean;
+declare function tl(t: any): void;
 declare function Zn(t: any): boolean;
-declare function el(t: any): void;
-declare function Qn(t: any): boolean;
-export { nl as Column, ll as createColumn, Jn as default, Zn as setTableCreateButtonSlot, el as setTableEmptySlot, Qn as setTableNavButtonSlot };
+export { ll as Column, ol as createColumn, Qn as default, on as defaultTableSorter, el as setTableCreateButtonSlot, tl as setTableEmptySlot, Zn as setTableNavButtonSlot };

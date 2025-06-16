@@ -10,6 +10,7 @@ export {
 import 'vue3-carousel/dist/carousel.css'
 import "./../lkt-table.css"
 import {Settings} from "./settings/Settings";
+export {defaultTableSorter} from "./functions/table-functions";
 
 const LktTable: Plugin = {
     install: (app: App) => {

@@ -2,6 +2,7 @@ import { Component, Plugin } from "vue";
 export { createColumn, Column } from "lkt-vue-kernel";
 import 'vue3-carousel/dist/carousel.css';
 import "./../lkt-table.css";
+export { defaultTableSorter } from "./functions/table-functions";
 declare const LktTable: Plugin;
 export default LktTable;
 export declare const setTableNavButtonSlot: (component: string | Component) => boolean;

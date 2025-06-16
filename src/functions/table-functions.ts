@@ -1,5 +1,5 @@
 import {__} from "lkt-i18n";
-import {Column, LktObject, SortDirection} from "lkt-vue-kernel";
+import {Column, ColumnType, FieldType, LktObject, MultipleOptionsDisplay, SortDirection} from "lkt-vue-kernel";
 
 /**
  *
@@ -12,8 +12,31 @@ import {Column, LktObject, SortDirection} from "lkt-vue-kernel";
 export const defaultTableSorter = (a: any, b: any, c: Column, sortDirection: SortDirection): number => {
     if (!c) return 0;
 
-    let A = String(a[c.key]).toLowerCase(),
+    let A, B;
+
+    if (c.type === ColumnType.Field) {
+
+        if ([FieldType.Number, FieldType.Range].includes(c.field?.type)) {
+            A = parseFloat(a[c.key]);
+            B = parseFloat(b[c.key]);
+
+        } else if ([FieldType.Date, FieldType.Date].includes(c.field?.type)) {
+            A = a[c.key];
+            B = b[c.key];
+
+        } else if (c.field?.type === FieldType.Select && c.field?.multiple && c.field?.multipleDisplay === MultipleOptionsDisplay.Count) {
+            A = a[c.key].length;
+            B = b[c.key].length;
+
+        } else {
+            A = String(a[c.key]).toLowerCase();
+            B = String(b[c.key]).toLowerCase();
+        }
+
+    } else {
+        A = String(a[c.key]).toLowerCase();
         B = String(b[c.key]).toLowerCase();
+    }
 
     if (sortDirection === SortDirection.Asc) {
         if (A > B) return 1;

@@ -7,7 +7,7 @@ import {
     AccordionConfig,
     ButtonConfig,
     ButtonType,
-    Column,
+    Column, ColumnConfig,
     ensureButtonConfig,
     extractI18nValue,
     getDefaultValues, ItemSlotComponentConfig,
@@ -270,16 +270,21 @@ const getItemByEvent = (e: any) => {
     getRowByIndex = (index: number) => {
         return tableBody.value?.querySelector(`[data-i="${index}"]`);
     },
-    sort = (column: Column | null) => {
+    sort = (column: ColumnConfig | null) => {
         if (!column) return;
         if (column.sortable) {
+            if (column.key === SortBy.value) {
+                SortingDirection.value = SortingDirection.value === SortDirection.Asc ? SortDirection.Desc : SortDirection.Asc;
+            }
+            SortBy.value = column.key;
             Items.value = Items.value.sort((a: any, b: any) => {
                 return Sorter.value(a, b, column, SortingDirection.value);
             });
-            SortingDirection.value = SortingDirection.value === SortDirection.Asc ? SortDirection.Desc : SortDirection.Asc;
-            SortBy.value = column.key;
             reRender();
-            emit('sort', [SortBy.value, SortingDirection.value]);
+            emit('sort', {
+                sortBy: SortBy.value,
+                sortDirection: SortingDirection.value,
+            });
         }
     },
     onClick = ($event: any) => {
