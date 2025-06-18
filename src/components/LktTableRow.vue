@@ -213,6 +213,7 @@ const canRenderDragIndicator = computed(() => {
                         :edit-mode-enabled="editModeEnabled"
                         :has-inline-edit-perm="hasInlineEditPerm"
                         :i="i"
+                        @inline-drop="onClickDrop"
                     />
                 </template>
             </td>

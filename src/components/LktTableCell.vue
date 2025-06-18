@@ -4,7 +4,8 @@ import {computed, ref, watch} from "vue";
 import {Column, ColumnType, extractPropValue, FieldConfig, FieldType, LktObject, TableType} from "lkt-vue-kernel";
 
 const emit = defineEmits([
-    'update:modelValue'
+    'update:modelValue',
+    'inline-drop',
 ]);
 
 const props = withDefaults(defineProps<{
@@ -33,6 +34,10 @@ watch(() => props.modelValue, (v) => {
 watch(item, (v) => {
     emit('update:modelValue', v);
 })
+
+const onClickInlineDrop = () => {
+    emit('inline-drop');
+}
 
 const slotData = computed(() => {
     return {...props.column.slotData, item: item.value};
@@ -101,6 +106,12 @@ const computedFieldLabel = computed(() => {
             prop: item
         }"
     />
+    <lkt-button
+        v-else-if="column.type === ColumnType.InlineDrop"
+        v-bind="column.button"
+        :prop="item"
+        @click="onClickInlineDrop"
+    >{{ getColumnDisplayContent(column, item, i) }}</lkt-button>
     <template v-else>
         {{ getColumnDisplayContent(column, item, i, columns) }}
     </template>
