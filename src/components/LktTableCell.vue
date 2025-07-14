@@ -112,6 +112,19 @@ const computedFieldLabel = computed(() => {
         :prop="item"
         @click="onClickInlineDrop"
     >{{ getColumnDisplayContent(column, item, i) }}</lkt-button>
+
+    <lkt-field
+        v-else-if="column.type === ColumnType.ColumnIndex && column.field"
+        v-bind="<FieldConfig>{
+            ...computedFieldConfig,
+            modelValue: getColumnDisplayContent(column, item, i, columns),
+            readMode: true,
+            slotData,
+            label: computedFieldLabel,
+            modalData: computedModalData,
+            prop: item,
+        }"
+    />
     <template v-else>
         {{ getColumnDisplayContent(column, item, i, columns) }}
     </template>

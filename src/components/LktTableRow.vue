@@ -7,9 +7,16 @@ import {
     getHorizontalColSpan
 } from "../functions/table-functions";
 import LktTableCell from "./LktTableCell.vue";
-import {computed, ref, useSlots, watch} from "vue";
+import {Component, computed, ref, useSlots, watch} from "vue";
 import {Settings} from "../settings/Settings";
-import {Column, LktObject, TableRowType, ValidTableRowTypeValue} from "lkt-vue-kernel";
+import {
+    Column,
+    ItemSlotComponentConfig,
+    LktObject,
+    TablePermission,
+    TableRowType,
+    ValidTableRowTypeValue
+} from "lkt-vue-kernel";
 
 const slots = useSlots();
 const emit = defineEmits([
@@ -40,6 +47,10 @@ const props = withDefaults(defineProps<{
     renderDrag?: boolean | Function
     disabledDrag?: boolean | Function
     itemContainerClass?: string | Function
+    itemSlotComponent?: string | Function | Component
+    itemSlotData?: LktObject | Function
+    itemSlotEvents?: LktObject | Function
+    permissions?: Array<TablePermission>
 }>(), {
     modelValue: () => ({}),
     isDraggable: true,
@@ -56,6 +67,7 @@ const props = withDefaults(defineProps<{
     renderDrag: true,
     disabledDrag: true,
     itemContainerClass: '',
+    permissions: () => [],
 });
 
 const Item = ref(props.modelValue);
@@ -156,7 +168,22 @@ const canRenderDragIndicator = computed(() => {
                 </lkt-button>
             </div>
         </td>
-        <template v-if="canCustomItem && slots[`item-${i}`]">
+        <template v-if="itemSlotComponent">
+            <td :key="'td' + i" :colspan="visibleColumns.length">
+                <component
+                    :is="itemSlotComponent"
+                    v-bind="<ItemSlotComponentConfig>{
+                        item: Item,
+                        index: i,
+                        editing: editModeEnabled,
+                        perms: permissions,
+                        data: itemSlotData,
+                        events: itemSlotEvents
+                    }"
+                />
+            </td>
+        </template>
+        <template v-else-if="canCustomItem && slots[`item-${i}`]">
             <td :key="'td' + i" :colspan="visibleColumns.length">
                 <slot
                     :name="`item-${i}`"

@@ -1,4 +1,5 @@
-import { Column, LktObject, ValidTableRowTypeValue } from "lkt-vue-kernel";
+import { Component } from "vue";
+import { Column, LktObject, TablePermission, ValidTableRowTypeValue } from "lkt-vue-kernel";
 type __VLS_Props = {
     modelValue: LktObject;
     isDraggable: boolean;
@@ -19,8 +20,12 @@ type __VLS_Props = {
     renderDrag?: boolean | Function;
     disabledDrag?: boolean | Function;
     itemContainerClass?: string | Function;
+    itemSlotComponent?: string | Function | Component;
+    itemSlotData?: LktObject | Function;
+    itemSlotEvents?: LktObject | Function;
+    permissions?: Array<TablePermission>;
 };
-declare var __VLS_26: `item-${number}`, __VLS_27: {
+declare var __VLS_30: `item-${number}`, __VLS_31: {
     item: LktObject;
     index: number;
     editing: boolean;
@@ -30,7 +35,7 @@ declare var __VLS_26: `item-${number}`, __VLS_27: {
     canDrop: boolean;
     isLoading: boolean;
     doDrop: () => void;
-}, __VLS_29: {
+}, __VLS_33: {
     item: LktObject;
     index: number;
     editing: boolean;
@@ -40,18 +45,18 @@ declare var __VLS_26: `item-${number}`, __VLS_27: {
     canDrop: boolean;
     isLoading: boolean;
     doDrop: () => void;
-}, __VLS_32: string, __VLS_33: {
+}, __VLS_36: string, __VLS_37: {
     value: any;
     item: LktObject;
     column: Column;
     i: number;
 };
 type __VLS_Slots = {} & {
-    [K in NonNullable<typeof __VLS_26>]?: (props: typeof __VLS_27) => any;
+    [K in NonNullable<typeof __VLS_30>]?: (props: typeof __VLS_31) => any;
 } & {
-    [K in NonNullable<typeof __VLS_32>]?: (props: typeof __VLS_33) => any;
+    [K in NonNullable<typeof __VLS_36>]?: (props: typeof __VLS_37) => any;
 } & {
-    item?: (props: typeof __VLS_29) => any;
+    item?: (props: typeof __VLS_33) => any;
 };
 declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
     "update:modelValue": (...args: any[]) => void;
@@ -81,6 +86,7 @@ declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}
     renderDrag: boolean | Function;
     disabledDrag: boolean | Function;
     itemContainerClass: string | Function;
+    permissions: Array<TablePermission>;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: __VLS_WithSlots<typeof __VLS_component, __VLS_Slots>;
 export default _default;

@@ -65,14 +65,16 @@ export const getColumnDisplayContent = (column: Column, item: any, i: number, co
         }
     }
 
+    let val = column.type === ColumnType.ColumnIndex ? i : item[column.key];
+
     if (column.formatter && typeof column.formatter === 'function') {
-        let formatted = column.formatter(item[column.key], item, column, i);
-        if (formatted.startsWith('__:')) {
+        let formatted = column.formatter(val, item, column, i);
+        if (typeof formatted === 'string' && formatted.startsWith('__:')) {
             return __(formatted.substring(3));
         }
         return formatted;
     }
-    return item[column.key];
+    return val;
 }
 
 /**
@@ -118,7 +120,7 @@ export const colPreferSlot = (column: Column, item: LktObject) => {
  * @returns {boolean}
  */
 export const canRenderColumn = (column: Column, emptyColumns: string[], item: LktObject): boolean => {
-    if (typeof column !== 'object' || !column.key) return false;
+    if (typeof column !== 'object' || (!column.key && [ColumnType.Field].includes(column.type))) return false;
     if (emptyColumns.indexOf(column.key) > -1) return false;
 
     let colspan = getHorizontalColSpan(column, item);
