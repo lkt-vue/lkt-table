@@ -1,22 +1,22 @@
-import { defineComponent as pe, computed as u, ref as E, shallowReactive as Ht, watch as U, watchEffect as Pt, onMounted as Yt, onBeforeUnmount as Da, reactive as Ut, provide as la, h as K, useId as Ia, inject as St, getCurrentInstance as Ba, onUnmounted as Ta, onUpdated as Ea, cloneVNode as Aa, resolveComponent as Ce, createBlock as M, createElementBlock as w, unref as h, openBlock as f, mergeProps as X, withCtx as F, createTextVNode as Ke, toDisplayString as We, normalizeProps as he, Fragment as G, useSlots as oa, normalizeClass as J, createCommentVNode as R, createElementVNode as ce, createVNode as ke, resolveDynamicComponent as ve, guardReactiveProps as Va, renderSlot as $, renderList as be, mergeDefaults as Ra, nextTick as Vt, withDirectives as ze, vShow as He, createSlots as La } from "vue";
-import { __ as Na } from "lkt-i18n";
-import { ColumnType as Ae, FieldType as Xe, MultipleOptionsDisplay as Ma, SortDirection as Je, Column as ia, extractPropValue as Oa, TableRowType as Se, extractI18nValue as ra, LktSettings as Ee, ensureButtonConfig as qe, TablePermission as Be, PaginatorType as Rt, TableType as Ge, getDefaultValues as $a, Table as Fa, ButtonType as _t } from "lkt-vue-kernel";
-import { Column as il, createColumn as rl } from "lkt-vue-kernel";
-import { generateRandomString as Pa, replaceAll as Ua } from "lkt-string-tools";
-import { DataState as _a } from "lkt-data-state";
-import ja from "sortablejs";
-import { time as za } from "lkt-date-tools";
+import { defineComponent as ye, computed as r, ref as E, shallowReactive as Gt, watch as U, watchEffect as _t, onMounted as Wt, onBeforeUnmount as Va, reactive as jt, provide as ra, h as K, useId as Ra, inject as pt, getCurrentInstance as La, onUnmounted as Na, onUpdated as Ma, cloneVNode as Oa, resolveComponent as we, createBlock as M, createElementBlock as w, unref as h, openBlock as p, mergeProps as X, withCtx as F, createTextVNode as Ye, toDisplayString as Ke, normalizeProps as ke, Fragment as q, useSlots as ua, normalizeClass as x, createCommentVNode as R, createElementVNode as pe, createVNode as Se, resolveDynamicComponent as me, guardReactiveProps as $a, renderSlot as $, renderList as he, mergeDefaults as Fa, nextTick as It, withDirectives as je, vShow as ze, createSlots as Pa } from "vue";
+import { __ as Ua } from "lkt-i18n";
+import { ColumnType as Ae, FieldType as Ge, MultipleOptionsDisplay as _a, SortDirection as We, Column as sa, extractPropValue as ja, TableRowType as Ce, extractI18nValue as da, LktSettings as Ee, ensureButtonConfig as He, TablePermission as Ie, PaginatorType as Bt, TableType as qe, getDefaultValues as za, Table as Ha, ButtonType as zt } from "lkt-vue-kernel";
+import { Column as vl, createColumn as fl } from "lkt-vue-kernel";
+import { generateRandomString as qa, replaceAll as Ga } from "lkt-string-tools";
+import { DataState as Xa } from "lkt-data-state";
+import Ya from "sortablejs";
+import { time as Ka } from "lkt-date-tools";
 /**
  * Vue 3 Carousel 0.14.0
  * (c) 2025
  * @license MIT
  */
-const ua = ["viewport", "carousel"], Nt = {
+const ca = ["viewport", "carousel"], At = {
   "bottom-to-top": "btt",
   "left-to-right": "ltr",
   "right-to-left": "rtl",
   "top-to-bottom": "ttb"
-}, sa = [
+}, va = [
   "ltr",
   "left-to-right",
   "rtl",
@@ -25,7 +25,7 @@ const ua = ["viewport", "carousel"], Nt = {
   "top-to-bottom",
   "btt",
   "bottom-to-top"
-], Ha = {
+], Wa = {
   ariaGallery: "Gallery",
   ariaNavigateToPage: "Navigate to page {slideNumber}",
   ariaNavigateToSlide: "Navigate to slide {slideNumber}",
@@ -36,21 +36,21 @@ const ua = ["viewport", "carousel"], Nt = {
   iconArrowRight: "Arrow pointing to the right",
   iconArrowUp: "Arrow pointing upwards",
   itemXofY: "Item {currentSlide} of {slidesCount}"
-}, da = ["slide", "fade"], ca = [
+}, fa = ["slide", "fade"], pa = [
   "center",
   "start",
   "end",
   "center-even",
   "center-odd"
-], z = {
+], H = {
   autoplay: 0,
-  breakpointMode: ua[0],
+  breakpointMode: ca[0],
   breakpoints: void 0,
-  dir: sa[0],
+  dir: va[0],
   enabled: !0,
   gap: 0,
   height: "auto",
-  i18n: Ha,
+  i18n: Wa,
   ignoreAnimations: !1,
   itemsToScroll: 1,
   itemsToShow: 1,
@@ -58,13 +58,13 @@ const ua = ["viewport", "carousel"], Nt = {
   mouseDrag: !0,
   pauseAutoplayOnHover: !1,
   preventExcessiveDragging: !1,
-  slideEffect: da[0],
-  snapAlign: ca[0],
+  slideEffect: fa[0],
+  snapAlign: pa[0],
   touchDrag: !0,
   transition: 300,
   wrapAround: !1
-}, Qe = Symbol("carousel"), qa = (t) => {
-  const i = Ht([]), o = (l) => {
+}, Je = Symbol("carousel"), Ja = (t) => {
+  const i = Gt([]), o = (l) => {
     l !== void 0 ? i.slice(l).forEach((n, a) => {
       var y;
       (y = n.exposed) === null || y === void 0 || y.setIndex(l + a);
@@ -90,10 +90,10 @@ const ua = ["viewport", "carousel"], Nt = {
     }
   };
 };
-function Ga(t) {
+function Qa(t) {
   return t.length === 0 ? 0 : t.reduce((o, l) => o + l, 0) / t.length;
 }
-function Zt({ slides: t, position: i, toShow: o }) {
+function ta({ slides: t, position: i, toShow: o }) {
   const l = [], n = i === "before", a = n ? -o : 0, y = n ? 0 : o;
   if (t.length <= 0)
     return l;
@@ -105,44 +105,44 @@ function Zt({ slides: t, position: i, toShow: o }) {
       id: void 0,
       // Make sure we don't duplicate the id which would be invalid html
       key: `clone-${i}-${k}`
-    }, v = t[(k % t.length + t.length) % t.length].vnode, B = Aa(v, s);
-    B.el = null, l.push(B);
+    }, v = t[(k % t.length + t.length) % t.length].vnode, I = Oa(v, s);
+    I.el = null, l.push(I);
   }
   return l;
 }
-const Xa = 'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])';
-function xt(t) {
+const Za = 'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])';
+function aa(t) {
   if (!t.el || !(t.el instanceof Element))
     return;
-  const i = t.el.querySelectorAll(Xa);
+  const i = t.el.querySelectorAll(Za);
   for (const o of i)
     o instanceof HTMLElement && !o.hasAttribute("disabled") && o.getAttribute("aria-hidden") !== "true" && o.setAttribute("tabindex", "-1");
 }
-function Ya(t, i) {
+function xa(t, i) {
   return Object.keys(t).filter((o) => !i.includes(o)).reduce((o, l) => (o[l] = t[l], o), {});
 }
-function Ka(t) {
+function en(t) {
   const { isVertical: i, isReversed: o, dragged: l, effectiveSlideSize: n } = t, a = i ? l.y : l.x;
   if (a === 0)
     return 0;
   const y = Math.round(a / n);
   return o ? y : -y;
 }
-function Te({ val: t, max: i, min: o }) {
+function Be({ val: t, max: i, min: o }) {
   return i < o ? t : Math.min(Math.max(t, isNaN(o) ? t : o), isNaN(i) ? t : i);
 }
-function Wa(t) {
+function tn(t) {
   const { transform: i } = window.getComputedStyle(t);
   return i.split(/[(,)]/).slice(1, -1).map((o) => parseFloat(o));
 }
-function Ja(t) {
+function an(t) {
   let i = 1, o = 1;
   return t.forEach((l) => {
-    const n = Wa(l);
+    const n = tn(l);
     n.length === 6 && (i /= n[0], o /= n[3]);
   }), { widthMultiplier: i, heightMultiplier: o };
 }
-function Qa(t, i) {
+function nn(t, i) {
   switch (t) {
     case "start":
       return 0;
@@ -157,7 +157,7 @@ function Qa(t, i) {
       return 0;
   }
 }
-function Za(t, i, o) {
+function ln(t, i, o) {
   switch (t) {
     case "start":
       return 0;
@@ -172,17 +172,17 @@ function Za(t, i, o) {
       return 0;
   }
 }
-function qt({ slideSize: t, viewportSize: i, align: o, itemsToShow: l }) {
-  return l !== void 0 ? Qa(o, l) : t !== void 0 && i !== void 0 ? Za(o, t, i) : 0;
+function Xt({ slideSize: t, viewportSize: i, align: o, itemsToShow: l }) {
+  return l !== void 0 ? nn(o, l) : t !== void 0 && i !== void 0 ? ln(o, t, i) : 0;
 }
-function va(t = "", i = {}) {
+function ma(t = "", i = {}) {
   return Object.entries(i).reduce((o, [l, n]) => o.replace(`{${l}}`, String(n)), t);
 }
-function fa({ val: t, max: i, min: o = 0 }) {
+function ga({ val: t, max: i, min: o = 0 }) {
   const l = i - o + 1;
   return ((t - o) % l + l) % l + o;
 }
-function jt(t, i = 0) {
+function Ht(t, i = 0) {
   let o = !1, l = 0, n = null;
   function a(...y) {
     if (o)
@@ -199,54 +199,54 @@ function jt(t, i = 0) {
     n && (cancelAnimationFrame(n), n = null, o = !1);
   }, a;
 }
-function Lt(t, i = "px") {
+function Et(t, i = "px") {
   if (!(t == null || t === ""))
     return typeof t == "number" || parseFloat(t).toString() === t ? `${t}${i}` : t;
 }
-const xa = pe({
+const on = ye({
   name: "CarouselAria",
   setup() {
-    const t = St(Qe);
+    const t = pt(Je);
     return t ? () => K("div", {
       class: ["carousel__liveregion", "carousel__sr-only"],
       "aria-live": "polite",
       "aria-atomic": "true"
-    }, va(t.config.i18n.itemXofY, {
+    }, ma(t.config.i18n.itemXofY, {
       currentSlide: t.currentSlide + 1,
       slidesCount: t.slidesCount
     })) : () => "";
   }
-}), en = {
+}), rn = {
   // time to auto advance slides in ms
   autoplay: {
-    default: z.autoplay,
+    default: H.autoplay,
     type: Number
   },
   // an object to store breakpoints
   breakpoints: {
-    default: z.breakpoints,
+    default: H.breakpoints,
     type: Object
   },
   // controls the breakpoint mode relative to the carousel container or the viewport
   breakpointMode: {
-    default: z.breakpointMode,
+    default: H.breakpointMode,
     validator(t) {
-      return ua.includes(t);
+      return ca.includes(t);
     }
   },
   // enable/disable the carousel component
   enabled: {
-    default: z.enabled,
+    default: H.enabled,
     type: Boolean
   },
   // control the gap between slides
   gap: {
-    default: z.gap,
+    default: H.gap,
     type: Number
   },
   // control the gap between slides
   height: {
-    default: z.height,
+    default: H.height,
     type: [Number, String]
   },
   ignoreAnimations: {
@@ -255,17 +255,17 @@ const xa = pe({
   },
   // count of items to be scrolled
   itemsToScroll: {
-    default: z.itemsToScroll,
+    default: H.itemsToScroll,
     type: Number
   },
   // count of items to showed per view
   itemsToShow: {
-    default: z.itemsToShow,
+    default: H.itemsToShow,
     type: [Number, String]
   },
   // aria-labels and additional text labels
   i18n: {
-    default: z.i18n,
+    default: H.i18n,
     type: Object
   },
   // slide number number of initial slide
@@ -275,16 +275,16 @@ const xa = pe({
   },
   // toggle mouse dragging.
   mouseDrag: {
-    default: z.mouseDrag,
+    default: H.mouseDrag,
     type: Boolean
   },
   // toggle mouse dragging.
   touchDrag: {
-    default: z.touchDrag,
+    default: H.touchDrag,
     type: Boolean
   },
   pauseAutoplayOnHover: {
-    default: z.pauseAutoplayOnHover,
+    default: H.pauseAutoplayOnHover,
     type: Boolean
   },
   preventExcessiveDragging: {
@@ -296,42 +296,42 @@ const xa = pe({
   },
   // control snap position alignment
   snapAlign: {
-    default: z.snapAlign,
+    default: H.snapAlign,
     validator(t) {
-      return ca.includes(t);
+      return pa.includes(t);
     }
   },
   slideEffect: {
     type: String,
-    default: z.slideEffect,
+    default: H.slideEffect,
     validator(t) {
-      return da.includes(t);
+      return fa.includes(t);
     }
   },
   // sliding transition time in ms
   transition: {
-    default: z.transition,
+    default: H.transition,
     type: Number
   },
   // control the gap between slides
   dir: {
     type: String,
-    default: z.dir,
+    default: H.dir,
     validator(t, i) {
-      if (!sa.includes(t))
+      if (!va.includes(t))
         return !1;
-      const o = t in Nt ? Nt[t] : t;
+      const o = t in At ? At[t] : t;
       return ["ttb", "btt"].includes(o) && (!i.height || i.height === "auto") && console.warn(`[vue3-carousel warn]: The dir "${t}" is not supported with height "auto".`), !0;
     }
   },
   // control infinite scrolling mode
   wrapAround: {
-    default: z.wrapAround,
+    default: H.wrapAround,
     type: Boolean
   }
-}, tn = pe({
+}, un = ye({
   name: "VueCarousel",
-  props: en,
+  props: rn,
   emits: [
     "before-init",
     "drag",
@@ -345,264 +345,264 @@ const xa = pe({
   ],
   setup(t, { slots: i, emit: o, expose: l }) {
     var n;
-    const a = qa(o), y = a.getSlides(), k = u(() => y.length), D = E(null), s = E(null), v = E(0), B = u(() => Object.assign(Object.assign(Object.assign({}, z), Ya(t, ["breakpoints", "modelValue"])), { i18n: Object.assign(Object.assign({}, z.i18n), t.i18n) })), c = Ht(Object.assign({}, B.value)), g = E((n = t.modelValue) !== null && n !== void 0 ? n : 0), V = E(g.value);
-    U(g, (r) => V.value = r);
-    const A = E(0), Ze = u(() => Math.ceil((k.value - 1) / 2)), oe = u(() => k.value - 1), ie = u(() => 0);
-    let Q = null, d = null, I = null;
-    const re = u(() => v.value + c.gap), _ = u(() => {
-      const r = c.dir || "ltr";
-      return r in Nt ? Nt[r] : r;
-    }), ae = u(() => ["rtl", "btt"].includes(_.value)), P = u(() => ["ttb", "btt"].includes(_.value)), ne = u(() => c.itemsToShow === "auto"), H = u(() => P.value ? "height" : "width");
-    function Oe() {
-      var r;
-      if (!Le.value)
+    const a = Ja(o), y = a.getSlides(), k = r(() => y.length), D = E(null), s = E(null), v = E(0), I = r(() => Object.assign(Object.assign(Object.assign({}, H), xa(t, ["breakpoints", "modelValue"])), { i18n: Object.assign(Object.assign({}, H.i18n), t.i18n) })), c = Gt(Object.assign({}, I.value)), g = E((n = t.modelValue) !== null && n !== void 0 ? n : 0), V = E(g.value);
+    U(g, (u) => V.value = u);
+    const A = E(0), Qe = r(() => Math.ceil((k.value - 1) / 2)), ie = r(() => k.value - 1), re = r(() => 0);
+    let ee = null, d = null, T = null;
+    const ue = r(() => v.value + c.gap), _ = r(() => {
+      const u = c.dir || "ltr";
+      return u in At ? At[u] : u;
+    }), ne = r(() => ["rtl", "btt"].includes(_.value)), se = r(() => ["ttb", "btt"].includes(_.value)), P = r(() => c.itemsToShow === "auto"), j = r(() => se.value ? "height" : "width");
+    function De() {
+      var u;
+      if (!Ze.value)
         return;
-      const b = (B.value.breakpointMode === "carousel" ? (r = D.value) === null || r === void 0 ? void 0 : r.getBoundingClientRect().width : typeof window < "u" ? window.innerWidth : 0) || 0, C = Object.keys(t.breakpoints || {}).map((N) => Number(N)).sort((N, W) => +W - +N), T = {};
-      C.some((N) => b >= N ? (Object.assign(T, t.breakpoints[N]), T.i18n && Object.assign(T.i18n, B.value.i18n, t.breakpoints[N].i18n), !0) : !1), Object.assign(c, B.value, T);
+      const b = (I.value.breakpointMode === "carousel" ? (u = D.value) === null || u === void 0 ? void 0 : u.getBoundingClientRect().width : typeof window < "u" ? window.innerWidth : 0) || 0, C = Object.keys(t.breakpoints || {}).map((L) => Number(L)).sort((L, J) => +J - +L), B = {};
+      C.some((L) => b >= L ? (Object.assign(B, t.breakpoints[L]), B.i18n && Object.assign(B.i18n, I.value.i18n, t.breakpoints[L].i18n), !0) : !1), Object.assign(c, I.value, B);
     }
-    const Ve = jt(() => {
-      Oe(), me(), ue();
-    }), xe = Ht(/* @__PURE__ */ new Set()), Z = E([]);
-    function Mt({ widthMultiplier: r, heightMultiplier: b }) {
-      Z.value = y.map((C) => {
-        var T;
-        const N = (T = C.exposed) === null || T === void 0 ? void 0 : T.getBoundingRect();
+    const Vt = Ht(() => {
+      De(), $e(), W();
+    }), de = Gt(/* @__PURE__ */ new Set()), te = E([]);
+    function Rt({ widthMultiplier: u, heightMultiplier: b }) {
+      te.value = y.map((C) => {
+        var B;
+        const L = (B = C.exposed) === null || B === void 0 ? void 0 : B.getBoundingRect();
         return {
-          width: N.width * r,
-          height: N.height * b
+          width: L.width * u,
+          height: L.height * b
         };
       });
     }
-    const $e = E({
+    const Oe = E({
       width: 0,
       height: 0
     });
-    function we({ widthMultiplier: r, heightMultiplier: b }) {
+    function Lt({ widthMultiplier: u, heightMultiplier: b }) {
       var C;
-      const T = ((C = s.value) === null || C === void 0 ? void 0 : C.getBoundingClientRect()) || { width: 0, height: 0 };
-      $e.value = {
-        width: T.width * r,
-        height: T.height * b
+      const B = ((C = s.value) === null || C === void 0 ? void 0 : C.getBoundingClientRect()) || { width: 0, height: 0 };
+      Oe.value = {
+        width: B.width * u,
+        height: B.height * b
       };
     }
-    function ue() {
+    function W() {
       if (!s.value)
         return;
-      const r = Ja(xe);
-      if (we(r), Mt(r), ne.value)
-        v.value = Ga(Z.value.map((b) => b[H.value]));
+      const u = an(de);
+      if (Lt(u), Rt(u), P.value)
+        v.value = Qa(te.value.map((b) => b[j.value]));
       else {
         const b = Number(c.itemsToShow), C = (b - 1) * c.gap;
-        v.value = ($e.value[H.value] - C) / b;
+        v.value = (Oe.value[j.value] - C) / b;
       }
     }
-    function me() {
-      !c.wrapAround && k.value > 0 && (g.value = Te({
+    function $e() {
+      !c.wrapAround && k.value > 0 && (g.value = Be({
         val: g.value,
-        max: oe.value,
-        min: ie.value
-      })), ne.value || (c.itemsToShow = Te({
+        max: ie.value,
+        min: re.value
+      })), P.value || (c.itemsToShow = Be({
         val: Number(c.itemsToShow),
         max: k.value,
         min: 1
       }));
     }
-    const it = u(() => typeof t.ignoreAnimations == "string" ? t.ignoreAnimations.split(",") : Array.isArray(t.ignoreAnimations) ? t.ignoreAnimations : t.ignoreAnimations ? !1 : []);
-    Pt(() => me()), Pt(() => {
-      ue();
+    const Te = r(() => typeof t.ignoreAnimations == "string" ? t.ignoreAnimations.split(",") : Array.isArray(t.ignoreAnimations) ? t.ignoreAnimations : t.ignoreAnimations ? !1 : []);
+    _t(() => $e()), _t(() => {
+      W();
     });
-    let Re;
-    const Ct = (r) => {
-      const b = r.target;
-      if (!(!(b != null && b.contains(D.value)) || Array.isArray(it.value) && it.value.includes(r.animationName)) && (xe.add(b), !Re)) {
+    let Ve;
+    const mt = (u) => {
+      const b = u.target;
+      if (!(!(b != null && b.contains(D.value)) || Array.isArray(Te.value) && Te.value.includes(u.animationName)) && (de.add(b), !Ve)) {
         const C = () => {
-          Re = requestAnimationFrame(() => {
-            ue(), C();
+          Ve = requestAnimationFrame(() => {
+            W(), C();
           });
         };
         C();
       }
-    }, wt = (r) => {
-      const b = r.target;
-      b && xe.delete(b), Re && xe.size === 0 && (cancelAnimationFrame(Re), ue());
-    }, Le = E(!1);
-    typeof document < "u" && Pt(() => {
-      Le.value && it.value !== !1 ? (document.addEventListener("animationstart", Ct), document.addEventListener("animationend", wt)) : (document.removeEventListener("animationstart", Ct), document.removeEventListener("animationend", wt));
-    }), Yt(() => {
-      Le.value = !0, Oe(), Dt(), D.value && (I = new ResizeObserver(Ve), I.observe(D.value)), o("init");
-    }), Da(() => {
-      Le.value = !1, a.cleanup(), d && clearTimeout(d), Re && cancelAnimationFrame(Re), Q && clearInterval(Q), I && (I.disconnect(), I = null), typeof document < "u" && Ne(), D.value && (D.value.removeEventListener("transitionend", ue), D.value.removeEventListener("animationiteration", ue));
+    }, gt = (u) => {
+      const b = u.target;
+      b && de.delete(b), Ve && de.size === 0 && (cancelAnimationFrame(Ve), W());
+    }, Ze = E(!1);
+    typeof document < "u" && _t(() => {
+      Ze.value && Te.value !== !1 ? (document.addEventListener("animationstart", mt), document.addEventListener("animationend", gt)) : (document.removeEventListener("animationstart", mt), document.removeEventListener("animationend", gt));
+    }), Wt(() => {
+      Ze.value = !0, De(), nt(), D.value && (T = new ResizeObserver(Vt), T.observe(D.value)), o("init");
+    }), Va(() => {
+      Ze.value = !1, a.cleanup(), d && clearTimeout(d), Ve && cancelAnimationFrame(Ve), ee && clearInterval(ee), T && (T.disconnect(), T = null), typeof document < "u" && ve(), D.value && (D.value.removeEventListener("transitionend", W), D.value.removeEventListener("animationiteration", W));
     });
-    let De = !1;
-    const ge = { x: 0, y: 0 }, se = Ut({ x: 0, y: 0 }), Fe = E(!1), rt = E(!1), Ot = () => {
-      Fe.value = !0;
-    }, ut = () => {
-      Fe.value = !1;
-    }, st = jt((r) => {
-      if (!r.ctrlKey)
-        switch (r.key) {
+    let ce = !1;
+    const xe = { x: 0, y: 0 }, Q = jt({ x: 0, y: 0 }), et = E(!1), tt = E(!1), Nt = () => {
+      et.value = !0;
+    }, Mt = () => {
+      et.value = !1;
+    }, at = Ht((u) => {
+      if (!u.ctrlKey)
+        switch (u.key) {
           case "ArrowLeft":
           case "ArrowUp":
-            P.value === r.key.endsWith("Up") && (ae.value ? Ie(!0) : at(!0));
+            se.value === u.key.endsWith("Up") && (ne.value ? Fe(!0) : Le(!0));
             break;
           case "ArrowRight":
           case "ArrowDown":
-            P.value === r.key.endsWith("Down") && (ae.value ? at(!0) : Ie(!0));
+            se.value === u.key.endsWith("Down") && (ne.value ? Le(!0) : Fe(!0));
             break;
         }
-    }, 200), ye = () => {
-      document.addEventListener("keydown", st);
-    }, Ne = () => {
-      document.removeEventListener("keydown", st);
+    }, 200), yt = () => {
+      document.addEventListener("keydown", at);
+    }, ve = () => {
+      document.removeEventListener("keydown", at);
     };
-    function x(r) {
-      const b = r.target.tagName;
-      if (["INPUT", "TEXTAREA", "SELECT"].includes(b) || q.value || (De = r.type === "touchstart", !De && (r.preventDefault(), r.button !== 0)))
+    function Re(u) {
+      const b = u.target.tagName;
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(b) || be.value || (ce = u.type === "touchstart", !ce && (u.preventDefault(), u.button !== 0)))
         return;
-      ge.x = "touches" in r ? r.touches[0].clientX : r.clientX, ge.y = "touches" in r ? r.touches[0].clientY : r.clientY;
-      const C = De ? "touchmove" : "mousemove", T = De ? "touchend" : "mouseup";
-      document.addEventListener(C, dt, { passive: !1 }), document.addEventListener(T, et, { passive: !0 });
+      xe.x = "touches" in u ? u.touches[0].clientX : u.clientX, xe.y = "touches" in u ? u.touches[0].clientY : u.clientY;
+      const C = ce ? "touchmove" : "mousemove", B = ce ? "touchend" : "mouseup";
+      document.addEventListener(C, Z, { passive: !1 }), document.addEventListener(B, bt, { passive: !0 });
     }
-    const dt = jt((r) => {
-      rt.value = !0;
-      const b = "touches" in r ? r.touches[0].clientX : r.clientX, C = "touches" in r ? r.touches[0].clientY : r.clientY;
-      se.x = b - ge.x, se.y = C - ge.y;
-      const T = Ka({
-        isVertical: P.value,
-        isReversed: ae.value,
-        dragged: se,
-        effectiveSlideSize: re.value
+    const Z = Ht((u) => {
+      tt.value = !0;
+      const b = "touches" in u ? u.touches[0].clientX : u.clientX, C = "touches" in u ? u.touches[0].clientY : u.clientY;
+      Q.x = b - xe.x, Q.y = C - xe.y;
+      const B = en({
+        isVertical: se.value,
+        isReversed: ne.value,
+        dragged: Q,
+        effectiveSlideSize: ue.value
       });
-      V.value = c.wrapAround ? g.value + T : Te({
-        val: g.value + T,
-        max: oe.value,
-        min: ie.value
-      }), o("drag", { deltaX: se.x, deltaY: se.y });
+      V.value = c.wrapAround ? g.value + B : Be({
+        val: g.value + B,
+        max: ie.value,
+        min: re.value
+      }), o("drag", { deltaX: Q.x, deltaY: Q.y });
     });
-    function et() {
-      if (dt.cancel(), V.value !== g.value && !De) {
-        const C = (T) => {
-          T.preventDefault(), window.removeEventListener("click", C);
+    function bt() {
+      if (Z.cancel(), V.value !== g.value && !ce) {
+        const C = (B) => {
+          B.preventDefault(), window.removeEventListener("click", C);
         };
         window.addEventListener("click", C);
       }
-      Me(V.value), se.x = 0, se.y = 0, rt.value = !1;
-      const r = De ? "touchmove" : "mousemove", b = De ? "touchend" : "mouseup";
-      document.removeEventListener(r, dt), document.removeEventListener(b, et);
+      G(V.value), Q.x = 0, Q.y = 0, tt.value = !1;
+      const u = ce ? "touchmove" : "mousemove", b = ce ? "touchend" : "mouseup";
+      document.removeEventListener(u, Z), document.removeEventListener(b, bt);
     }
-    function Dt() {
-      !c.autoplay || c.autoplay <= 0 || (Q = setInterval(() => {
-        c.pauseAutoplayOnHover && Fe.value || Ie();
+    function nt() {
+      !c.autoplay || c.autoplay <= 0 || (ee = setInterval(() => {
+        c.pauseAutoplayOnHover && et.value || Fe();
       }, c.autoplay));
     }
-    function ct() {
-      Q && (clearInterval(Q), Q = null);
+    function ht() {
+      ee && (clearInterval(ee), ee = null);
     }
-    function tt() {
-      ct(), Dt();
+    function lt() {
+      ht(), nt();
     }
-    const q = E(!1);
-    function Me(r, b = !1) {
-      if (!b && q.value)
+    const be = E(!1);
+    function G(u, b = !1) {
+      if (!b && be.value)
         return;
-      let C = r, T = r;
-      A.value = g.value, c.wrapAround ? T = fa({
+      let C = u, B = u;
+      A.value = g.value, c.wrapAround ? B = ga({
         val: C,
-        max: oe.value,
-        min: ie.value
-      }) : C = Te({
+        max: ie.value,
+        min: re.value
+      }) : C = Be({
         val: C,
-        max: oe.value,
-        min: ie.value
+        max: ie.value,
+        min: re.value
       }), o("slide-start", {
-        slidingToIndex: r,
+        slidingToIndex: u,
         currentSlideIndex: g.value,
         prevSlideIndex: A.value,
         slidesCount: k.value
-      }), ct(), q.value = !0, g.value = C, T !== C && vt.pause(), o("update:modelValue", T), d = setTimeout(() => {
-        c.wrapAround && T !== C && (vt.resume(), g.value = T, o("loop", {
+      }), ht(), be.value = !0, g.value = C, B !== C && Ne.pause(), o("update:modelValue", B), d = setTimeout(() => {
+        c.wrapAround && B !== C && (Ne.resume(), g.value = B, o("loop", {
           currentSlideIndex: g.value,
-          slidingToIndex: r
+          slidingToIndex: u
         })), o("slide-end", {
           currentSlideIndex: g.value,
           prevSlideIndex: A.value,
           slidesCount: k.value
-        }), q.value = !1, tt();
+        }), be.value = !1, lt();
       }, c.transition);
     }
-    function Ie(r = !1) {
-      Me(g.value + c.itemsToScroll, r);
+    function Fe(u = !1) {
+      G(g.value + c.itemsToScroll, u);
     }
-    function at(r = !1) {
-      Me(g.value - c.itemsToScroll, r);
+    function Le(u = !1) {
+      G(g.value - c.itemsToScroll, u);
     }
-    function Pe() {
-      Oe(), me(), ue(), tt();
+    function Ot() {
+      De(), $e(), W(), lt();
     }
-    U(() => [B.value, t.breakpoints], () => Oe(), { deep: !0 }), U(() => t.autoplay, () => tt());
-    const vt = U(() => t.modelValue, (r) => {
-      r !== g.value && Me(Number(r), !0);
+    U(() => [I.value, t.breakpoints], () => De(), { deep: !0 }), U(() => t.autoplay, () => lt());
+    const Ne = U(() => t.modelValue, (u) => {
+      u !== g.value && G(Number(u), !0);
     });
     o("before-init");
-    const Ue = u(() => {
+    const Me = r(() => {
       if (!c.wrapAround)
         return { before: 0, after: 0 };
-      if (ne.value)
+      if (P.value)
         return { before: y.length, after: y.length };
-      const r = Number(c.itemsToShow), b = Math.ceil(r + (c.itemsToScroll - 1)), C = b - V.value, T = b - (k.value - (V.value + 1));
+      const u = Number(c.itemsToShow), b = Math.ceil(u + (c.itemsToScroll - 1)), C = b - V.value, B = b - (k.value - (V.value + 1));
       return {
         before: Math.max(0, C),
-        after: Math.max(0, T)
+        after: Math.max(0, B)
       };
-    }), le = u(() => Ue.value.before ? ne.value ? Z.value.slice(-1 * Ue.value.before).reduce((r, b) => r + b[H.value] + c.gap, 0) * -1 : Ue.value.before * re.value * -1 : 0), ft = u(() => {
-      var r;
-      if (ne.value) {
+    }), ut = r(() => Me.value.before ? P.value ? te.value.slice(-1 * Me.value.before).reduce((u, b) => u + b[j.value] + c.gap, 0) * -1 : Me.value.before * ue.value * -1 : 0), oe = r(() => {
+      var u;
+      if (P.value) {
         const b = (g.value % y.length + y.length) % y.length;
-        return qt({
-          slideSize: (r = Z.value[b]) === null || r === void 0 ? void 0 : r[H.value],
-          viewportSize: $e.value[H.value],
+        return Xt({
+          slideSize: (u = te.value[b]) === null || u === void 0 ? void 0 : u[j.value],
+          viewportSize: Oe.value[j.value],
           align: c.snapAlign
         });
       }
-      return qt({
+      return Xt({
         align: c.snapAlign,
         itemsToShow: +c.itemsToShow
       });
-    }), nt = u(() => {
-      let r = 0;
-      if (ne.value) {
-        if (g.value < 0 ? r = Z.value.slice(g.value).reduce((b, C) => b + C[H.value] + c.gap, 0) * -1 : r = Z.value.slice(0, g.value).reduce((b, C) => b + C[H.value] + c.gap, 0), r -= ft.value, !c.wrapAround) {
-          const b = Z.value.reduce((C, T) => C + T[H.value] + c.gap, 0) - $e.value[H.value] - c.gap;
-          r = Te({
-            val: r,
+    }), ot = r(() => {
+      let u = 0;
+      if (P.value) {
+        if (g.value < 0 ? u = te.value.slice(g.value).reduce((b, C) => b + C[j.value] + c.gap, 0) * -1 : u = te.value.slice(0, g.value).reduce((b, C) => b + C[j.value] + c.gap, 0), u -= oe.value, !c.wrapAround) {
+          const b = te.value.reduce((C, B) => C + B[j.value] + c.gap, 0) - Oe.value[j.value] - c.gap;
+          u = Be({
+            val: u,
             max: b,
             min: 0
           });
         }
       } else {
-        let b = g.value - ft.value;
-        c.wrapAround || (b = Te({
+        let b = g.value - oe.value;
+        c.wrapAround || (b = Be({
           val: b,
           max: k.value - +c.itemsToShow,
           min: 0
-        })), r = b * re.value;
+        })), u = b * ue.value;
       }
-      return r * (ae.value ? 1 : -1);
-    }), It = u(() => {
-      var r, b;
-      if (!ne.value) {
-        const N = g.value - ft.value;
+      return u * (ne.value ? 1 : -1);
+    }), $t = r(() => {
+      var u, b;
+      if (!P.value) {
+        const L = g.value - oe.value;
         return c.wrapAround ? {
-          min: Math.floor(N),
-          max: Math.ceil(N + Number(c.itemsToShow) - 1)
+          min: Math.floor(L),
+          max: Math.ceil(L + Number(c.itemsToShow) - 1)
         } : {
-          min: Math.floor(Te({
-            val: N,
+          min: Math.floor(Be({
+            val: L,
             max: k.value - Number(c.itemsToShow),
             min: 0
           })),
-          max: Math.ceil(Te({
-            val: N + Number(c.itemsToShow) - 1,
+          max: Math.ceil(Be({
+            val: L + Number(c.itemsToShow) - 1,
             max: k.value - 1,
             min: 0
           }))
@@ -610,107 +610,107 @@ const xa = pe({
       }
       let C = 0;
       {
-        let N = 0, W = 0 - Ue.value.before;
-        const Y = Math.abs(nt.value + le.value);
-        for (; N <= Y; ) {
-          const ee = (W % y.length + y.length) % y.length;
-          N += ((r = Z.value[ee]) === null || r === void 0 ? void 0 : r[H.value]) + c.gap, W++;
+        let L = 0, J = 0 - Me.value.before;
+        const le = Math.abs(ot.value + ut.value);
+        for (; L <= le; ) {
+          const Y = (J % y.length + y.length) % y.length;
+          L += ((u = te.value[Y]) === null || u === void 0 ? void 0 : u[j.value]) + c.gap, J++;
         }
-        C = W - 1;
+        C = J - 1;
       }
-      let T = 0;
+      let B = 0;
       {
-        let N = C, W = 0;
-        for (N < 0 ? W = Z.value.slice(0, N).reduce((Y, ee) => Y + ee[H.value] + c.gap, 0) - Math.abs(nt.value + le.value) : W = Z.value.slice(0, N).reduce((Y, ee) => Y + ee[H.value] + c.gap, 0) - Math.abs(nt.value); W < $e.value[H.value]; ) {
-          const Y = (N % y.length + y.length) % y.length;
-          W += ((b = Z.value[Y]) === null || b === void 0 ? void 0 : b[H.value]) + c.gap, N++;
+        let L = C, J = 0;
+        for (L < 0 ? J = te.value.slice(0, L).reduce((le, Y) => le + Y[j.value] + c.gap, 0) - Math.abs(ot.value + ut.value) : J = te.value.slice(0, L).reduce((le, Y) => le + Y[j.value] + c.gap, 0) - Math.abs(ot.value); J < Oe.value[j.value]; ) {
+          const le = (L % y.length + y.length) % y.length;
+          J += ((b = te.value[le]) === null || b === void 0 ? void 0 : b[j.value]) + c.gap, L++;
         }
-        T = N - 1;
+        B = L - 1;
       }
       return {
         min: Math.floor(C),
-        max: Math.ceil(T)
+        max: Math.ceil(B)
       };
-    }), $t = u(() => {
+    }), kt = r(() => {
       if (c.slideEffect === "fade")
         return;
-      const r = P.value ? "Y" : "X", b = P.value ? se.y : se.x;
-      let C = nt.value + b;
+      const u = se.value ? "Y" : "X", b = se.value ? Q.y : Q.x;
+      let C = ot.value + b;
       if (!c.wrapAround && c.preventExcessiveDragging) {
-        let T = 0;
-        ne.value ? T = Z.value.reduce((Y, ee) => Y + ee[H.value], 0) : T = (k.value - Number(c.itemsToShow)) * re.value;
-        const N = ae.value ? 0 : -1 * T, W = ae.value ? T : 0;
-        C = Te({
+        let B = 0;
+        P.value ? B = te.value.reduce((le, Y) => le + Y[j.value], 0) : B = (k.value - Number(c.itemsToShow)) * ue.value;
+        const L = ne.value ? 0 : -1 * B, J = ne.value ? B : 0;
+        C = Be({
           val: C,
-          min: N,
-          max: W
+          min: L,
+          max: J
         });
       }
-      return `translate${r}(${C}px)`;
-    }), Ft = u(() => ({
-      "--vc-transition-duration": q.value ? Lt(c.transition, "ms") : void 0,
-      "--vc-slide-gap": Lt(c.gap),
-      "--vc-carousel-height": Lt(c.height),
-      "--vc-cloned-offset": Lt(le.value)
-    })), Bt = { slideTo: Me, next: Ie, prev: at }, pt = Ut({
+      return `translate${u}(${C}px)`;
+    }), Ft = r(() => ({
+      "--vc-transition-duration": be.value ? Et(c.transition, "ms") : void 0,
+      "--vc-slide-gap": Et(c.gap),
+      "--vc-carousel-height": Et(c.height),
+      "--vc-cloned-offset": Et(ut.value)
+    })), St = { slideTo: G, next: Fe, prev: Le }, Pt = jt({
       activeSlide: V,
       config: c,
       currentSlide: g,
-      isSliding: q,
-      isVertical: P,
-      maxSlide: oe,
-      minSlide: ie,
-      nav: Bt,
+      isSliding: be,
+      isVertical: se,
+      maxSlide: ie,
+      minSlide: re,
+      nav: St,
       normalizedDir: _,
       slideRegistry: a,
       slideSize: v,
       slides: y,
       slidesCount: k,
       viewport: s,
-      visibleRange: It
+      visibleRange: $t
     });
-    la(Qe, pt);
-    const _e = Ut({
+    ra(Je, Pt);
+    const Pe = jt({
       config: c,
       currentSlide: g,
-      maxSlide: oe,
-      middleSlide: Ze,
-      minSlide: ie,
+      maxSlide: ie,
+      middleSlide: Qe,
+      minSlide: re,
       slideSize: v,
       slidesCount: k
     });
     return l({
-      data: _e,
-      nav: Bt,
-      next: Ie,
-      prev: at,
-      restartCarousel: Pe,
-      slideTo: Me,
-      updateBreakpointsConfig: Oe,
-      updateSlideSize: ue,
-      updateSlidesData: me
+      data: Pe,
+      nav: St,
+      next: Fe,
+      prev: Le,
+      restartCarousel: Ot,
+      slideTo: G,
+      updateBreakpointsConfig: De,
+      updateSlideSize: W,
+      updateSlidesData: $e
     }), () => {
-      var r;
-      const b = i.default || i.slides, C = (b == null ? void 0 : b(_e)) || [], { before: T, after: N } = Ue.value, W = Zt({
+      var u;
+      const b = i.default || i.slides, C = (b == null ? void 0 : b(Pe)) || [], { before: B, after: L } = Me.value, J = ta({
         slides: y,
         position: "before",
-        toShow: T
-      }), Y = Zt({
+        toShow: B
+      }), le = ta({
         slides: y,
         position: "after",
-        toShow: N
-      }), ee = [...W, ...C, ...Y];
-      if (!c.enabled || !ee.length)
+        toShow: L
+      }), Y = [...J, ...C, ...le];
+      if (!c.enabled || !Y.length)
         return K("section", {
           ref: D,
           class: ["carousel", "is-disabled"]
-        }, ee);
-      const mt = ((r = i.addons) === null || r === void 0 ? void 0 : r.call(i, _e)) || [], lt = K("ol", {
+        }, Y);
+      const Ct = ((u = i.addons) === null || u === void 0 ? void 0 : u.call(i, Pe)) || [], st = K("ol", {
         class: "carousel__track",
-        style: { transform: $t.value },
-        onMousedownCapture: c.mouseDrag ? x : null,
-        onTouchstartPassiveCapture: c.touchDrag ? x : null
-      }, ee), gt = K("div", { class: "carousel__viewport", ref: s }, lt);
+        style: { transform: kt.value },
+        onMousedownCapture: c.mouseDrag ? Re : null,
+        onTouchstartPassiveCapture: c.touchDrag ? Re : null
+      }, Y), it = K("div", { class: "carousel__viewport", ref: s }, st);
       return K("section", {
         ref: D,
         class: [
@@ -718,56 +718,56 @@ const xa = pe({
           `is-${_.value}`,
           `is-effect-${c.slideEffect}`,
           {
-            "is-vertical": P.value,
-            "is-sliding": q.value,
-            "is-dragging": rt.value,
-            "is-hover": Fe.value
+            "is-vertical": se.value,
+            "is-sliding": be.value,
+            "is-dragging": tt.value,
+            "is-hover": et.value
           }
         ],
         dir: _.value,
         style: Ft.value,
         "aria-label": c.i18n.ariaGallery,
         tabindex: "0",
-        onFocus: ye,
-        onBlur: Ne,
-        onMouseenter: Ot,
-        onMouseleave: ut
-      }, [gt, mt, K(xa)]);
+        onFocus: yt,
+        onBlur: ve,
+        onMouseenter: Nt,
+        onMouseleave: Mt
+      }, [it, Ct, K(on)]);
     };
   }
 });
-var Gt;
+var Yt;
 (function(t) {
   t.arrowDown = "arrowDown", t.arrowLeft = "arrowLeft", t.arrowRight = "arrowRight", t.arrowUp = "arrowUp";
-})(Gt || (Gt = {}));
-const ea = (t) => `icon${t.charAt(0).toUpperCase() + t.slice(1)}`, an = {
+})(Yt || (Yt = {}));
+const na = (t) => `icon${t.charAt(0).toUpperCase() + t.slice(1)}`, sn = {
   arrowDown: "M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z",
   arrowLeft: "M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z",
   arrowRight: "M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z",
   arrowUp: "M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"
 };
-function nn(t) {
-  return t in Gt;
+function dn(t) {
+  return t in Yt;
 }
-const ta = (t) => t && nn(t), aa = pe({
+const la = (t) => t && dn(t), oa = ye({
   props: {
     name: {
       type: String,
       required: !0,
-      validator: ta
+      validator: la
     },
     title: {
       type: String,
-      default: (t) => t.name ? z.i18n[ea(t.name)] : ""
+      default: (t) => t.name ? H.i18n[na(t.name)] : ""
     }
   },
   setup(t) {
-    const i = St(Qe, null);
+    const i = pt(Je, null);
     return () => {
       const o = t.name;
-      if (!o || !ta(o))
+      if (!o || !la(o))
         return;
-      const l = an[o], n = K("path", { d: l }), a = (i == null ? void 0 : i.config.i18n[ea(o)]) || t.title, y = K("title", a);
+      const l = sn[o], n = K("path", { d: l }), a = (i == null ? void 0 : i.config.i18n[na(o)]) || t.title, y = K("title", a);
       return K("svg", {
         class: "carousel__icon",
         viewBox: "0 0 24 24",
@@ -776,11 +776,11 @@ const ta = (t) => t && nn(t), aa = pe({
       }, [y, n]);
     };
   }
-}), ln = pe({
+}), cn = ye({
   name: "CarouselNavigation",
   inheritAttrs: !1,
   setup(t, { slots: i, attrs: o }) {
-    const l = St(Qe);
+    const l = pt(Je);
     if (!l)
       return () => "";
     const { next: n, prev: a } = i, y = () => ({
@@ -793,21 +793,21 @@ const ta = (t) => t && nn(t), aa = pe({
       ltr: "arrowRight",
       rtl: "arrowLeft",
       ttb: "arrowDown"
-    })[l.normalizedDir], D = u(() => !l.config.wrapAround && l.currentSlide <= l.minSlide), s = u(() => !l.config.wrapAround && l.currentSlide >= l.maxSlide);
+    })[l.normalizedDir], D = r(() => !l.config.wrapAround && l.currentSlide <= l.minSlide), s = r(() => !l.config.wrapAround && l.currentSlide >= l.maxSlide);
     return () => {
-      const { i18n: v } = l.config, B = K("button", Object.assign(Object.assign({ type: "button", disabled: D.value, "aria-label": v.ariaPreviousSlide, title: v.ariaPreviousSlide, onClick: l.nav.prev }, o), { class: [
+      const { i18n: v } = l.config, I = K("button", Object.assign(Object.assign({ type: "button", disabled: D.value, "aria-label": v.ariaPreviousSlide, title: v.ariaPreviousSlide, onClick: l.nav.prev }, o), { class: [
         "carousel__prev",
         { "carousel__prev--disabled": D.value },
         o.class
-      ] }), (a == null ? void 0 : a()) || K(aa, { name: y() })), c = K("button", Object.assign(Object.assign({ type: "button", disabled: s.value, "aria-label": v.ariaNextSlide, title: v.ariaNextSlide, onClick: l.nav.next }, o), { class: [
+      ] }), (a == null ? void 0 : a()) || K(oa, { name: y() })), c = K("button", Object.assign(Object.assign({ type: "button", disabled: s.value, "aria-label": v.ariaNextSlide, title: v.ariaNextSlide, onClick: l.nav.next }, o), { class: [
         "carousel__next",
         { "carousel__next--disabled": s.value },
         o.class
-      ] }), (n == null ? void 0 : n()) || K(aa, { name: k() }));
-      return [B, c];
+      ] }), (n == null ? void 0 : n()) || K(oa, { name: k() }));
+      return [I, c];
     };
   }
-}), on = pe({
+}), vn = ye({
   name: "CarouselPagination",
   props: {
     disableOnClick: {
@@ -818,13 +818,13 @@ const ta = (t) => t && nn(t), aa = pe({
     }
   },
   setup(t) {
-    const i = St(Qe);
+    const i = pt(Je);
     if (!i)
       return () => "";
-    const o = u(() => i.config.itemsToShow), l = u(() => qt({
+    const o = r(() => i.config.itemsToShow), l = r(() => Xt({
       align: i.config.snapAlign,
       itemsToShow: o.value
-    })), n = u(() => t.paginateByItemsToShow && o.value > 1), a = u(() => Math.ceil((i.activeSlide - l.value) / o.value)), y = u(() => Math.ceil(i.slidesCount / o.value)), k = (D) => fa(n.value ? {
+    })), n = r(() => t.paginateByItemsToShow && o.value > 1), a = r(() => Math.ceil((i.activeSlide - l.value) / o.value)), y = r(() => Math.ceil(i.slidesCount / o.value)), k = (D) => ga(n.value ? {
       val: a.value,
       max: y.value - 1,
       min: 0
@@ -836,10 +836,10 @@ const ta = (t) => t && nn(t), aa = pe({
     return () => {
       var D, s;
       const v = [];
-      for (let B = n.value ? 0 : i.minSlide; B <= (n.value ? y.value - 1 : i.maxSlide); B++) {
-        const c = va(i.config.i18n[n.value ? "ariaNavigateToPage" : "ariaNavigateToSlide"], {
-          slideNumber: B + 1
-        }), g = k(B), V = K("button", {
+      for (let I = n.value ? 0 : i.minSlide; I <= (n.value ? y.value - 1 : i.maxSlide); I++) {
+        const c = ma(i.config.i18n[n.value ? "ariaNavigateToPage" : "ariaNavigateToSlide"], {
+          slideNumber: I + 1
+        }), g = k(I), V = K("button", {
           type: "button",
           class: {
             "carousel__pagination-button": !0,
@@ -847,22 +847,22 @@ const ta = (t) => t && nn(t), aa = pe({
           },
           "aria-label": c,
           "aria-pressed": g,
-          "aria-controls": (s = (D = i.slides[B]) === null || D === void 0 ? void 0 : D.exposed) === null || s === void 0 ? void 0 : s.id,
+          "aria-controls": (s = (D = i.slides[I]) === null || D === void 0 ? void 0 : D.exposed) === null || s === void 0 ? void 0 : s.id,
           title: c,
           disabled: t.disableOnClick,
-          onClick: () => i.nav.slideTo(n.value ? Math.floor(B * +i.config.itemsToShow + l.value) : B)
-        }), A = K("li", { class: "carousel__pagination-item", key: B }, V);
+          onClick: () => i.nav.slideTo(n.value ? Math.floor(I * +i.config.itemsToShow + l.value) : I)
+        }), A = K("li", { class: "carousel__pagination-item", key: I }, V);
         v.push(A);
       }
       return K("ol", { class: "carousel__pagination" }, v);
     };
   }
-}), na = pe({
+}), ia = ye({
   name: "CarouselSlide",
   props: {
     id: {
       type: String,
-      default: (t) => t.isClone ? void 0 : Ia()
+      default: (t) => t.isClone ? void 0 : Ra()
     },
     index: {
       type: Number,
@@ -878,12 +878,12 @@ const ta = (t) => t && nn(t), aa = pe({
     }
   },
   setup(t, { attrs: i, slots: o, expose: l }) {
-    const n = St(Qe);
-    if (la(Qe, void 0), !n)
+    const n = pt(Je);
+    if (ra(Je, void 0), !n)
       return () => "";
     const a = E(t.index), y = (V) => {
       a.value = V;
-    }, k = Ba(), D = () => {
+    }, k = La(), D = () => {
       const V = k.vnode.el;
       return V ? V.getBoundingClientRect() : { width: 0, height: 0 };
     };
@@ -892,18 +892,18 @@ const ta = (t) => t && nn(t), aa = pe({
       setIndex: y,
       getBoundingRect: D
     });
-    const s = u(() => a.value === n.activeSlide), v = u(() => a.value === n.activeSlide - 1), B = u(() => a.value === n.activeSlide + 1), c = u(() => a.value >= n.visibleRange.min && a.value <= n.visibleRange.max), g = u(() => {
+    const s = r(() => a.value === n.activeSlide), v = r(() => a.value === n.activeSlide - 1), I = r(() => a.value === n.activeSlide + 1), c = r(() => a.value >= n.visibleRange.min && a.value <= n.visibleRange.max), g = r(() => {
       if (n.config.itemsToShow === "auto")
         return;
       const V = n.config.itemsToShow, A = n.config.gap > 0 && V > 1 ? `calc(${100 / V}% - ${n.config.gap * (V - 1) / V}px)` : `${100 / V}%`;
       return n.isVertical ? { height: A } : { width: A };
     });
-    return n.slideRegistry.registerSlide(k, t.index), Ta(() => {
+    return n.slideRegistry.registerSlide(k, t.index), Na(() => {
       n.slideRegistry.unregisterSlide(k);
-    }), t.isClone && (Yt(() => {
-      xt(k.vnode);
-    }), Ea(() => {
-      xt(k.vnode);
+    }), t.isClone && (Wt(() => {
+      aa(k.vnode);
+    }), Ma(() => {
+      aa(k.vnode);
     })), () => {
       var V, A;
       return n.config.enabled ? K("li", {
@@ -914,7 +914,7 @@ const ta = (t) => t && nn(t), aa = pe({
           "carousel__slide--visible": c.value,
           "carousel__slide--active": s.value,
           "carousel__slide--prev": v.value,
-          "carousel__slide--next": B.value,
+          "carousel__slide--next": I.value,
           "carousel__slide--sliding": n.isSliding
         },
         onFocusin: () => {
@@ -927,17 +927,17 @@ const ta = (t) => t && nn(t), aa = pe({
         isActive: s.value,
         isClone: t.isClone,
         isPrev: v.value,
-        isNext: B.value,
+        isNext: I.value,
         isSliding: n.isSliding,
         isVisible: c.value
       })) : (V = o.default) === null || V === void 0 ? void 0 : V.call(o);
     };
   }
-}), rn = (t, i, o, l) => {
+}), fn = (t, i, o, l) => {
   var y, k, D, s, v;
   if (!o) return 0;
   let n, a;
-  if (o.type === Ae.Field ? [Xe.Number, Xe.Range].includes((y = o.field) == null ? void 0 : y.type) ? (n = parseFloat(t[o.key]), a = parseFloat(i[o.key])) : [Xe.Date, Xe.Date].includes((k = o.field) == null ? void 0 : k.type) ? (n = t[o.key], a = i[o.key]) : ((D = o.field) == null ? void 0 : D.type) === Xe.Select && ((s = o.field) != null && s.multiple) && ((v = o.field) == null ? void 0 : v.multipleDisplay) === Ma.Count ? (n = t[o.key].length, a = i[o.key].length) : (n = String(t[o.key]).toLowerCase(), a = String(i[o.key]).toLowerCase()) : (n = String(t[o.key]).toLowerCase(), a = String(i[o.key]).toLowerCase()), l === Je.Asc) {
+  if (o.type === Ae.Field ? [Ge.Number, Ge.Range].includes((y = o.field) == null ? void 0 : y.type) ? (n = parseFloat(t[o.key]), a = parseFloat(i[o.key])) : [Ge.Date, Ge.Date].includes((k = o.field) == null ? void 0 : k.type) ? (n = t[o.key], a = i[o.key]) : ((D = o.field) == null ? void 0 : D.type) === Ge.Select && ((s = o.field) != null && s.multiple) && ((v = o.field) == null ? void 0 : v.multipleDisplay) === _a.Count ? (n = t[o.key].length, a = i[o.key].length) : (n = String(t[o.key]).toLowerCase(), a = String(i[o.key]).toLowerCase()) : (n = String(t[o.key]).toLowerCase(), a = String(i[o.key]).toLowerCase()), l === We.Asc) {
     if (n > a) return 1;
     if (a > n) return -1;
   } else {
@@ -945,49 +945,49 @@ const ta = (t) => t && nn(t), aa = pe({
     if (a > n) return 1;
   }
   return 0;
-}, Ye = (t, i, o, l = []) => {
+}, Xe = (t, i, o, l = []) => {
   if (t.extractTitleFromColumn) {
     let a = l.find((y) => y.key === t.extractTitleFromColumn);
     if (a)
-      return Ye(a, i, o, l);
+      return Xe(a, i, o, l);
   }
   let n = t.type === Ae.ColumnIndex ? o : i[t.key];
   if (t.formatter && typeof t.formatter == "function") {
     let a = t.formatter(n, i, t, o);
-    return typeof a == "string" && a.startsWith("__:") ? Na(a.substring(3)) : a;
+    return typeof a == "string" && a.startsWith("__:") ? Ua(a.substring(3)) : a;
   }
   return n;
-}, un = (t, i, o) => {
+}, pn = (t, i, o) => {
   if (!t.colspan) return -1;
   let l = i;
   return o.forEach((n) => {
-    let a = Kt(t, n);
+    let a = Jt(t, n);
     a > 0 && a < l && (l = a);
   }), l;
-}, Kt = (t, i) => t.colspan === !1 ? !1 : typeof t.colspan == "function" ? t.colspan(i) : t.colspan, pa = (t, i) => typeof t.preferSlot > "u" ? !0 : t.preferSlot === !1 ? !1 : typeof t.preferSlot == "function" ? t.preferSlot(i) : !0, sn = (t, i, o) => {
+}, Jt = (t, i) => t.colspan === !1 ? !1 : typeof t.colspan == "function" ? t.colspan(i) : t.colspan, ya = (t, i) => typeof t.preferSlot > "u" ? !0 : t.preferSlot === !1 ? !1 : typeof t.preferSlot == "function" ? t.preferSlot(i) : !0, mn = (t, i, o) => {
   if (typeof t != "object" || !t.key && [Ae.Field].includes(t.type) || i.indexOf(t.key) > -1) return !1;
-  let l = Kt(t, o);
+  let l = Jt(t, o);
   return typeof t.colspan > "u" ? !0 : (typeof t.colspan < "u" && (typeof t.colspan == "function" ? l = parseInt(t.colspan(o)) : l = parseInt(t.colspan)), l > 0);
-}, dn = (t = []) => {
+}, gn = (t = []) => {
   if (t.length > 0) {
     for (let i = 0; i < t.length; ++i)
       if (t[i].sortable) return t[i].key;
   }
   return "";
-}, cn = (t, i) => {
+}, yn = (t, i) => {
   if (t.length > 0) {
     for (let o = 0; o < t.length; ++o)
       if (t[o].key === i) return t[o];
   }
   return null;
-}, ma = (t) => {
+}, ba = (t) => {
   let i = [];
   return t.class && i.push(t.class), t.type && i.push(`is-${t.type}`), i.join(" ");
-}, Xt = /* @__PURE__ */ pe({
+}, Kt = /* @__PURE__ */ ye({
   __name: "LktTableCell",
   props: {
     modelValue: { default: () => ({}) },
-    column: { default: () => new ia() },
+    column: { default: () => new sa() },
     columns: { default: () => [] },
     i: { default: 0 },
     editModeEnabled: { type: Boolean, default: !1 },
@@ -1007,9 +1007,9 @@ const ta = (t) => t && nn(t), aa = pe({
     });
     const a = () => {
       o("inline-drop");
-    }, y = u(() => ({ ...l.column.slotData, item: n.value })), k = u(() => {
-      var v, B, c, g;
-      if ((v = l.column.field) != null && v.modalData && typeof ((B = l.column.field) == null ? void 0 : B.modalData) == "object")
+    }, y = r(() => ({ ...l.column.slotData, item: n.value })), k = r(() => {
+      var v, I, c, g;
+      if ((v = l.column.field) != null && v.modalData && typeof ((I = l.column.field) == null ? void 0 : I.modalData) == "object")
         for (let V in l.column.field.modalData)
           if (typeof ((c = l.column.field) == null ? void 0 : c.modalData[V]) == "string" && l.column.field.modalData[V].startsWith("prop:")) {
             let A = l.column.field.modalData[V].substring(5);
@@ -1017,29 +1017,29 @@ const ta = (t) => t && nn(t), aa = pe({
           } else
             l.column.field.modalData[V];
       return (g = l.column.field) == null ? void 0 : g.modalData;
-    }), D = u(() => typeof l.column.field == "string" && l.column.field.startsWith("prop:") ? Oa(l.column.field, n.value) : l.column.field), s = u(() => {
-      var v, B, c, g;
-      return l.column.type === Ae.Field ? !((B = (v = l.column) == null ? void 0 : v.field) != null && B.label) && (l.column.ensureFieldLabel || [
-        Xe.Switch,
-        Xe.Check
+    }), D = r(() => typeof l.column.field == "string" && l.column.field.startsWith("prop:") ? ja(l.column.field, n.value) : l.column.field), s = r(() => {
+      var v, I, c, g;
+      return l.column.type === Ae.Field ? !((I = (v = l.column) == null ? void 0 : v.field) != null && I.label) && (l.column.ensureFieldLabel || [
+        Ge.Switch,
+        Ge.Check
       ].includes((c = l.column.field) == null ? void 0 : c.type)) ? l.column.label : (g = l.column.field) == null ? void 0 : g.label : "";
     });
-    return (v, B) => {
-      const c = Ce("lkt-anchor"), g = Ce("lkt-button"), V = Ce("lkt-field");
-      return v.column.type === h(Ae).Anchor ? (f(), M(c, X({ key: 0 }, v.column.anchor, { prop: n.value }), {
+    return (v, I) => {
+      const c = we("lkt-anchor"), g = we("lkt-button"), V = we("lkt-field");
+      return v.column.type === h(Ae).Anchor ? (p(), M(c, X({ key: 0 }, v.column.anchor, { prop: n.value }), {
         default: F(() => [
-          Ke(We(h(Ye)(v.column, n.value, v.i)), 1)
+          Ye(Ke(h(Xe)(v.column, n.value, v.i)), 1)
         ]),
         _: 1
-      }, 16, ["prop"])) : v.column.type === h(Ae).Button ? (f(), M(g, X({ key: 1 }, v.column.button, { prop: n.value }), {
+      }, 16, ["prop"])) : v.column.type === h(Ae).Button ? (p(), M(g, X({ key: 1 }, v.column.button, { prop: n.value }), {
         default: F(() => [
-          Ke(We(h(Ye)(v.column, n.value, v.i)), 1)
+          Ye(Ke(h(Xe)(v.column, n.value, v.i)), 1)
         ]),
         _: 1
-      }, 16, ["prop"])) : v.column.type === h(Ae).Field ? (f(), M(V, X({
+      }, 16, ["prop"])) : v.column.type === h(Ae).Field ? (p(), M(V, X({
         key: 2,
         modelValue: n.value[v.column.key],
-        "onUpdate:modelValue": B[0] || (B[0] = (A) => n.value[v.column.key] = A)
+        "onUpdate:modelValue": I[0] || (I[0] = (A) => n.value[v.column.key] = A)
       }, {
         ...D.value,
         readMode: !v.hasInlineEditPerm || D.value.readMode,
@@ -1047,41 +1047,41 @@ const ta = (t) => t && nn(t), aa = pe({
         label: s.value,
         modalData: k.value,
         prop: n.value
-      }), null, 16, ["modelValue"])) : v.column.type === h(Ae).InlineDrop ? (f(), M(g, X({ key: 3 }, v.column.button, {
+      }), null, 16, ["modelValue"])) : v.column.type === h(Ae).InlineDrop ? (p(), M(g, X({ key: 3 }, v.column.button, {
         prop: n.value,
         onClick: a
       }), {
         default: F(() => [
-          Ke(We(h(Ye)(v.column, n.value, v.i)), 1)
+          Ye(Ke(h(Xe)(v.column, n.value, v.i)), 1)
         ]),
         _: 1
-      }, 16, ["prop"])) : v.column.type === h(Ae).ColumnIndex && v.column.field ? (f(), M(V, he(X({ key: 4 }, {
+      }, 16, ["prop"])) : v.column.type === h(Ae).ColumnIndex && v.column.field ? (p(), M(V, ke(X({ key: 4 }, {
         ...D.value,
-        modelValue: h(Ye)(v.column, n.value, v.i, v.columns),
+        modelValue: h(Xe)(v.column, n.value, v.i, v.columns),
         readMode: !0,
         slotData: y.value,
         label: s.value,
         modalData: k.value,
         prop: n.value
-      })), null, 16)) : (f(), w(G, { key: 5 }, [
-        Ke(We(h(Ye)(v.column, n.value, v.i, v.columns)), 1)
+      })), null, 16)) : (p(), w(q, { key: 5 }, [
+        Ye(Ke(h(Xe)(v.column, n.value, v.i, v.columns)), 1)
       ], 64));
     };
   }
-}), kt = class kt {
+}), ft = class ft {
 };
-kt.navButtonSlot = "", kt.createButtonSlot = "", kt.defaultEmptySlot = void 0;
-let fe = kt;
-const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
+ft.navButtonSlot = "", ft.createButtonSlot = "", ft.defaultEmptySlot = void 0;
+let ge = ft;
+const bn = ["data-i", "data-draggable"], hn = ["data-role", "data-i"], kn = {
   key: 1,
   class: "lkt-table-nav-cell"
-}, mn = { class: "lkt-table-nav-container" }, gn = {
+}, Sn = { class: "lkt-table-nav-container" }, Cn = {
   key: 1,
   class: "lkt-icn-arrow-top"
-}, yn = {
+}, wn = {
   key: 1,
   class: "lkt-icn-arrow-bottom"
-}, bn = ["colspan"], hn = ["colspan"], kn = ["colspan"], Sn = ["data-column", "colspan", "title"], Cn = /* @__PURE__ */ pe({
+}, Dn = ["colspan"], Tn = ["colspan"], In = ["colspan"], Bn = ["data-column", "colspan", "title"], En = /* @__PURE__ */ ye({
   __name: "LktTableRow",
   props: {
     modelValue: { default: () => ({}) },
@@ -1099,7 +1099,7 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
     i: { default: 0 },
     visibleColumns: { default: () => [] },
     emptyColumns: { default: () => [] },
-    rowDisplayType: { type: [Number, Function], default: Se.Auto },
+    rowDisplayType: { type: [Number, Function], default: Ce.Auto },
     renderDrag: { type: [Boolean, Function], default: !0 },
     disabledDrag: { type: [Boolean, Function], default: !0 },
     itemContainerClass: { type: [String, Function], default: "" },
@@ -1116,13 +1116,13 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
     "item-drop"
   ],
   setup(t, { emit: i }) {
-    const o = oa(), l = i, n = t, a = E(n.modelValue);
+    const o = ua(), l = i, n = t, a = E(n.modelValue);
     let y = typeof n.rowDisplayType == "function" ? n.rowDisplayType(a.value, n.i) : n.rowDisplayType;
-    y || (y = Se.Auto);
-    const k = [Se.Auto, Se.PreferCustomItem].includes(y), D = [Se.Auto, Se.PreferItem].includes(y), s = (d) => l("click", d), v = u(() => {
-      let d = [], I = typeof n.disabledDrag == "function" ? n.disabledDrag(a.value) : oe.value === !0;
-      return !I && n.sortable && n.isDraggable ? d.push("handle") : I && d.push("disabled"), d.join(" ");
-    }), B = u(() => fe.navButtonSlot !== ""), c = u(() => fe.navButtonSlot), g = () => {
+    y || (y = Ce.Auto);
+    const k = [Ce.Auto, Ce.PreferCustomItem].includes(y), D = [Ce.Auto, Ce.PreferItem].includes(y), s = (d) => l("click", d), v = r(() => {
+      let d = [], T = typeof n.disabledDrag == "function" ? n.disabledDrag(a.value) : ie.value === !0;
+      return !T && n.sortable && n.isDraggable ? d.push("handle") : T && d.push("disabled"), d.join(" ");
+    }), I = r(() => ge.navButtonSlot !== ""), c = r(() => ge.navButtonSlot), g = () => {
       l("item-up", n.i);
     }, V = () => {
       l("item-down", n.i);
@@ -1132,60 +1132,60 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
     U(() => n.modelValue, (d) => a.value = d), U(a, (d) => {
       l("update:modelValue", d);
     }, { deep: !0 });
-    const Ze = u(() => typeof n.renderDrag == "function" ? n.renderDrag(a.value) : n.renderDrag === !0), oe = u(() => typeof n.disabledDrag == "function" ? n.disabledDrag(a.value) : n.disabledDrag === !0), ie = u(() => v.value.includes("handle") ? "drag-indicator" : "invalid-drag-indicator"), Q = u(() => {
+    const Qe = r(() => typeof n.renderDrag == "function" ? n.renderDrag(a.value) : n.renderDrag === !0), ie = r(() => typeof n.disabledDrag == "function" ? n.disabledDrag(a.value) : n.disabledDrag === !0), re = r(() => v.value.includes("handle") ? "drag-indicator" : "invalid-drag-indicator"), ee = r(() => {
       let d = [];
       return k && d.push("type-custom-item"), D && d.push("type-item"), typeof n.itemContainerClass == "function" ? d.push(n.itemContainerClass(a.value, n.i)) : n.itemContainerClass !== "" && d.push(n.itemContainerClass), d.join(" ");
     });
-    return (d, I) => {
-      const re = Ce("lkt-button");
-      return f(), w("tr", {
+    return (d, T) => {
+      const ue = we("lkt-button");
+      return p(), w("tr", {
         "data-i": d.i,
         "data-draggable": d.isDraggable,
-        class: J(Q.value)
+        class: x(ee.value)
       }, [
-        d.sortable && d.editModeEnabled && Ze.value ? (f(), w("td", {
+        d.sortable && d.editModeEnabled && Qe.value ? (p(), w("td", {
           key: 0,
-          "data-role": ie.value,
-          class: J(v.value),
+          "data-role": re.value,
+          class: x(v.value),
           "data-i": d.i
-        }, I[2] || (I[2] = [
-          ce("i", { class: "lkt-icn-drag-indicator" }, null, -1)
-        ]), 10, fn)) : R("", !0),
-        d.addNavigation && d.editModeEnabled ? (f(), w("td", pn, [
-          ce("div", mn, [
-            ke(re, {
+        }, T[2] || (T[2] = [
+          pe("i", { class: "lkt-icn-drag-indicator" }, null, -1)
+        ]), 10, hn)) : R("", !0),
+        d.addNavigation && d.editModeEnabled ? (p(), w("td", kn, [
+          pe("div", Sn, [
+            Se(ue, {
               palette: "table-nav",
               disabled: d.i === 0,
               onClick: g
             }, {
               default: F(() => [
-                B.value ? (f(), M(ve(c.value), {
+                I.value ? (p(), M(me(c.value), {
                   key: 0,
                   direction: "up"
-                })) : (f(), w("i", gn))
+                })) : (p(), w("i", Cn))
               ]),
               _: 1
             }, 8, ["disabled"]),
-            ke(re, {
+            Se(ue, {
               palette: "table-nav",
               disabled: d.latestRow,
               onClick: V
             }, {
               default: F(() => [
-                B.value ? (f(), M(ve(c.value), {
+                I.value ? (p(), M(me(c.value), {
                   key: 0,
                   direction: "down"
-                })) : (f(), w("i", yn))
+                })) : (p(), w("i", wn))
               ]),
               _: 1
             }, 8, ["disabled"])
           ])
         ])) : R("", !0),
-        d.itemSlotComponent ? (f(), w("td", {
+        d.itemSlotComponent ? (p(), w("td", {
           key: "td" + d.i,
           colspan: d.visibleColumns.length
         }, [
-          (f(), M(ve(d.itemSlotComponent), he(Va({
+          (p(), M(me(d.itemSlotComponent), ke($a({
             item: a.value,
             index: d.i,
             editing: d.editModeEnabled,
@@ -1193,7 +1193,7 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
             data: d.itemSlotData,
             events: d.itemSlotEvents
           })), null, 16))
-        ], 8, bn)) : h(k) && h(o)[`item-${d.i}`] ? (f(), w("td", {
+        ], 8, Dn)) : h(k) && h(o)[`item-${d.i}`] ? (p(), w("td", {
           key: "td" + d.i,
           colspan: d.visibleColumns.length
         }, [
@@ -1208,7 +1208,7 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
             isLoading: d.isLoading,
             doDrop: () => A()
           })
-        ], 8, hn)) : h(D) && h(o).item ? (f(), w("td", {
+        ], 8, Tn)) : h(D) && h(o).item ? (p(), w("td", {
           key: "td" + d.i,
           colspan: d.visibleColumns.length
         }, [
@@ -1223,25 +1223,25 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
             isLoading: d.isLoading,
             doDrop: () => A()
           })
-        ], 8, kn)) : (f(!0), w(G, { key: 5 }, be(d.visibleColumns, (_) => (f(), w(G, null, [
-          h(sn)(_, d.emptyColumns, a.value) ? (f(), w("td", {
+        ], 8, In)) : (p(!0), w(q, { key: 5 }, he(d.visibleColumns, (_) => (p(), w(q, null, [
+          h(mn)(_, d.emptyColumns, a.value) ? (p(), w("td", {
             key: "td" + d.i,
             "data-column": _.key,
-            colspan: h(Kt)(_, a.value),
-            title: h(Ye)(_, a.value, d.i, d.visibleColumns),
-            class: J(h(ma)(_)),
-            onClick: I[1] || (I[1] = (ae) => s(ae))
+            colspan: h(Jt)(_, a.value),
+            title: h(Xe)(_, a.value, d.i, d.visibleColumns),
+            class: x(h(ba)(_)),
+            onClick: T[1] || (T[1] = (ne) => s(ne))
           }, [
-            d.$slots[_.key] && h(pa)(_, a.value) ? $(d.$slots, _.key, {
+            d.$slots[_.key] && h(ya)(_, a.value) ? $(d.$slots, _.key, {
               key: 0,
               value: a.value[_.key],
               item: a.value,
               column: _,
               i: d.i
-            }) : a.value ? (f(), M(Xt, {
+            }) : a.value ? (p(), M(Kt, {
               key: 1,
               modelValue: a.value,
-              "onUpdate:modelValue": I[0] || (I[0] = (ae) => a.value = ae),
+              "onUpdate:modelValue": T[0] || (T[0] = (ne) => a.value = ne),
               column: _,
               columns: d.visibleColumns,
               "edit-mode-enabled": d.editModeEnabled,
@@ -1249,12 +1249,12 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
               i: d.i,
               onInlineDrop: A
             }, null, 8, ["modelValue", "column", "columns", "edit-mode-enabled", "has-inline-edit-perm", "i"])) : R("", !0)
-          ], 10, Sn)) : R("", !0)
+          ], 10, Bn)) : R("", !0)
         ], 64))), 256))
-      ], 10, vn);
+      ], 10, bn);
     };
   }
-}), zt = /* @__PURE__ */ pe({
+}), qt = /* @__PURE__ */ ye({
   __name: "CreateButton",
   props: {
     config: { default: void 0 },
@@ -1266,7 +1266,7 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
   ],
   setup(t, { emit: i }) {
     var s;
-    const o = i, l = t, n = u(() => fe.createButtonSlot !== ""), a = u(() => fe.createButtonSlot), y = {
+    const o = i, l = t, n = r(() => ge.createButtonSlot !== ""), a = r(() => ge.createButtonSlot), y = {
       ...(s = l.config) == null ? void 0 : s.modalData,
       beforeClose: (v) => {
         "itemCreated" in v && v.itemCreated === !0 && o("append", v.item);
@@ -1282,23 +1282,23 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
         return;
       }
     };
-    return (v, B) => {
-      const c = Ce("lkt-button");
-      return f(), M(c, X(k, {
+    return (v, I) => {
+      const c = we("lkt-button");
+      return p(), M(c, X(k, {
         disabled: v.disabled,
         onClick: D
       }), {
         default: F(() => [
-          n.value ? (f(), M(ve(a.value), { key: 0 })) : R("", !0)
+          n.value ? (p(), M(me(a.value), { key: 0 })) : R("", !0)
         ]),
         _: 1
       }, 16, ["disabled"]);
     };
   }
-}), wn = ["data-column", "data-sortable", "data-sort", "colspan", "title"], Dn = /* @__PURE__ */ pe({
+}), An = ["data-column", "data-sortable", "data-sort", "colspan", "title"], Vn = /* @__PURE__ */ ye({
   __name: "TableHeader",
   props: {
-    column: { default: () => new ia() },
+    column: { default: () => new sa() },
     sortBy: { default: "" },
     sortDirection: { default: "" },
     amountOfColumns: { default: 0 },
@@ -1308,43 +1308,43 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
     "click"
   ],
   setup(t, { emit: i }) {
-    const o = i, l = t, n = u(() => un(l.column, l.amountOfColumns, l.items)), a = u(() => l.column.sortable === !0), y = u(() => a.value && l.sortBy === l.column.key ? l.sortDirection : ""), k = u(() => ra(l.column.label)), D = u(() => a.value && l.sortBy === l.column.key ? l.sortDirection === Je.Asc ? Ee.defaultTableSortAscIcon : l.sortDirection === Je.Desc ? Ee.defaultTableSortDescIcon : "" : ""), s = () => o("click", l.column);
-    return (v, B) => (f(), w("th", {
+    const o = i, l = t, n = r(() => pn(l.column, l.amountOfColumns, l.items)), a = r(() => l.column.sortable === !0), y = r(() => a.value && l.sortBy === l.column.key ? l.sortDirection : ""), k = r(() => da(l.column.label)), D = r(() => a.value && l.sortBy === l.column.key ? l.sortDirection === We.Asc ? Ee.defaultTableSortAscIcon : l.sortDirection === We.Desc ? Ee.defaultTableSortDescIcon : "" : ""), s = () => o("click", l.column);
+    return (v, I) => (p(), w("th", {
       "data-column": v.column.key,
       "data-sortable": a.value,
       "data-sort": y.value,
       colspan: n.value,
       title: k.value,
-      class: J(h(ma)(v.column)),
+      class: x(h(ba)(v.column)),
       onClick: s
     }, [
-      ce("div", null, [
-        Ke(We(k.value) + " ", 1),
-        D.value ? (f(), w("i", {
+      pe("div", null, [
+        Ye(Ke(k.value) + " ", 1),
+        D.value ? (p(), w("i", {
           key: 0,
-          class: J(D.value)
+          class: x(D.value)
         }, null, 2)) : R("", !0)
       ])
-    ], 10, wn));
+    ], 10, An));
   }
-}), In = ["id"], Bn = { class: "lkt-table-page-buttons" }, Tn = { class: "switch-edition-mode" }, En = { class: "switch-edition-mode" }, An = {
+}), Rn = ["id"], Ln = { class: "lkt-table-page-buttons" }, Nn = { class: "switch-edition-mode" }, Mn = { class: "switch-edition-mode" }, On = {
   key: 0,
   class: "lkt-table-page-buttons"
-}, Vn = {
+}, $n = {
   key: 1,
   class: "lkt-table-page-filters"
-}, Rn = { class: "lkt-table" }, Ln = { key: 0 }, Nn = { key: 0 }, Mn = {
+}, Fn = { class: "lkt-table" }, Pn = { key: 0 }, Un = { key: 0 }, _n = {
   key: 0,
   "data-role": "drag-indicator"
-}, On = { key: 1 }, $n = ["id"], Fn = ["id"], Pn = ["data-i"], Un = ["id"], _n = ["data-i"], jn = ["id"], zn = { class: "lkt-carousel-slide" }, Hn = { class: "lkt-carousel-slide" }, qn = {
+}, jn = { key: 1 }, zn = ["id"], Hn = ["id"], qn = ["data-i"], Gn = ["id"], Xn = ["data-i"], Yn = ["id"], Kn = { class: "lkt-carousel-slide" }, Wn = { class: "lkt-carousel-slide" }, Jn = {
   key: 2,
   class: "lkt-table-empty"
-}, Gn = {
+}, Qn = {
   key: 4,
   class: "lkt-table-page-buttons lkt-table-page-buttons-bottom"
-}, Xn = /* @__PURE__ */ pe({
+}, Zn = /* @__PURE__ */ ye({
   __name: "LktTable",
-  props: /* @__PURE__ */ Ra({
+  props: /* @__PURE__ */ Fa({
     modelValue: {},
     type: {},
     columns: {},
@@ -1390,8 +1390,11 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
     itemContainerClass: { type: [String, Function] },
     skipTableItemsContainer: { type: Boolean },
     createEnabledValidator: { type: Function },
+    switchableTypes: {},
+    switchableTypesButtons: {},
+    useItemSlot: { type: [Boolean, Function] },
     events: {}
-  }, $a(Fa)),
+  }, za(Ha)),
   emits: [
     "update:modelValue",
     "update:perms",
@@ -1408,103 +1411,103 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
     "drag-end"
   ],
   setup(t, { expose: i, emit: o }) {
-    var Wt, Jt;
-    const l = o, n = oa(), a = t, y = E(typeof a.sorter == "function" ? a.sorter : rn), k = E(dn(a.columns)), D = E(Je.Asc), s = E(a.modelValue), v = E(null), B = E(a.columns), c = E((Wt = a.paginator) == null ? void 0 : Wt.modelValue), g = E(a.loading), V = E(!1), A = E(a.perms), Ze = E(null), oe = E(null), ie = E(null), Q = E({}), d = E(new _a({ items: s.value }, a.dataStateConfig)), I = E(a.editMode), re = E(0), _ = E(null), ae = E(((Jt = a.carousel) == null ? void 0 : Jt.currentSlide) || 0), P = E(qe(a.saveButton, Ee.defaultSaveButton)), ne = E(qe(a.createButton, Ee.defaultCreateButton)), H = E(qe(a.editModeButton, Ee.defaultEditModeButton)), Oe = E(qe(a.groupButton, Ee.defaultGroupButton));
-    U(() => a.saveButton, (e) => P.value = qe(a.saveButton, Ee.defaultSaveButton)), U(() => a.createButton, (e) => ne.value = qe(a.createButton, Ee.defaultCreateButton)), U(() => a.editModeButton, (e) => H.value = qe(a.editModeButton, Ee.defaultEditModeButton));
-    const Ve = E(!1);
+    var Zt, xt;
+    const l = o, n = ua(), a = t, y = E(typeof a.sorter == "function" ? a.sorter : fn), k = E(gn(a.columns)), D = E(We.Asc), s = E(a.modelValue), v = E(null), I = E(a.columns), c = E((Zt = a.paginator) == null ? void 0 : Zt.modelValue), g = E(a.loading), V = E(!1), A = E(a.perms), Qe = E(null), ie = E(null), re = E(null), ee = E({}), d = E(new Xa({ items: s.value }, a.dataStateConfig)), T = E(a.editMode), ue = E(0), _ = E(null), ne = E(a.type), se = E(((xt = a.carousel) == null ? void 0 : xt.currentSlide) || 0), P = E(He(a.saveButton, Ee.defaultSaveButton)), j = E(He(a.createButton, Ee.defaultCreateButton)), De = E(He(a.editModeButton, Ee.defaultEditModeButton)), Vt = E(He(a.groupButton, Ee.defaultGroupButton));
+    U(() => a.saveButton, (e) => P.value = He(a.saveButton, Ee.defaultSaveButton)), U(() => a.createButton, (e) => j.value = He(a.createButton, Ee.defaultCreateButton)), U(() => a.editModeButton, (e) => De.value = He(a.editModeButton, Ee.defaultEditModeButton));
+    const de = E(!1);
     U(g, (e) => l("update:loading", e)), U(c, (e) => l("page", e));
-    const xe = (e) => {
+    const te = (e) => {
       A.value = e;
-    }, Z = (e) => {
-      var m;
+    }, Rt = (e) => {
+      var f;
       if (Array.isArray(e.data)) {
         let O = e.data;
-        typeof ((m = a.events) == null ? void 0 : m.parseResults) == "function" && (O = a.events.parseResults(O)), s.value = [...s.value, ...O];
+        typeof ((f = a.events) == null ? void 0 : f.parseResults) == "function" && (O = a.events.parseResults(O)), s.value = [...s.value, ...O];
       }
-      g.value = !1, V.value = !0, d.value.store({ items: s.value }).turnStoredIntoOriginal(), Ve.value = !1, Vt(() => {
-        ge.value, l("read-response", e);
+      g.value = !1, V.value = !0, d.value.store({ items: s.value }).turnStoredIntoOriginal(), de.value = !1, It(() => {
+        Q.value, l("read-response", e);
       });
-    }, Mt = () => Vt(() => {
+    }, Oe = () => It(() => {
       var e;
-      (!a.paginator || ![Rt.LoadMore, Rt.Infinite].includes((e = a.paginator) == null ? void 0 : e.type)) && s.value.splice(0, s.value.length), g.value = !0;
-    }), $e = () => {
-      Ze.value.doRefresh();
-    }, we = Pa(12), ue = u(() => {
+      (!a.paginator || ![Bt.LoadMore, Bt.Infinite].includes((e = a.paginator) == null ? void 0 : e.type)) && s.value.splice(0, s.value.length), g.value = !0;
+    }), Lt = () => {
+      Qe.value.doRefresh();
+    }, W = qa(12), $e = r(() => {
       if (!a.hideEmptyColumns) return [];
       let e = [];
-      return B.value.forEach((m) => {
-        let O = m.key, j = !1;
-        s.value.forEach((te) => {
-          if (typeof te.checkEmpty == "function")
-            return te.checkEmpty(te);
-          te[O] && (j = !0);
-        }), j || e.push(O);
+      return I.value.forEach((f) => {
+        let O = f.key, z = !1;
+        s.value.forEach((ae) => {
+          if (typeof ae.checkEmpty == "function")
+            return ae.checkEmpty(ae);
+          ae[O] && (z = !0);
+        }), z || e.push(O);
       }), e;
-    }), me = u(() => B.value.filter((e) => !e.hidden)), it = u(() => B.value.filter((e) => e.isForRowKey)), Re = u(() => B.value.map((e) => e.key)), Ct = u(() => {
+    }), Te = r(() => I.value.filter((e) => !e.hidden)), Ve = r(() => I.value.filter((e) => e.isForRowKey)), mt = r(() => I.value.map((e) => e.key)), gt = r(() => {
       let e = [];
-      for (let m in n) Re.value.indexOf(m) !== -1 && e.push(m);
+      for (let f in n) mt.value.indexOf(f) !== -1 && e.push(f);
       return e;
-    }), wt = u(() => {
+    }), Ze = r(() => {
       let e = [];
-      for (let m in n) m.indexOf("slide-") !== -1 && e.push(m);
+      for (let f in n) f.indexOf("slide-") !== -1 && e.push(f);
       return e;
-    }), Le = u(() => {
+    }), ce = r(() => {
       var e;
-      return a.hiddenSave || g.value || !((e = P.value) != null && e.resource || P.value.type) ? !1 : I.value && Ve.value ? !0 : I.value;
-    }), De = u(() => yt.value && s.value.length >= a.requiredItemsForTopCreate || Ie.value ? !0 : Le.value || I.value && ye.value), ge = u(() => {
-      var e, m;
-      return re.value, typeof ((e = P.value) == null ? void 0 : e.disabled) == "function" ? P.value.disabled({
+      return a.hiddenSave || g.value || !((e = P.value) != null && e.resource || P.value.type) ? !1 : T.value && de.value ? !0 : T.value;
+    }), xe = r(() => dt.value && s.value.length >= a.requiredItemsForTopCreate || Le.value ? !0 : ce.value || T.value && ve.value), Q = r(() => {
+      var e, f;
+      return ue.value, typeof ((e = P.value) == null ? void 0 : e.disabled) == "function" ? P.value.disabled({
         value: s.value,
         dataState: d.value
-      }) : typeof ((m = P.value) == null ? void 0 : m.disabled) == "boolean" ? P.value.disabled : !Ve.value;
-    }), se = u(() => s.value.length), Fe = u(() => {
+      }) : typeof ((f = P.value) == null ? void 0 : f.disabled) == "boolean" ? P.value.disabled : !de.value;
+    }), et = r(() => s.value.length), tt = r(() => {
       var e;
       return {
         items: s.value,
         ...(e = P.value) == null ? void 0 : e.resourceData
       };
-    }), rt = u(() => a.titleTag === "" ? "h2" : a.titleTag), Ot = u(() => a.wrapContentTag === "" ? "div" : a.wrapContentTag), ut = u(() => ra(a.title)), st = u(() => {
+    }), Nt = r(() => a.titleTag === "" ? "h2" : a.titleTag), Mt = r(() => a.wrapContentTag === "" ? "div" : a.wrapContentTag), at = r(() => da(a.title)), yt = r(() => {
       var e;
       return (e = a.drag) == null ? void 0 : e.enabled;
-    }), ye = u(() => A.value.includes(Be.Create)), Ne = u(() => A.value.includes("read")), x = u(() => A.value.includes(Be.Update)), dt = u(() => A.value.includes(Be.Edit)), et = u(() => A.value.includes(Be.InlineEdit)), Dt = u(() => A.value.includes(Be.ModalCreate)), ct = u(() => A.value.includes(Be.InlineCreate)), tt = u(() => A.value.includes(Be.InlineCreateEver)), q = u(() => A.value.includes(Be.Drop)), Me = u(() => A.value.includes(Be.SwitchEditMode)), Ie = u(() => !Me.value || !x.value && !q.value || !x.value && q.value ? !1 : !g.value), at = u(() => {
+    }), ve = r(() => A.value.includes(Ie.Create)), Re = r(() => A.value.includes("read")), Z = r(() => A.value.includes(Ie.Update)), bt = r(() => A.value.includes(Ie.Edit)), nt = r(() => A.value.includes(Ie.InlineEdit)), ht = r(() => A.value.includes(Ie.ModalCreate)), lt = r(() => A.value.includes(Ie.InlineCreate)), be = r(() => A.value.includes(Ie.InlineCreateEver)), G = r(() => A.value.includes(Ie.Drop)), Fe = r(() => A.value.includes(Ie.SwitchEditMode)), Le = r(() => !Fe.value || !Z.value && !G.value || !Z.value && G.value ? !1 : !g.value), Ot = r(() => {
       var e;
-      return (typeof ((e = a.paginator) == null ? void 0 : e.type) < "u" && [Rt.LoadMore, Rt.Infinite].includes(a.paginator.type) || !g.value) && s.value.length > 0;
-    }), Pe = u(() => B.value.find((e) => e.isForAccordionHeader)), vt = (e, m) => typeof a.customItemSlotName == "function" ? a.customItemSlotName(e, m) : "", Ue = (e) => {
-      let m = e.target;
-      if (typeof m.dataset.column > "u")
+      return (typeof ((e = a.paginator) == null ? void 0 : e.type) < "u" && [Bt.LoadMore, Bt.Infinite].includes(a.paginator.type) || !g.value) && s.value.length > 0;
+    }), Ne = r(() => I.value.find((e) => e.isForAccordionHeader)), Me = (e, f) => typeof a.customItemSlotName == "function" ? a.customItemSlotName(e, f) : "", ut = (e) => {
+      let f = e.target;
+      if (typeof f.dataset.column > "u")
         do
-          m = m.parentNode;
-        while (typeof m.dataset.column > "u" && m.tagName !== "TABLE" && m.tagName !== "body");
-      if (m.tagName === "TD" && (m = m.parentNode, m = m.dataset.i, typeof m < "u"))
-        return s.value[m];
-    }, le = () => {
-      re.value = za();
-    }, ft = (e) => s.value[e], nt = (e) => {
-      var m;
-      return (m = v.value) == null ? void 0 : m.querySelector(`[data-i="${e}"]`);
-    }, It = (e) => {
-      e && e.sortable && (e.key === k.value && (D.value = D.value === Je.Asc ? Je.Desc : Je.Asc), k.value = e.key, s.value = s.value.sort((m, O) => y.value(m, O, e, D.value)), le(), l("sort", {
+          f = f.parentNode;
+        while (typeof f.dataset.column > "u" && f.tagName !== "TABLE" && f.tagName !== "body");
+      if (f.tagName === "TD" && (f = f.parentNode, f = f.dataset.i, typeof f < "u"))
+        return s.value[f];
+    }, oe = () => {
+      ue.value = Ka();
+    }, ot = (e) => s.value[e], $t = (e) => {
+      var f;
+      return (f = v.value) == null ? void 0 : f.querySelector(`[data-i="${e}"]`);
+    }, kt = (e) => {
+      e && e.sortable && (e.key === k.value && (D.value = D.value === We.Asc ? We.Desc : We.Asc), k.value = e.key, s.value = s.value.sort((f, O) => y.value(f, O, e, D.value)), oe(), l("sort", {
         sortBy: k.value,
         sortDirection: D.value
       }));
-    }, $t = (e) => {
-      l("click", e);
     }, Ft = (e) => {
-      var O, j, te, de, At, ht, S, p;
-      let m = parseInt((de = (te = (j = (O = e == null ? void 0 : e.originalEvent) == null ? void 0 : O.toElement) == null ? void 0 : j.closest("tr")) == null ? void 0 : te.dataset) == null ? void 0 : de.i);
-      return !(typeof ((At = a.drag) == null ? void 0 : At.isValid) == "function" && !((ht = a.drag) != null && ht.isValid(s.value[m])) || typeof ((S = a.drag) == null ? void 0 : S.isValid) == "boolean" && !((p = a.drag) != null && p.isValid));
-    }, Bt = (e) => {
-      var m, O;
-      return typeof ((m = a.drag) == null ? void 0 : m.isDraggable) == "function" ? (O = a.drag) == null ? void 0 : O.isDraggable(e) : !0;
-    }, pt = () => {
-      if (ye.value) {
+      l("click", e);
+    }, St = (e) => {
+      var O, z, ae, fe, Tt, vt, S, m;
+      let f = parseInt((fe = (ae = (z = (O = e == null ? void 0 : e.originalEvent) == null ? void 0 : O.toElement) == null ? void 0 : z.closest("tr")) == null ? void 0 : ae.dataset) == null ? void 0 : fe.i);
+      return !(typeof ((Tt = a.drag) == null ? void 0 : Tt.isValid) == "function" && !((vt = a.drag) != null && vt.isValid(s.value[f])) || typeof ((S = a.drag) == null ? void 0 : S.isValid) == "boolean" && !((m = a.drag) != null && m.isValid));
+    }, Pt = (e) => {
+      var f, O;
+      return typeof ((f = a.drag) == null ? void 0 : f.isDraggable) == "function" ? (O = a.drag) == null ? void 0 : O.isDraggable(e) : !0;
+    }, Pe = () => {
+      if (ve.value) {
         l("click-create");
         return;
       }
-      if (ct.value || tt.value) {
+      if (lt.value || be.value) {
         if (typeof a.newValueGenerator == "function") {
           let e = a.newValueGenerator();
-          if (typeof e == "object" || a.type !== Ge.Table) {
+          if (typeof e == "object" || _e.value !== qe.Table) {
             s.value.push(e);
             return;
           }
@@ -1512,168 +1515,192 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
         s.value.push({});
       } else
         l("click-create");
-    }, _e = (e) => {
+    }, u = (e) => {
       s.value.push(e);
-    }, r = () => g.value = !0, b = () => g.value = !1, C = (e, m) => {
-      var O, j, te;
+    }, b = () => g.value = !0, C = () => g.value = !1, B = (e, f) => {
+      var O, z, ae;
       if (!((O = P.value) != null && O.type && [
-        _t.Split,
-        _t.SplitEver,
-        _t.SplitLazy
-      ].includes((j = P.value) == null ? void 0 : j.type))) {
-        if (l("before-save"), (te = P.value) != null && te.resource && (g.value = !1, !m.success)) {
-          l("error", m.httpStatus);
+        zt.Split,
+        zt.SplitEver,
+        zt.SplitLazy
+      ].includes((z = P.value) == null ? void 0 : z.type))) {
+        if (l("before-save"), (ae = P.value) != null && ae.resource && (g.value = !1, !f.success)) {
+          l("error", f.httpStatus);
           return;
         }
-        d.value.turnStoredIntoOriginal(), Ve.value = !1, l("save", m);
+        d.value.turnStoredIntoOriginal(), de.value = !1, l("save", f);
       }
-    }, T = (e, m, O) => {
+    }, L = (e, f, O) => {
       if (O >= e.length) {
-        let j = O - e.length + 1;
-        for (; j--; ) e.push(void 0);
+        let z = O - e.length + 1;
+        for (; z--; ) e.push(void 0);
       }
-      return e.splice(O, 0, e.splice(m, 1)[0]), e;
-    }, N = (e) => {
-      T(s.value, e, e - 1), le();
-    }, W = (e) => {
-      T(s.value, e, e + 1), le();
+      return e.splice(O, 0, e.splice(f, 1)[0]), e;
+    }, J = (e) => {
+      L(s.value, e, e - 1), oe();
+    }, le = (e) => {
+      L(s.value, e, e + 1), oe();
     }, Y = (e) => {
-      s.value.splice(e, 1), le();
-    }, ee = () => {
+      s.value.splice(e, 1), oe();
+    }, Ct = () => {
       var e;
-      Q.value && typeof ((e = Q.value) == null ? void 0 : e.destroy) == "function" && (Q.value.destroy(), Q.value = {});
-    }, mt = () => {
-      _.value || (_.value = document.getElementById("lkt-table-body-" + we)), Q.value = new ja(_.value, {
+      ee.value && typeof ((e = ee.value) == null ? void 0 : e.destroy) == "function" && (ee.value.destroy(), ee.value = {});
+    }, st = () => {
+      _.value || (_.value = document.getElementById("lkt-table-body-" + W)), ee.value = new Ya(_.value, {
         direction: "vertical",
         handle: ".handle",
         animation: 150,
         onEnd: function(e) {
-          let m = e.oldIndex, O = e.newIndex;
-          s.value.splice(O, 0, s.value.splice(m, 1)[0]), le(), l("drag-end", s.value[O]);
+          let f = e.oldIndex, O = e.newIndex;
+          s.value.splice(O, 0, s.value.splice(f, 1)[0]), oe(), l("drag-end", s.value[O]);
         },
-        onMove: function(e, m) {
-          return Ft(e);
+        onMove: function(e, f) {
+          return St(e);
         }
       });
-    }, lt = (e, m, O = !1) => {
-      let j = [re.value, we, "row", m];
-      return O && j.push("hidden"), it.value.forEach((te) => {
-        let de = String(e[te.key]).toLowerCase();
-        de.length > 50 && (de = de.substring(0, 50)), de = Ua(de, " ", "-"), j.push(de);
-      }), j.join("-");
-    }, gt = u(() => typeof a.createEnabledValidator == "function" ? a.createEnabledValidator({ items: s.value }) : !0), yt = u(() => a.createButton === !1 ? !1 : tt.value || ye.value && I.value || ct.value && I.value || Dt.value && I.value), ga = u(() => [Ge.Ol, Ge.Ul].includes(a.type)), bt = (e, m) => typeof a.itemDisplayChecker == "function" ? a.itemDisplayChecker(e, m) : !0, Tt = (e, m) => typeof a.itemContainerClass == "function" ? a.itemContainerClass(e, m) : a.itemContainerClass, ya = (e, m) => Pe.value ? e[Pe.value.key] : "", je = u(() => typeof a.itemSlotComponent == "function" ? a.itemSlotComponent() : a.itemSlotComponent), Et = u(() => typeof a.itemSlotData == "function" ? a.itemSlotData() : a.itemSlotData);
-    Yt(() => {
+    }, it = (e, f, O = !1) => {
+      let z = [ue.value, W, "row", f];
+      return O && z.push("hidden"), Ve.value.forEach((ae) => {
+        let fe = String(e[ae.key]).toLowerCase();
+        fe.length > 50 && (fe = fe.substring(0, 50)), fe = Ga(fe, " ", "-"), z.push(fe);
+      }), z.join("-");
+    }, Ut = r(() => typeof a.createEnabledValidator == "function" ? a.createEnabledValidator({ items: s.value }) : !0), dt = r(() => a.createButton === !1 ? !1 : be.value || ve.value && T.value || lt.value && T.value || ht.value && T.value), ha = r(() => [qe.Ol, qe.Ul].includes(_e.value)), ct = (e, f) => typeof a.itemDisplayChecker == "function" ? a.itemDisplayChecker(e, f) : !0, wt = (e, f) => typeof a.itemContainerClass == "function" ? a.itemContainerClass(e, f) : a.itemContainerClass, ka = (e, f) => Ne.value ? e[Ne.value.key] : "", Ue = r(() => typeof a.itemSlotComponent == "function" ? a.itemSlotComponent() : a.itemSlotComponent), Dt = r(() => typeof a.itemSlotData == "function" ? a.itemSlotData() : a.itemSlotData);
+    Wt(() => {
       var e;
-      a.initialSorting && It(cn(a.columns, k.value)), d.value.store({ items: s.value }).turnStoredIntoOriginal(), Ve.value = !1, (e = a.drag) != null && e.enabled && Vt(() => {
-        mt();
+      a.initialSorting && kt(yn(a.columns, k.value)), d.value.store({ items: s.value }).turnStoredIntoOriginal(), de.value = !1, (e = a.drag) != null && e.enabled && It(() => {
+        st();
       });
     }), U(() => {
       var e;
       return (e = a.drag) == null ? void 0 : e.enabled;
     }, (e) => {
-      e ? mt() : ee();
+      e ? st() : Ct();
     }), U(() => a.type, (e) => {
-      var m;
-      (m = a.drag) != null && m.enabled ? mt() : ee();
-    }), U(() => a.perms, (e) => A.value = e), U(A, (e) => l("update:perms", e)), U(I, (e) => {
+      var f;
+      (f = a.drag) != null && f.enabled ? st() : Ct();
+    }), U(() => a.perms, (e) => A.value = e), U(A, (e) => l("update:perms", e)), U(T, (e) => {
       l("update:editMode", e);
-    }), U(() => a.editMode, (e) => I.value = e), U(() => a.columns, (e) => B.value = e, { deep: !0 }), U(() => a.modelValue, (e) => {
+    }), U(() => a.editMode, (e) => T.value = e), U(() => a.columns, (e) => I.value = e, { deep: !0 }), U(() => a.modelValue, (e) => {
       s.value = e;
     }, { deep: !0 }), U(s, (e) => {
-      d.value.increment({ items: e }), Ve.value = d.value.changed(), l("update:modelValue", e);
+      d.value.increment({ items: e }), de.value = d.value.changed(), l("update:modelValue", e);
     }, { deep: !0 }), i({
-      getItemByEvent: Ue,
-      getItemByIndex: ft,
-      getRowByIndex: nt,
-      doRefresh: $e,
+      getItemByEvent: ut,
+      getItemByIndex: ot,
+      getRowByIndex: $t,
+      doRefresh: Lt,
       doRemoveIndex: (e) => {
-        s.value.splice(e, 1), le();
+        s.value.splice(e, 1), oe();
       },
-      getHtml: () => oe.value,
-      reRender: le,
+      getHtml: () => ie.value,
+      reRender: oe,
       turnStoredIntoOriginal: () => {
-        d.value.turnStoredIntoOriginal(), Vt(() => {
-          le();
+        d.value.turnStoredIntoOriginal(), It(() => {
+          oe();
         });
       }
     });
-    const ba = u(() => typeof fe.defaultEmptySlot < "u"), ha = u(() => fe.defaultEmptySlot), ka = u(() => !a.drag || Object.keys(a.drag).length === 0 || !a.drag.enabled ? !1 : typeof a.drag.canRender > "u" ? !0 : a.drag.canRender), Sa = u(() => !a.drag || Object.keys(a.drag).length === 0 || !a.drag.enabled || typeof a.drag.isDisabled > "u" ? !1 : a.drag.isDisabled), Ca = u(() => typeof a.header == "object" && Object.keys(a.header).length > 0);
-    return (e, m) => {
-      const O = Ce("lkt-header"), j = Ce("lkt-button"), te = Ce("lkt-accordion"), de = Ce("lkt-loader"), At = Ce("lkt-paginator");
-      return f(), w("section", {
+    const Sa = r(() => typeof ge.defaultEmptySlot < "u"), Ca = r(() => ge.defaultEmptySlot), wa = r(() => !a.drag || Object.keys(a.drag).length === 0 || !a.drag.enabled ? !1 : typeof a.drag.canRender > "u" ? !0 : a.drag.canRender), Da = r(() => !a.drag || Object.keys(a.drag).length === 0 || !a.drag.enabled || typeof a.drag.isDisabled > "u" ? !1 : a.drag.isDisabled), Ta = r(() => typeof a.header == "object" && Object.keys(a.header).length > 0), _e = r(() => Array.isArray(a.switchableTypes) && a.switchableTypes.length > 0 ? ne.value : a.type), Ia = r(() => Array.isArray(a.switchableTypes) ? a.switchableTypes.length > 0 ? a.switchableTypes.includes(a.type) ? a.switchableTypes : [
+      a.type,
+      ...a.switchableTypes
+    ] : [] : []), Ba = r(() => {
+      let e = [];
+      return Ia.value.forEach((f) => {
+        e.push({
+          ...a.switchableTypesButtons[f],
+          events: {
+            click: (O) => {
+              ne.value = f, typeof a.switchableTypesButtons[f] == "function" && a.switchableTypesButtons[f](O);
+            }
+          }
+        });
+      }), e;
+    }), Ea = r(() => {
+      var e, f;
+      return {
+        ...a.header,
+        topEndButtons: [
+          ...typeof ((e = a.header) == null ? void 0 : e.topEndButtons) > "u" ? [] : (f = a.header) == null ? void 0 : f.topEndButtons,
+          ...Ba.value
+        ]
+      };
+    }), Qt = (e, f) => typeof a.useItemSlot == "function" ? a.useItemSlot({ item: e, index: f }) === !0 : a.useItemSlot;
+    return (e, f) => {
+      const O = we("lkt-header"), z = we("lkt-button"), ae = we("lkt-accordion"), fe = we("lkt-loader"), Tt = we("lkt-paginator");
+      return p(), w("section", {
         ref_key: "element",
-        ref: oe,
+        ref: ie,
         class: "lkt-table-page",
-        id: "lkt-table-page-" + h(we)
+        id: "lkt-table-page-" + h(W)
       }, [
-        Ca.value ? (f(), M(O, he(X({ key: 0 }, e.header)), null, 16)) : ut.value || h(n).title ? (f(), w("header", {
+        Ta.value ? (p(), M(O, ke(X({ key: 0 }, Ea.value)), null, 16)) : at.value || h(n).title ? (p(), w("header", {
           key: 1,
-          class: J(e.headerClass)
+          class: x(e.headerClass)
         }, [
-          ut.value ? (f(), M(ve(rt.value), { key: 0 }, {
+          at.value ? (p(), M(me(Nt.value), { key: 0 }, {
             default: F(() => [
-              e.titleIcon ? (f(), w("i", {
+              e.titleIcon ? (p(), w("i", {
                 key: 0,
-                class: J(e.titleIcon)
+                class: x(e.titleIcon)
               }, null, 2)) : R("", !0),
-              Ke(" " + We(ut.value), 1)
+              Ye(" " + Ke(at.value), 1)
             ]),
             _: 1
           })) : R("", !0),
           h(n).title ? $(e.$slots, "title", { key: 1 }) : R("", !0)
         ], 2)) : R("", !0),
-        (f(), M(ve(Ot.value), {
-          class: J(["lkt-table-page-content-wrapper", e.wrapContentClass])
+        (p(), M(me(Mt.value), {
+          class: x(["lkt-table-page-content-wrapper", e.wrapContentClass])
         }, {
           default: F(() => {
-            var ht;
+            var vt;
             return [
-              ze(ce("div", Bn, [
-                e.groupButton !== !1 ? (f(), M(j, X({
+              je(pe("div", Ln, [
+                e.groupButton !== !1 ? (p(), M(z, X({
                   key: 0,
                   ref: "groupButton"
-                }, Oe.value, { class: "lkt-item-crud-group-button" }), {
+                }, Vt.value, { class: "lkt-item-crud-group-button" }), {
                   split: F(() => [
-                    ce("div", Tn, [
-                      ze(ke(j, X(H.value, {
-                        checked: I.value,
-                        "onUpdate:checked": m[0] || (m[0] = (S) => I.value = S)
+                    pe("div", Nn, [
+                      je(Se(z, X(De.value, {
+                        checked: T.value,
+                        "onUpdate:checked": f[0] || (f[0] = (S) => T.value = S)
                       }), null, 16, ["checked"]), [
-                        [He, Ie.value]
+                        [ze, Le.value]
                       ])
                     ]),
                     h(n)["prev-buttons-ever"] ? $(e.$slots, "prev-buttons-ever", {
                       key: 0,
-                      canUpdate: x.value,
-                      canDrop: q.value,
+                      canUpdate: Z.value,
+                      canDrop: G.value,
                       perms: e.perms
                     }) : R("", !0),
                     h(n)["prev-buttons"] ? $(e.$slots, "prev-buttons", {
                       key: 1,
-                      canUpdate: x.value,
-                      canDrop: q.value,
+                      canUpdate: Z.value,
+                      canDrop: G.value,
                       perms: e.perms
                     }) : R("", !0),
-                    ze(ke(j, X({
+                    je(Se(z, X({
                       class: "lkt-table--save-button",
                       ref_key: "saveButtonRef",
-                      ref: ie
+                      ref: re
                     }, {
                       ...P.value,
-                      disabled: ge.value,
-                      resourceData: Fe.value
+                      disabled: Q.value,
+                      resourceData: tt.value
                     }, {
-                      onLoading: r,
-                      onLoaded: b,
-                      onClick: C
+                      onLoading: b,
+                      onLoaded: C,
+                      onClick: B
                     }), {
-                      split: F(({ doClose: S, doRootClick: p }) => [
+                      split: F(({ doClose: S, doRootClick: m }) => [
                         $(e.$slots, "button-save-split", {
                           doClose: S,
-                          doRootClick: p,
+                          doRootClick: m,
                           dataState: d.value,
-                          onButtonLoading: r,
-                          onButtonLoaded: b
+                          onButtonLoading: b,
+                          onButtonLoaded: C
                         })
                       ]),
                       default: F(() => [
@@ -1681,55 +1708,55 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
                           key: 0,
                           items: s.value,
                           editMode: e.editMode,
-                          canUpdate: !ge.value
+                          canUpdate: !Q.value
                         }) : R("", !0)
                       ]),
                       _: 3
                     }, 16), [
-                      [He, Le.value]
+                      [ze, ce.value]
                     ]),
-                    yt.value && s.value.length >= e.requiredItemsForTopCreate ? (f(), M(zt, {
+                    dt.value && s.value.length >= e.requiredItemsForTopCreate ? (p(), M(qt, {
                       key: 2,
-                      config: ne.value,
-                      disabled: !gt.value,
-                      onClick: pt,
-                      onAppend: _e
+                      config: j.value,
+                      disabled: !Ut.value,
+                      onClick: Pe,
+                      onAppend: u
                     }, null, 8, ["config", "disabled"])) : R("", !0)
                   ]),
                   _: 3
                 }, 16)) : R("", !0),
                 h(n)["prev-buttons-ever"] ? $(e.$slots, "prev-buttons-ever", {
                   key: 1,
-                  canUpdate: x.value,
-                  canDrop: q.value,
+                  canUpdate: Z.value,
+                  canDrop: G.value,
                   perms: e.perms
                 }) : R("", !0),
                 h(n)["prev-buttons"] ? $(e.$slots, "prev-buttons", {
                   key: 2,
-                  canUpdate: x.value,
-                  canDrop: q.value,
+                  canUpdate: Z.value,
+                  canDrop: G.value,
                   perms: e.perms
                 }) : R("", !0),
-                ze(ke(j, X({
+                je(Se(z, X({
                   class: "lkt-table--save-button",
                   ref_key: "saveButtonRef",
-                  ref: ie
+                  ref: re
                 }, {
                   ...P.value,
-                  disabled: ge.value,
-                  resourceData: Fe.value
+                  disabled: Q.value,
+                  resourceData: tt.value
                 }, {
-                  onLoading: r,
-                  onLoaded: b,
-                  onClick: C
+                  onLoading: b,
+                  onLoaded: C,
+                  onClick: B
                 }), {
-                  split: F(({ doClose: S, doRootClick: p }) => [
+                  split: F(({ doClose: S, doRootClick: m }) => [
                     $(e.$slots, "button-save-split", {
                       doClose: S,
-                      doRootClick: p,
+                      doRootClick: m,
                       dataState: d.value,
-                      onButtonLoading: r,
-                      onButtonLoaded: b
+                      onButtonLoading: b,
+                      onButtonLoaded: C
                     })
                   ]),
                   default: F(() => [
@@ -1737,255 +1764,255 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
                       key: 0,
                       items: s.value,
                       editMode: e.editMode,
-                      canUpdate: !ge.value
+                      canUpdate: !Q.value
                     }) : R("", !0)
                   ]),
                   _: 3
                 }, 16), [
-                  [He, Le.value]
+                  [ze, ce.value]
                 ]),
-                yt.value && s.value.length >= e.requiredItemsForTopCreate ? (f(), M(zt, {
+                dt.value && s.value.length >= e.requiredItemsForTopCreate ? (p(), M(qt, {
                   key: 3,
-                  config: ne.value,
-                  disabled: !gt.value,
-                  onClick: pt,
-                  onAppend: _e
+                  config: j.value,
+                  disabled: !Ut.value,
+                  onClick: Pe,
+                  onAppend: u
                 }, null, 8, ["config", "disabled"])) : R("", !0),
-                ce("div", En, [
-                  ze(ke(j, X(H.value, {
-                    checked: I.value,
-                    "onUpdate:checked": m[1] || (m[1] = (S) => I.value = S)
+                pe("div", Mn, [
+                  je(Se(z, X(De.value, {
+                    checked: T.value,
+                    "onUpdate:checked": f[1] || (f[1] = (S) => T.value = S)
                   }), null, 16, ["checked"]), [
-                    [He, Ie.value]
+                    [ze, Le.value]
                   ])
                 ])
               ], 512), [
-                [He, De.value]
+                [ze, xe.value]
               ]),
-              h(n).buttons ? (f(), w("div", An, [
+              h(n).buttons ? (p(), w("div", On, [
                 $(e.$slots, "buttons")
               ])) : R("", !0),
-              V.value && h(n).filters ? (f(), w("div", Vn, [
+              V.value && h(n).filters ? (p(), w("div", $n, [
                 $(e.$slots, "filters", {
                   items: s.value,
                   isLoading: g.value
                 })
               ])) : R("", !0),
-              ze(ce("div", Rn, [
-                e.type === h(Ge).Table ? (f(), w("table", Ln, [
-                  e.hideTableHeader ? R("", !0) : (f(), w("thead", Nn, [
-                    ce("tr", null, [
-                      st.value && I.value ? (f(), w("th", Mn)) : R("", !0),
-                      e.addNavigation && I.value ? (f(), w("th", On)) : R("", !0),
-                      (f(!0), w(G, null, be(me.value, (S) => (f(), w(G, null, [
-                        ue.value.indexOf(S.key) === -1 ? (f(), M(Dn, {
+              je(pe("div", Fn, [
+                _e.value === h(qe).Table ? (p(), w("table", Pn, [
+                  e.hideTableHeader ? R("", !0) : (p(), w("thead", Un, [
+                    pe("tr", null, [
+                      yt.value && T.value ? (p(), w("th", _n)) : R("", !0),
+                      e.addNavigation && T.value ? (p(), w("th", jn)) : R("", !0),
+                      (p(!0), w(q, null, he(Te.value, (S) => (p(), w(q, null, [
+                        $e.value.indexOf(S.key) === -1 ? (p(), M(Vn, {
                           key: 0,
                           column: S,
                           "sort-by": k.value,
                           "sort-direction": D.value,
                           "amount-of-columns": e.columns.length,
                           items: s.value,
-                          onClick: (p) => It(S)
+                          onClick: (m) => kt(S)
                         }, null, 8, ["column", "sort-by", "sort-direction", "amount-of-columns", "items", "onClick"])) : R("", !0)
                       ], 64))), 256))
                     ])
                   ])),
-                  ce("tbody", {
+                  pe("tbody", {
                     ref_key: "tableBody",
                     ref: v,
-                    id: "lkt-table-body-" + h(we),
-                    class: J(e.itemsContainerClass)
+                    id: "lkt-table-body-" + h(W),
+                    class: x(e.itemsContainerClass)
                   }, [
-                    (f(!0), w(G, null, be(s.value, (S, p) => ze((f(), M(Cn, {
-                      modelValue: s.value[p],
-                      "onUpdate:modelValue": (L) => s.value[p] = L,
-                      key: lt(S, p),
-                      i: p,
-                      "is-draggable": Bt(S),
-                      sortable: st.value,
-                      "visible-columns": me.value,
-                      "empty-columns": ue.value,
+                    (p(!0), w(q, null, he(s.value, (S, m) => je((p(), M(En, {
+                      modelValue: s.value[m],
+                      "onUpdate:modelValue": (N) => s.value[m] = N,
+                      key: it(S, m),
+                      i: m,
+                      "is-draggable": Pt(S),
+                      sortable: yt.value,
+                      "visible-columns": Te.value,
+                      "empty-columns": $e.value,
                       "add-navigation": e.addNavigation,
-                      "latest-row": p + 1 === se.value,
-                      "can-drop": q.value && I.value,
-                      "can-edit": dt.value && x.value && I.value,
-                      "can-read": Ne.value,
-                      "can-create": ye.value,
-                      "edit-mode-enabled": I.value,
-                      "has-inline-edit-perm": et.value,
+                      "latest-row": m + 1 === et.value,
+                      "can-drop": G.value && T.value,
+                      "can-edit": bt.value && Z.value && T.value,
+                      "can-read": Re.value,
+                      "can-create": ve.value,
+                      "edit-mode-enabled": T.value,
+                      "has-inline-edit-perm": nt.value,
                       "row-display-type": e.rowDisplayType,
-                      "render-drag": ka.value,
-                      "disabled-drag": Sa.value,
+                      "render-drag": wa.value,
+                      "disabled-drag": Da.value,
                       "is-loading": g.value,
                       "item-container-class": e.itemContainerClass,
-                      "item-slot-component": je.value,
-                      "item-slot-data": Et.value,
+                      "item-slot-component": Ue.value,
+                      "item-slot-data": Dt.value,
                       "item-slot-events": e.itemSlotEvents,
                       permissions: A.value,
-                      onClick: $t,
-                      onItemUp: N,
-                      onItemDown: W,
+                      onClick: Ft,
+                      onItemUp: J,
+                      onItemDown: le,
                       onItemDrop: Y
-                    }, La({ _: 2 }, [
-                      h(n)[`item-${p}`] ? {
-                        name: `item-${p}`,
-                        fn: F((L) => [
-                          $(e.$slots, `item-${p}`, he({
-                            [e.slotItemVar || ""]: L.item,
-                            index: p,
-                            editing: L.editing,
-                            canCreate: L.canCreate,
-                            canRead: L.canRead,
-                            canUpdate: L.canUpdate,
-                            canDrop: L.canDrop,
-                            isLoading: L.isLoading,
-                            doDrop: L.doDrop
+                    }, Pa({ _: 2 }, [
+                      h(n)[`item-${m}`] && Qt(e.row, m) ? {
+                        name: `item-${m}`,
+                        fn: F((N) => [
+                          $(e.$slots, `item-${m}`, ke({
+                            [e.slotItemVar || ""]: N.item,
+                            index: m,
+                            editing: N.editing,
+                            canCreate: N.canCreate,
+                            canRead: N.canRead,
+                            canUpdate: N.canUpdate,
+                            canDrop: N.canDrop,
+                            isLoading: N.isLoading,
+                            doDrop: N.doDrop
                           }))
                         ]),
                         key: "0"
-                      } : h(n).item ? {
+                      } : h(n).item && Qt(e.row, m) ? {
                         name: "item",
-                        fn: F((L) => [
-                          $(e.$slots, "item", he({
-                            [e.slotItemVar || ""]: L.item,
-                            index: p,
-                            editing: L.editing,
-                            canCreate: L.canCreate,
-                            canRead: L.canRead,
-                            canUpdate: L.canUpdate,
-                            canDrop: L.canDrop,
-                            isLoading: L.isLoading,
-                            doDrop: L.doDrop
+                        fn: F((N) => [
+                          $(e.$slots, "item", ke({
+                            [e.slotItemVar || ""]: N.item,
+                            index: m,
+                            editing: N.editing,
+                            canCreate: N.canCreate,
+                            canRead: N.canRead,
+                            canUpdate: N.canUpdate,
+                            canDrop: N.canDrop,
+                            isLoading: N.isLoading,
+                            doDrop: N.doDrop
                           }))
                         ]),
                         key: "1"
                       } : void 0,
-                      be(Ct.value, (L) => ({
-                        name: L,
-                        fn: F((ot) => [
-                          $(e.$slots, L, he({
-                            [e.slotItemVar || ""]: ot.item,
-                            value: ot.value,
-                            column: ot.column
+                      he(gt.value, (N) => ({
+                        name: N,
+                        fn: F((rt) => [
+                          $(e.$slots, N, ke({
+                            [e.slotItemVar || ""]: rt.item,
+                            value: rt.value,
+                            column: rt.column
                           }))
                         ])
                       }))
                     ]), 1032, ["modelValue", "onUpdate:modelValue", "i", "is-draggable", "sortable", "visible-columns", "empty-columns", "add-navigation", "latest-row", "can-drop", "can-edit", "can-read", "can-create", "edit-mode-enabled", "has-inline-edit-perm", "row-display-type", "render-drag", "disabled-drag", "is-loading", "item-container-class", "item-slot-component", "item-slot-data", "item-slot-events", "permissions"])), [
-                      [He, bt(s.value[p], p)]
+                      [ze, ct(s.value[m], m)]
                     ])), 128))
-                  ], 10, $n)
-                ])) : e.type === h(Ge).Item ? (f(), w("div", {
+                  ], 10, zn)
+                ])) : _e.value === h(qe).Item ? (p(), w("div", {
                   key: 1,
                   ref_key: "tableBody",
                   ref: v,
-                  id: "lkt-table-body-" + h(we),
-                  class: J(["lkt-table-items-container", e.itemsContainerClass])
+                  id: "lkt-table-body-" + h(W),
+                  class: x(["lkt-table-items-container", e.itemsContainerClass])
                 }, [
-                  (f(!0), w(G, null, be(s.value, (S, p) => (f(), w(G, {
-                    key: lt(S, p)
+                  (p(!0), w(q, null, he(s.value, (S, m) => (p(), w(q, {
+                    key: it(S, m)
                   }, [
-                    !e.skipTableItemsContainer && bt(S, p) ? (f(), w("div", {
+                    !e.skipTableItemsContainer && ct(S, m) ? (p(), w("div", {
                       key: 0,
-                      class: J(["lkt-table-item", Tt(S, p)]),
-                      "data-i": p
+                      class: x(["lkt-table-item", wt(S, m)]),
+                      "data-i": m
                     }, [
-                      je.value ? (f(), M(ve(je.value), X({
+                      Ue.value ? (p(), M(me(Ue.value), X({
                         key: 0,
                         ref_for: !0
                       }, {
                         item: S,
-                        index: p,
-                        editing: I.value,
+                        index: m,
+                        editing: T.value,
                         perms: A.value,
-                        data: Et.value,
+                        data: Dt.value,
                         events: e.itemSlotEvents
-                      }), null, 16)) : $(e.$slots, "item", he({
+                      }), null, 16)) : $(e.$slots, "item", ke({
                         key: 1,
                         [e.slotItemVar || ""]: S,
-                        index: p,
-                        editing: I.value,
-                        canCreate: ye.value,
-                        canRead: Ne.value,
-                        canUpdate: x.value,
-                        canDrop: q.value,
+                        index: m,
+                        editing: T.value,
+                        canCreate: ve.value,
+                        canRead: Re.value,
+                        canUpdate: Z.value,
+                        canDrop: G.value,
                         isLoading: g.value,
-                        doDrop: () => Y(p)
+                        doDrop: () => Y(m)
                       }))
-                    ], 10, Pn)) : bt(S, p) ? $(e.$slots, "item", he({
+                    ], 10, qn)) : ct(S, m) ? $(e.$slots, "item", ke({
                       key: 1,
-                      class: Tt(S, p),
-                      dataI: p,
+                      class: wt(S, m),
+                      dataI: m,
                       [e.slotItemVar || ""]: S,
-                      index: p,
-                      editing: I.value,
-                      canCreate: ye.value,
-                      canRead: Ne.value,
-                      canUpdate: x.value,
-                      canDrop: q.value,
+                      index: m,
+                      editing: T.value,
+                      canCreate: ve.value,
+                      canRead: Re.value,
+                      canUpdate: Z.value,
+                      canDrop: G.value,
                       isLoading: g.value,
-                      doDrop: () => Y(p)
+                      doDrop: () => Y(m)
                     })) : R("", !0)
                   ], 64))), 128))
-                ], 10, Fn)) : e.type === h(Ge).Accordion ? (f(), w("div", {
+                ], 10, Hn)) : _e.value === h(qe).Accordion ? (p(), w("div", {
                   key: 2,
                   ref_key: "tableBody",
                   ref: v,
-                  id: "lkt-table-body-" + h(we),
-                  class: J(["lkt-table-items-container", e.itemsContainerClass])
+                  id: "lkt-table-body-" + h(W),
+                  class: x(["lkt-table-items-container", e.itemsContainerClass])
                 }, [
-                  (f(!0), w(G, null, be(s.value, (S, p) => (f(), w(G, null, [
-                    [h(Se).Auto, h(Se).PreferCustomItem].includes(e.rowDisplayType) && h(n)[vt(S, p)] ? $(e.$slots, vt(S, p), {
+                  (p(!0), w(q, null, he(s.value, (S, m) => (p(), w(q, null, [
+                    [h(Ce).Auto, h(Ce).PreferCustomItem].includes(e.rowDisplayType) && h(n)[Me(S, m)] ? $(e.$slots, Me(S, m), {
                       key: 0,
                       item: S,
-                      index: p,
-                      editing: I.value,
+                      index: m,
+                      editing: T.value,
                       isLoading: g.value
-                    }) : [h(Se).Auto, h(Se).PreferCustomItem].includes(e.rowDisplayType) && h(n)[`item-${p}`] ? $(e.$slots, `item-${p}`, {
+                    }) : [h(Ce).Auto, h(Ce).PreferCustomItem].includes(e.rowDisplayType) && h(n)[`item-${m}`] ? $(e.$slots, `item-${m}`, {
                       key: 1,
                       item: S,
-                      index: p,
-                      editing: I.value,
+                      index: m,
+                      editing: T.value,
                       isLoading: g.value
-                    }) : (f(), w(G, { key: 2 }, [
-                      bt(S, p) ? (f(), M(te, X({
-                        class: ["lkt-table-item", Tt(S, p)],
-                        "data-i": p,
-                        key: lt(S, p)
+                    }) : (p(), w(q, { key: 2 }, [
+                      ct(S, m) ? (p(), M(ae, X({
+                        class: ["lkt-table-item", wt(S, m)],
+                        "data-i": m,
+                        key: it(S, m)
                       }, { ref_for: !0 }, {
                         ...e.accordion,
-                        title: ya(S)
+                        title: ka(S)
                       }), {
                         header: F(() => [
-                          ke(Xt, {
-                            modelValue: s.value[p],
-                            "onUpdate:modelValue": (L) => s.value[p] = L,
-                            i: p,
-                            column: Pe.value,
-                            columns: me.value,
-                            "edit-mode-enabled": I.value,
-                            "has-inline-edit-perm": et.value
+                          Se(Kt, {
+                            modelValue: s.value[m],
+                            "onUpdate:modelValue": (N) => s.value[m] = N,
+                            i: m,
+                            column: Ne.value,
+                            columns: Te.value,
+                            "edit-mode-enabled": T.value,
+                            "has-inline-edit-perm": nt.value
                           }, null, 8, ["modelValue", "onUpdate:modelValue", "i", "column", "columns", "edit-mode-enabled", "has-inline-edit-perm"])
                         ]),
                         default: F(() => [
-                          (f(!0), w(G, null, be(me.value, (L) => {
-                            var ot, Qt;
-                            return f(), w(G, null, [
-                              L.key !== ((ot = Pe.value) == null ? void 0 : ot.key) && e.$slots[L.key] && h(pa)(L, s.value[p]) ? $(e.$slots, L.key, {
+                          (p(!0), w(q, null, he(Te.value, (N) => {
+                            var rt, ea;
+                            return p(), w(q, null, [
+                              N.key !== ((rt = Ne.value) == null ? void 0 : rt.key) && e.$slots[N.key] && h(ya)(N, s.value[m]) ? $(e.$slots, N.key, {
                                 key: 0,
-                                value: s.value[p][L.key],
-                                item: s.value[p],
-                                column: L,
-                                i: p
-                              }) : (f(), w(G, { key: 1 }, [
-                                L.key !== ((Qt = Pe.value) == null ? void 0 : Qt.key) ? (f(), M(Xt, {
+                                value: s.value[m][N.key],
+                                item: s.value[m],
+                                column: N,
+                                i: m
+                              }) : (p(), w(q, { key: 1 }, [
+                                N.key !== ((ea = Ne.value) == null ? void 0 : ea.key) ? (p(), M(Kt, {
                                   key: 0,
-                                  modelValue: s.value[p],
-                                  "onUpdate:modelValue": (wa) => s.value[p] = wa,
-                                  i: p,
-                                  column: L,
-                                  columns: me.value,
-                                  "edit-mode-enabled": I.value,
-                                  "has-inline-edit-perm": et.value
+                                  modelValue: s.value[m],
+                                  "onUpdate:modelValue": (Aa) => s.value[m] = Aa,
+                                  i: m,
+                                  column: N,
+                                  columns: Te.value,
+                                  "edit-mode-enabled": T.value,
+                                  "has-inline-edit-perm": nt.value
                                 }, null, 8, ["modelValue", "onUpdate:modelValue", "i", "column", "columns", "edit-mode-enabled", "has-inline-edit-perm"])) : R("", !0)
                               ], 64))
                             ], 64);
@@ -1995,101 +2022,101 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
                       }, 1040, ["class", "data-i"])) : R("", !0)
                     ], 64))
                   ], 64))), 256))
-                ], 10, Un)) : ga.value ? (f(), M(ve(e.type), {
+                ], 10, Gn)) : ha.value ? (p(), M(me(_e.value), {
                   key: 3,
-                  class: J(["lkt-table-items-container", e.itemsContainerClass])
+                  class: x(["lkt-table-items-container", e.itemsContainerClass])
                 }, {
                   default: F(() => [
-                    (f(!0), w(G, null, be(s.value, (S, p) => (f(), w(G, {
-                      key: lt(S, p)
+                    (p(!0), w(q, null, he(s.value, (S, m) => (p(), w(q, {
+                      key: it(S, m)
                     }, [
-                      bt(S, p) ? (f(), w("li", {
+                      ct(S, m) ? (p(), w("li", {
                         key: 0,
-                        class: J(["lkt-table-item", Tt(S, p)]),
-                        "data-i": p
+                        class: x(["lkt-table-item", wt(S, m)]),
+                        "data-i": m
                       }, [
-                        je.value ? (f(), M(ve(je.value), X({
+                        Ue.value ? (p(), M(me(Ue.value), X({
                           key: 0,
                           ref_for: !0
                         }, {
                           item: S,
-                          index: p,
-                          editing: I.value,
+                          index: m,
+                          editing: T.value,
                           perms: A.value,
-                          data: Et.value,
+                          data: Dt.value,
                           events: e.itemSlotEvents
-                        }), null, 16)) : $(e.$slots, "item", he({
+                        }), null, 16)) : $(e.$slots, "item", ke({
                           key: 1,
                           [e.slotItemVar || ""]: S,
-                          index: p,
-                          editing: I.value,
-                          canCreate: ye.value,
-                          canRead: Ne.value,
-                          canUpdate: x.value,
-                          canDrop: q.value,
+                          index: m,
+                          editing: T.value,
+                          canCreate: ve.value,
+                          canRead: Re.value,
+                          canUpdate: Z.value,
+                          canDrop: G.value,
                           isLoading: g.value,
-                          doDrop: () => Y(p)
+                          doDrop: () => Y(m)
                         }))
-                      ], 10, _n)) : R("", !0)
+                      ], 10, Xn)) : R("", !0)
                     ], 64))), 128))
                   ]),
                   _: 3
-                }, 8, ["class"])) : e.type === h(Ge).Carousel ? (f(), w("div", {
+                }, 8, ["class"])) : _e.value === h(qe).Carousel ? (p(), w("div", {
                   key: 4,
                   ref_key: "tableBody",
                   ref: v,
-                  id: "lkt-table-body-" + h(we),
-                  class: J(["lkt-table-items-container", e.itemsContainerClass])
+                  id: "lkt-table-body-" + h(W),
+                  class: x(["lkt-table-items-container", e.itemsContainerClass])
                 }, [
-                  ke(h(tn), X({
-                    modelValue: ae.value,
-                    "onUpdate:modelValue": m[2] || (m[2] = (S) => ae.value = S)
+                  Se(h(un), X({
+                    modelValue: se.value,
+                    "onUpdate:modelValue": f[2] || (f[2] = (S) => se.value = S)
                   }, e.carousel, {
-                    "wrap-around": ((ht = e.carousel) == null ? void 0 : ht.infinite) === !0
+                    "wrap-around": ((vt = e.carousel) == null ? void 0 : vt.infinite) === !0
                   }), {
                     addons: F(() => [
-                      ke(h(ln)),
-                      ke(h(on))
+                      Se(h(cn)),
+                      Se(h(vn))
                     ]),
                     default: F(() => [
-                      (f(!0), w(G, null, be(wt.value, (S, p) => (f(), M(h(na), {
+                      (p(!0), w(q, null, he(Ze.value, (S, m) => (p(), M(h(ia), {
                         key: S,
-                        index: p
+                        index: m
                       }, {
                         default: F(() => [
-                          ce("div", zn, [
+                          pe("div", Kn, [
                             $(e.$slots, S)
                           ])
                         ]),
                         _: 2
                       }, 1032, ["index"]))), 128)),
-                      (f(!0), w(G, null, be(s.value, (S, p) => (f(), M(h(na), {
+                      (p(!0), w(q, null, he(s.value, (S, m) => (p(), M(h(ia), {
                         key: e.slide,
-                        index: p
+                        index: m
                       }, {
                         default: F(() => [
-                          ce("div", Hn, [
-                            je.value ? (f(), M(ve(je.value), X({
+                          pe("div", Wn, [
+                            Ue.value ? (p(), M(me(Ue.value), X({
                               key: 0,
                               ref_for: !0
                             }, {
                               item: S,
-                              index: p,
-                              editing: I.value,
+                              index: m,
+                              editing: T.value,
                               perms: A.value,
-                              data: Et.value,
+                              data: Dt.value,
                               events: e.itemSlotEvents
-                            }), null, 16)) : $(e.$slots, "item", he({
+                            }), null, 16)) : $(e.$slots, "item", ke({
                               key: 1,
                               [e.slotItemVar || ""]: S,
-                              index: p,
-                              editing: I.value,
-                              canCreate: ye.value,
-                              canRead: Ne.value,
-                              canUpdate: x.value,
-                              canDrop: q.value,
+                              index: m,
+                              editing: T.value,
+                              canCreate: ve.value,
+                              canRead: Re.value,
+                              canUpdate: Z.value,
+                              canDrop: G.value,
                               isLoading: g.value,
-                              doDrop: () => Y(p)
+                              doDrop: () => Y(m)
                             }))
                           ])
                         ]),
@@ -2098,61 +2125,61 @@ const vn = ["data-i", "data-draggable"], fn = ["data-role", "data-i"], pn = {
                     ]),
                     _: 3
                   }, 16, ["modelValue", "wrap-around"])
-                ], 10, jn)) : R("", !0)
+                ], 10, Yn)) : R("", !0)
               ], 512), [
-                [He, at.value]
+                [ze, Ot.value]
               ]),
-              !g.value && s.value.length === 0 ? (f(), w("div", qn, [
-                h(n).empty ? $(e.$slots, "empty", { key: 0 }) : ba.value ? (f(), M(ve(ha.value), {
+              !g.value && s.value.length === 0 ? (p(), w("div", Jn, [
+                h(n).empty ? $(e.$slots, "empty", { key: 0 }) : Sa.value ? (p(), M(me(Ca.value), {
                   key: 1,
                   message: e.noResultsText
-                }, null, 8, ["message"])) : e.noResultsText ? (f(), w(G, { key: 2 }, [
-                  Ke(We(e.noResultsText), 1)
+                }, null, 8, ["message"])) : e.noResultsText ? (p(), w(q, { key: 2 }, [
+                  Ye(Ke(e.noResultsText), 1)
                 ], 64)) : R("", !0)
               ])) : R("", !0),
-              g.value ? (f(), M(de, { key: 3 })) : R("", !0),
-              yt.value || h(n).bottomButtons ? (f(), w("div", Gn, [
-                yt.value && s.value.length >= e.requiredItemsForBottomCreate ? (f(), M(zt, {
+              g.value ? (p(), M(fe, { key: 3 })) : R("", !0),
+              dt.value || h(n).bottomButtons ? (p(), w("div", Qn, [
+                dt.value && s.value.length >= e.requiredItemsForBottomCreate ? (p(), M(qt, {
                   key: 0,
-                  config: ne.value,
-                  disabled: !gt.value,
-                  onClick: pt,
-                  onAppend: _e
+                  config: j.value,
+                  disabled: !Ut.value,
+                  onClick: Pe,
+                  onAppend: u
                 }, null, 8, ["config", "disabled"])) : R("", !0),
                 $(e.$slots, "bottom-buttons")
               ])) : R("", !0),
-              e.paginator && Object.keys(e.paginator).length > 0 ? (f(), M(At, X({
+              e.paginator && Object.keys(e.paginator).length > 0 ? (p(), M(Tt, X({
                 key: 5,
                 ref_key: "paginatorRef",
-                ref: Ze
+                ref: Qe
               }, e.paginator, {
                 modelValue: c.value,
-                "onUpdate:modelValue": m[3] || (m[3] = (S) => c.value = S),
-                onLoading: Mt,
-                onPerms: xe,
-                onResponse: Z
+                "onUpdate:modelValue": f[3] || (f[3] = (S) => c.value = S),
+                onLoading: Oe,
+                onPerms: te,
+                onResponse: Rt
               }), null, 16, ["modelValue"])) : R("", !0),
               h(n)["web-element-actions"] ? $(e.$slots, "web-element-actions", { key: 6 }) : R("", !0)
             ];
           }),
           _: 3
         }, 8, ["class"]))
-      ], 8, In);
+      ], 8, Rn);
     };
   }
-}), el = {
+}), il = {
   install: (t) => {
-    t.component("lkt-table") === void 0 && t.component("lkt-table", Xn);
+    t.component("lkt-table") === void 0 && t.component("lkt-table", Zn);
   }
-}, tl = (t) => (fe.navButtonSlot = t, !0), al = (t) => (fe.createButtonSlot = t, !0), nl = (t) => {
-  fe.defaultEmptySlot = t;
+}, rl = (t) => (ge.navButtonSlot = t, !0), ul = (t) => (ge.createButtonSlot = t, !0), sl = (t) => {
+  ge.defaultEmptySlot = t;
 };
 export {
-  il as Column,
-  rl as createColumn,
-  el as default,
-  rn as defaultTableSorter,
-  al as setTableCreateButtonSlot,
-  nl as setTableEmptySlot,
-  tl as setTableNavButtonSlot
+  vl as Column,
+  fl as createColumn,
+  il as default,
+  fn as defaultTableSorter,
+  ul as setTableCreateButtonSlot,
+  sl as setTableEmptySlot,
+  rl as setTableNavButtonSlot
 };

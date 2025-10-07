@@ -6,11 +6,11 @@ import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
 import {
     AccordionConfig,
     ButtonConfig,
-    ButtonType,
+    ButtonType, ClickEventArgs,
     Column, ColumnConfig,
     ensureButtonConfig,
     extractI18nValue,
-    getDefaultValues, ItemSlotComponentConfig,
+    getDefaultValues, HeaderConfig, ItemSlotComponentConfig,
     LktObject,
     LktSettings,
     PaginatorType,
@@ -70,6 +70,7 @@ const Page = ref(props.paginator?.modelValue),
     editModeEnabled = ref(props.editMode),
     updateTimeStamp = ref(0),
     sortableContainer = ref(<HTMLElement | null>null),
+    activeType = ref(props.type),
     currentSlide = ref(props.carousel?.currentSlide || 0)
 ;
 
@@ -310,7 +311,7 @@ const getItemByEvent = (e: any) => {
             if (typeof props.newValueGenerator === 'function') {
                 let newValue = props.newValueGenerator();
 
-                if (typeof newValue === 'object' || props.type !== TableType.Table) {
+                if (typeof newValue === 'object' || computedType.value !== TableType.Table) {
                     Items.value.push(newValue);
                     return;
                 }
@@ -431,7 +432,7 @@ const getItemByEvent = (e: any) => {
             || (hasModalCreatePerm.value && editModeEnabled.value);
     }),
     computedIsList = computed(() => {
-        return [TableType.Ol, TableType.Ul].includes(props.type);
+        return [TableType.Ol, TableType.Ul].includes(computedType.value);
     }),
     canDisplayItem = (item: LktObject, index: number) => {
         if (typeof props.itemDisplayChecker === 'function') return props.itemDisplayChecker(item, index);
@@ -541,13 +542,69 @@ const hasEmptySlot = computed(() => {
     displayLktHeader = computed(() => {
         return typeof props.header === 'object'
             && Object.keys(props.header).length > 0;
+    }),
+    computedType = computed(() => {
+        if (!Array.isArray(props.switchableTypes)) return props.type;
+        if (props.switchableTypes.length > 0) {
+            return activeType.value;
+        }
+        return props.type;
     });
+
+const availableTypes = computed(() => {
+        if (!Array.isArray(props.switchableTypes)) return [];
+        if (props.switchableTypes.length > 0) {
+            if (!props.switchableTypes.includes(props.type)) {
+                return [
+                    props.type,
+                    ...props.switchableTypes,
+                ]
+            }
+            return props.switchableTypes;
+        }
+        return [];
+    }),
+    computedSwitchTypesButtons = computed(() => {
+        let r: Array<ButtonConfig> = [];
+        availableTypes.value.forEach(type => {
+            r.push(<ButtonConfig>{
+                ...props.switchableTypesButtons[type],
+                events: {
+                    click: (args: ClickEventArgs) => {
+
+                        activeType.value = type;
+
+                        if (typeof props.switchableTypesButtons[type] === 'function') {
+                            props.switchableTypesButtons[type](args);
+                        }
+                    }
+                }
+            });
+        });
+        return r;
+    }),
+    computedHeaderConfig = computed(() => {
+        return <HeaderConfig>{
+            ...props.header,
+            topEndButtons: [
+                ...typeof props.header?.topEndButtons === 'undefined' ? [] : props.header?.topEndButtons,
+                ...computedSwitchTypesButtons.value,
+            ]
+        }
+    });
+
+const checkUseItemSlot = (item: LktObject, index: number) => {
+
+    if (typeof props.useItemSlot === 'function') return props.useItemSlot({item, index}) === true;
+
+    return props.useItemSlot;
+}
 
 </script>
 
 <template>
     <section ref="element" class="lkt-table-page" :id="'lkt-table-page-' + uniqueId">
-        <lkt-header v-if="displayLktHeader" v-bind="header"/>
+        <lkt-header v-if="displayLktHeader" v-bind="computedHeaderConfig"/>
         <header v-else-if="computedTitle || slots.title" :class="headerClass">
             <component :is="computedTitleTag" v-if="computedTitle">
                 <i v-if="titleIcon" :class="titleIcon"/>
@@ -713,7 +770,7 @@ const hasEmptySlot = computed(() => {
             </div>
 
             <div v-show="computedShowItems" class="lkt-table">
-                <table v-if="type === TableType.Table">
+                <table v-if="computedType === TableType.Table">
                     <thead v-if="!hideTableHeader">
                     <tr>
                         <th v-if="computedDragModeEnabled && editModeEnabled" data-role="drag-indicator"/>
@@ -768,7 +825,7 @@ const hasEmptySlot = computed(() => {
                         @item-down="onItemDown"
                         @item-drop="onItemDrop"
                     >
-                        <template v-if="slots[`item-${i}`]" v-slot:[`item-${i}`]="row">
+                        <template v-if="slots[`item-${i}`] && checkUseItemSlot(row, i)" v-slot:[`item-${i}`]="row">
                             <slot
                                 :name="`item-${i}`"
                                 :[slotItemVar]="row.item"
@@ -782,7 +839,7 @@ const hasEmptySlot = computed(() => {
                                 v-bind:do-drop="row.doDrop"
                             />
                         </template>
-                        <template v-else-if="slots.item" #item="row">
+                        <template v-else-if="slots.item && checkUseItemSlot(row, i)" #item="row">
                             <slot
                                 name="item"
                                 :[slotItemVar]="row.item"
@@ -810,7 +867,7 @@ const hasEmptySlot = computed(() => {
                     </tbody>
                 </table>
 
-                <div v-else-if="type === TableType.Item"
+                <div v-else-if="computedType === TableType.Item"
                      ref="tableBody"
                      :id="'lkt-table-body-' + uniqueId"
                      class="lkt-table-items-container"
@@ -868,7 +925,7 @@ const hasEmptySlot = computed(() => {
                     </template>
                 </div>
 
-                <div v-else-if="type === TableType.Accordion"
+                <div v-else-if="computedType === TableType.Accordion"
                      ref="tableBody"
                      :id="'lkt-table-body-' + uniqueId"
                      class="lkt-table-items-container"
@@ -945,7 +1002,7 @@ const hasEmptySlot = computed(() => {
                     </template>
                 </div>
 
-                <component :is="type" v-else-if="computedIsList" class="lkt-table-items-container"
+                <component :is="computedType" v-else-if="computedIsList" class="lkt-table-items-container"
                            :class="itemsContainerClass">
                     <template
                         v-for="(item, i) in Items" :key="getRowKey(item, i)">
@@ -979,7 +1036,7 @@ const hasEmptySlot = computed(() => {
                     </template>
                 </component>
 
-                <div v-else-if="type === TableType.Carousel"
+                <div v-else-if="computedType === TableType.Carousel"
                      ref="tableBody"
                      :id="'lkt-table-body-' + uniqueId"
                      class="lkt-table-items-container"
