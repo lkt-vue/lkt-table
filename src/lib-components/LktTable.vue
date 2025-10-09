@@ -6,7 +6,7 @@ import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
 import {
     AccordionConfig,
     ButtonConfig,
-    ButtonType, ClickEventArgs,
+    ButtonType, CalendarConfig, CalendarEventConfig, ClickEventArgs,
     Column, ColumnConfig,
     ensureButtonConfig,
     extractI18nValue,
@@ -26,7 +26,7 @@ import {HTTPResponse} from "lkt-http-client";
 import CreateButton from "../components/CreateButton.vue";
 import Sortable from 'sortablejs';
 import TableHeader from "../components/TableHeader.vue";
-import {time} from "lkt-date-tools";
+import {date, time} from "lkt-date-tools";
 import {Settings} from "../settings/Settings";
 import LktTableCell from "../components/LktTableCell.vue";
 
@@ -237,6 +237,14 @@ const emptyColumns = computed(() => {
 
     computedAccordionHeaderColumn = computed(() => {
         return Columns.value.find(c => c.isForAccordionHeader);
+    }),
+
+    computedCalendarDateColumn = computed(() => {
+        return Columns.value.find(c => c.isCalendarDate);
+    }),
+
+    computedCalendarGroupColumn = computed(() => {
+        return Columns.value.find(c => c.isCalendarGroup);
     })
 ;
 
@@ -599,6 +607,52 @@ const checkUseItemSlot = (item: LktObject, index: number) => {
 
     return props.useItemSlot;
 }
+
+const computedCalendarEvents = computed(() => {
+    if (!computedCalendarDateColumn.value || typeof computedCalendarDateColumn.value === 'undefined') return [];
+
+    let r: Array<CalendarEventConfig> = [];
+    let rControl: Array<string> = [];
+
+    Items.value.forEach((item: LktObject) => {
+        let dateObj = item[computedCalendarDateColumn.value.key];
+        let stringDate = date('Y-m-d H:i:s', dateObj);
+
+        let groupValue:string|undefined = undefined;
+        if (computedCalendarGroupColumn.value?.key) {
+            groupValue = item[computedCalendarGroupColumn.value.key];
+        }
+
+        let groupConfig = {};
+        if (groupValue && props.calendarGroups && typeof props.calendarGroups[groupValue] === 'object') {
+            groupConfig = props.calendarGroups[groupValue];
+        }
+
+        const controlKey = [stringDate, groupValue].join('-');
+
+        let i = -1;
+        if (!rControl.includes(controlKey)) {
+            i = rControl.length;
+            rControl.push(controlKey);
+            r.push({
+                date: dateObj,
+                data: {
+                    items: [],
+                },
+                dot: {
+                    ...groupConfig,
+                    class: `lkt-calendar-group--${groupValue}`,
+                },
+            })
+        } else {
+            i = rControl.findIndex(v => v === controlKey);
+        }
+
+        r[i].data.items.push(item);
+    })
+
+    return r;
+})
 
 </script>
 
@@ -1093,6 +1147,19 @@ const checkUseItemSlot = (item: LktObject, index: number) => {
                             <Pagination/>
                         </template>
                     </carousel>
+                </div>
+
+                <div v-else-if="computedType === TableType.Calendar"
+                     ref="tableBody"
+                     :id="'lkt-table-body-' + uniqueId"
+                     class="lkt-table-items-container"
+                     :class="itemsContainerClass">
+                    <lkt-calendar
+                        v-bind="<CalendarConfig>{
+                            ...calendar,
+                            events: computedCalendarEvents,
+                        }"
+                    />
                 </div>
             </div>
 
