@@ -6,7 +6,7 @@ import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
 import {
     AccordionConfig,
     ButtonConfig,
-    ButtonType, CalendarConfig, CalendarEventConfig, ClickEventArgs,
+    ButtonType, CalendarConfig, CalendarEventConfig, CalendarItemConfig, ClickEventArgs,
     Column, ColumnConfig,
     ensureButtonConfig,
     extractI18nValue,
@@ -575,8 +575,10 @@ const availableTypes = computed(() => {
     computedSwitchTypesButtons = computed(() => {
         let r: Array<ButtonConfig> = [];
         availableTypes.value.forEach(type => {
+            let data = props.switchableTypesButtons[type];
             r.push(<ButtonConfig>{
-                ...props.switchableTypesButtons[type],
+                ...data,
+                class: [data.class, type === computedType.value ? 'is-current' : ''].join(' '),
                 events: {
                     click: (args: ClickEventArgs) => {
 
@@ -609,9 +611,9 @@ const checkUseItemSlot = (item: LktObject, index: number) => {
 }
 
 const computedCalendarEvents = computed(() => {
-    if (!computedCalendarDateColumn.value || typeof computedCalendarDateColumn.value === 'undefined') return [];
+    if (computedType.value !== TableType.Calendar || !computedCalendarDateColumn.value || typeof computedCalendarDateColumn.value === 'undefined') return [];
 
-    let r: Array<CalendarEventConfig> = [];
+    let r: Array<CalendarItemConfig> = [];
     let rControl: Array<string> = [];
 
     Items.value.forEach((item: LktObject) => {
@@ -652,7 +654,25 @@ const computedCalendarEvents = computed(() => {
     })
 
     return r;
-})
+});
+
+const calendarEvents = {
+    dayPicked: ((args: {
+        pickedDate: Date,
+        items: Array<CalendarItemConfig>
+    }) => {
+        if (typeof props.calendar.events?.dayPicked === 'function') {
+            props.calendar.events.dayPicked(args);
+        }
+    }),
+    visibleMonthChanged: ((args: {
+        visibleDate: Date
+    }) => {
+        if (typeof props.calendar.events?.visibleMonthChanged === 'function') {
+            props.calendar.events.visibleMonthChanged(args);
+        }
+    })
+}
 
 </script>
 
@@ -1157,7 +1177,8 @@ const computedCalendarEvents = computed(() => {
                     <lkt-calendar
                         v-bind="<CalendarConfig>{
                             ...calendar,
-                            events: computedCalendarEvents,
+                            items: computedCalendarEvents,
+                            events: calendarEvents,
                         }"
                     />
                 </div>
