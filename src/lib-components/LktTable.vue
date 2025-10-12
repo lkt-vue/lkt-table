@@ -6,18 +6,26 @@ import {computed, nextTick, onMounted, ref, useSlots, watch} from "vue";
 import {
     AccordionConfig,
     ButtonConfig,
-    ButtonType, CalendarConfig, CalendarEventConfig, CalendarItemConfig, ClickEventArgs,
-    Column, ColumnConfig,
+    ButtonType,
+    CalendarConfig,
+    CalendarItemConfig,
+    ClickEventArgs,
+    Column,
+    ColumnConfig,
     ensureButtonConfig,
     extractI18nValue,
-    getDefaultValues, HeaderConfig, ItemSlotComponentConfig,
+    getDefaultValues,
+    HeaderConfig,
+    ItemSlotComponentConfig,
     LktObject,
     LktSettings,
+    PaginatorConfig,
     PaginatorType,
     SortDirection,
     Table,
     TableConfig,
-    TablePermission, TableRowType,
+    TablePermission,
+    TableRowType,
     TableType
 } from "lkt-vue-kernel";
 import {generateRandomString, replaceAll} from "lkt-string-tools";
@@ -26,7 +34,7 @@ import {HTTPResponse} from "lkt-http-client";
 import CreateButton from "../components/CreateButton.vue";
 import Sortable from 'sortablejs';
 import TableHeader from "../components/TableHeader.vue";
-import {date, time} from "lkt-date-tools";
+import {date, findOldestAndNewestDateInObjects, time} from "lkt-date-tools";
 import {Settings} from "../settings/Settings";
 import LktTableCell from "../components/LktTableCell.vue";
 
@@ -71,7 +79,10 @@ const Page = ref(props.paginator?.modelValue),
     updateTimeStamp = ref(0),
     sortableContainer = ref(<HTMLElement | null>null),
     activeType = ref(props.type),
-    currentSlide = ref(props.carousel?.currentSlide || 0)
+    currentSlide = ref(props.carousel?.currentSlide || 0),
+    timelineOldestDate = ref(<Date|undefined>undefined),
+    timelineNewestDate = ref(<Date|undefined>undefined),
+    timelineVisibleDate = ref(<Date|undefined>undefined)
 ;
 
 const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton)),
@@ -99,6 +110,12 @@ const onPerms = (r: string[]) => {
                 rawItems = props.events.parseResults(rawItems);
             }
             Items.value = [...Items.value, ...rawItems];
+
+            if ([PaginatorType.TimelineAsc, PaginatorType.TimelineDesc, PaginatorType.TimelineAscDesc].includes(props.paginator?.type)) {
+                const dateRange = findOldestAndNewestDateInObjects(Items.value, props.paginator.dateKey);
+                timelineOldestDate.value = dateRange.oldest;
+                timelineNewestDate.value = dateRange.newest;
+            }
         }
         isLoading.value = false;
         firstLoadReady.value = true;
@@ -671,6 +688,8 @@ const calendarEvents = {
         if (typeof props.calendar.events?.visibleMonthChanged === 'function') {
             props.calendar.events.visibleMonthChanged(args);
         }
+
+        timelineVisibleDate.value = args.visibleDate;
     })
 }
 
@@ -1213,7 +1232,12 @@ const calendarEvents = {
             <lkt-paginator
                 ref="paginatorRef"
                 v-if="paginator && Object.keys(paginator).length > 0"
-                v-bind="paginator"
+                v-bind="<PaginatorConfig>{
+                    ...paginator,
+                    timelineOldestDate,
+                    timelineNewestDate,
+                    timelineVisibleDate,
+                }"
                 v-model="Page"
                 @loading="onLoading"
                 @perms="onPerms"
