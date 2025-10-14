@@ -467,6 +467,10 @@ const getItemByEvent = (e: any) => {
         if (typeof props.itemContainerClass === 'function') return props.itemContainerClass(item, index);
         return props.itemContainerClass;
     },
+    getItemContainerStyle = (item: LktObject, index: number) => {
+        if (typeof props.itemContainerStyle === 'function') return props.itemContainerStyle(item, index);
+        return props.itemContainerStyle;
+    },
     getAccordionHeaderText = (item: LktObject, index: number) => {
         if (!computedAccordionHeaderColumn.value) return '';
 
@@ -601,8 +605,12 @@ const availableTypes = computed(() => {
 
                         activeType.value = type;
 
-                        if (typeof props.switchableTypesButtons[type] === 'function') {
-                            props.switchableTypesButtons[type](args);
+                        if (typeof props.switchableTypesButtons[type].events?.click === 'function') {
+                            props.switchableTypesButtons[type].events.click(args);
+                        }
+
+                        if (typeof props.events?.viewChanged === 'function') {
+                            props.events.viewChanged(type);
                         }
                     }
                 }
@@ -971,7 +979,9 @@ const calendarEvents = {
                             v-if="!skipTableItemsContainer && canDisplayItem(item, i)"
                             class="lkt-table-item"
                             :class="getItemContainerClass(item, i)"
-                            :data-i="i">
+                            :style="getItemContainerStyle(item, i)"
+                            :data-i="i"
+                        >
                             <template v-if="computedItemSlotComponent">
                                 <component
                                     :is="computedItemSlotComponent"
@@ -1100,7 +1110,11 @@ const calendarEvents = {
                     <template
                         v-for="(item, i) in Items" :key="getRowKey(item, i)">
                         <li class="lkt-table-item"
-                            :class="getItemContainerClass(item, i)" v-if="canDisplayItem(item, i)" :data-i="i">
+                            :class="getItemContainerClass(item, i)"
+                            v-if="canDisplayItem(item, i)"
+                            :data-i="i"
+                            :style="getItemContainerStyle(item, i)"
+                        >
                             <template v-if="computedItemSlotComponent">
                                 <component
                                     :is="computedItemSlotComponent"
