@@ -1,10 +1,10 @@
-import { Column as Tl } from "lkt-vue-kernel";
-import { createColumn as Il } from "lkt-vue-kernel";
-declare namespace hl {
+import { Column as Vn } from "lkt-vue-kernel";
+import { createColumn as Rn } from "lkt-vue-kernel";
+declare namespace Dn {
     function install(a: any): void;
 }
-declare function Tn(a: any, i: any, o: any, l: any): 0 | 1 | -1;
-declare function Sl(a: any): boolean;
-declare function Cl(a: any): void;
-declare function kl(a: any): boolean;
-export { Tl as Column, Il as createColumn, hl as default, Tn as defaultTableSorter, Sl as setTableCreateButtonSlot, Cl as setTableEmptySlot, kl as setTableNavButtonSlot };
+declare function Al(a: any, i: any, o: any, n: any): 0 | 1 | -1;
+declare function In(a: any): boolean;
+declare function Bn(a: any): void;
+declare function Tn(a: any): boolean;
+export { Vn as Column, Rn as createColumn, Dn as default, Al as defaultTableSorter, In as setTableCreateButtonSlot, Bn as setTableEmptySlot, Tn as setTableNavButtonSlot };

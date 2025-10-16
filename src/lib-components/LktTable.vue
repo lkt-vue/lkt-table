@@ -13,7 +13,7 @@ import {
     Column,
     ColumnConfig,
     ensureButtonConfig,
-    extractI18nValue,
+    extractI18nValue, FormUiConfig,
     getDefaultValues,
     HeaderConfig,
     ItemSlotComponentConfig,
@@ -82,7 +82,13 @@ const Page = ref(props.paginator?.modelValue),
     currentSlide = ref(props.carousel?.currentSlide || 0),
     timelineOldestDate = ref(<Date|undefined>undefined),
     timelineNewestDate = ref(<Date|undefined>undefined),
-    timelineVisibleDate = ref(<Date|undefined>undefined)
+    timelineVisibleDate = ref(<Date|undefined>undefined),
+    filtersFormData = ref({
+        ...typeof props.paginator.resourceData === 'object' ? props.paginator.resourceData : {}
+    }),
+    paginatorResourceData = ref({
+        ...typeof props.paginator.resourceData === 'object' ? props.paginator.resourceData : {}
+    })
 ;
 
 const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton)),
@@ -572,6 +578,12 @@ const hasEmptySlot = computed(() => {
         return typeof props.header === 'object'
             && Object.keys(props.header).length > 0;
     }),
+    displayFiltersLktForm = computed(() => {
+        console.log('displayFiltersLktForm: ', typeof props.filtersForm === 'object'
+            && Object.keys(props.filtersForm).length > 0)
+        return typeof props.filtersForm === 'object'
+            && Object.keys(props.filtersForm).length > 0;
+    }),
     computedType = computed(() => {
         if (!Array.isArray(props.switchableTypes)) return props.type;
         if (props.switchableTypes.length > 0) {
@@ -700,6 +712,18 @@ const calendarEvents = {
         timelineVisibleDate.value = args.visibleDate;
     })
 }
+
+let filterFormTimeout = null;
+watch(filtersFormData, () => {
+    clearTimeout(filterFormTimeout);
+    filterFormTimeout = setTimeout(() => {
+        paginatorResourceData.value = {
+            ...paginatorResourceData.value,
+            ...filtersFormData.value,
+        }
+    }, 400);
+}, {deep: true})
+
 
 </script>
 
@@ -869,6 +893,16 @@ const calendarEvents = {
                  v-if="firstLoadReady && slots.filters">
                 <slot name="filters" :items="Items" :is-loading="isLoading"/>
             </div>
+
+            <lkt-form
+                v-if="displayFiltersLktForm"
+                v-model="filtersFormData"
+                v-model:editing="editMode"
+                v-model:perms="perms"
+                v-bind="<FormUiConfig>{
+                form: filtersForm
+            }"
+            />
 
             <div v-show="computedShowItems" class="lkt-table">
                 <table v-if="computedType === TableType.Table">
@@ -1248,6 +1282,7 @@ const calendarEvents = {
                 v-if="paginator && Object.keys(paginator).length > 0"
                 v-bind="<PaginatorConfig>{
                     ...paginator,
+                    resourceData: paginatorResourceData,
                     timelineOldestDate,
                     timelineNewestDate,
                     timelineVisibleDate,
