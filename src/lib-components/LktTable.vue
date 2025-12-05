@@ -80,13 +80,13 @@ const Page = ref(props.paginator?.modelValue),
     sortableContainer = ref(<HTMLElement | null>null),
     activeType = ref(props.type),
     currentSlide = ref(props.carousel?.currentSlide || 0),
-    timelineOldestDate = ref(<Date|undefined>undefined),
-    timelineNewestDate = ref(<Date|undefined>undefined),
-    timelineVisibleDate = ref(<Date|undefined>undefined),
-    filtersFormData = ref({
+    timelineOldestDate = ref(<Date | undefined>undefined),
+    timelineNewestDate = ref(<Date | undefined>undefined),
+    timelineVisibleDate = ref(<Date | undefined>undefined),
+    filtersFormData = ref(<LktObject>{
         ...typeof props.paginator.resourceData === 'object' ? props.paginator.resourceData : {}
     }),
-    paginatorResourceData = ref({
+    paginatorResourceData = ref(<LktObject>{
         ...typeof props.paginator.resourceData === 'object' ? props.paginator.resourceData : {}
     })
 ;
@@ -134,9 +134,22 @@ const onPerms = (r: string[]) => {
         })
     },
     onLoading = () => nextTick(() => {
-        if (!props.paginator || ![PaginatorType.LoadMore, PaginatorType.Infinite].includes(props.paginator?.type)) {
+        const paginator = props.paginator;
+        const typeOfPaginator = paginator?.type;
+
+        let hasToClean = true;
+
+        if (typeOfPaginator) {
+            if ([PaginatorType.LoadMore, PaginatorType.Infinite].includes(typeOfPaginator)) hasToClean = false;
+            else if ([PaginatorType.TimelineDesc, PaginatorType.TimelineAsc, PaginatorType.TimelineAscDesc].includes(typeOfPaginator) && props.paginator.timeline?.accumulative) {
+                hasToClean = false;
+            }
+        }
+
+        if (hasToClean) {
             Items.value.splice(0, Items.value.length);
         }
+
         isLoading.value = true
     }),
     doRefresh = () => {
@@ -657,7 +670,7 @@ const computedCalendarEvents = computed(() => {
         let dateObj = item[computedCalendarDateColumn.value.key];
         let stringDate = date('Y-m-d H:i:s', dateObj);
 
-        let groupValue:string|undefined = undefined;
+        let groupValue: string | undefined = undefined;
         if (computedCalendarGroupColumn.value?.key) {
             groupValue = item[computedCalendarGroupColumn.value.key];
         }
@@ -897,11 +910,11 @@ watch(filtersFormData, () => {
             <lkt-form
                 v-if="displayFiltersLktForm"
                 v-model="filtersFormData"
-                v-model:editing="editMode"
-                v-model:perms="perms"
+                v-model:editing="editModeEnabled"
+                v-model:perms="permissions"
                 v-bind="<FormUiConfig>{
-                form: filtersForm
-            }"
+                    form: filtersForm
+                }"
             />
 
             <div v-show="computedShowItems" class="lkt-table">
