@@ -93,6 +93,7 @@ const Page = ref(props.paginator?.modelValue),
 
 const safeSaveButton = ref(ensureButtonConfig(props.saveButton, LktSettings.defaultSaveButton)),
     safeCreateButton = ref(ensureButtonConfig(props.createButton, LktSettings.defaultCreateButton)),
+    safeInlineCreateButton = ref(ensureButtonConfig(props.createButton, LktSettings.defaultInlineCreateButton)),
     safeEditModeButton = ref(ensureButtonConfig(props.editModeButton, LktSettings.defaultEditModeButton)),
     safeGroupButton = ref(ensureButtonConfig(props.groupButton, LktSettings.defaultGroupButton));
 
@@ -472,6 +473,12 @@ const getItemByEvent = (e: any) => {
         if (props.createButton === false) return false;
         return hasInlineCreateEverPerm.value
             || (hasCreatePerm.value && editModeEnabled.value)
+            || (hasInlineCreatePerm.value && editModeEnabled.value)
+            || (hasModalCreatePerm.value && editModeEnabled.value);
+    }),
+    computedDisplayInlineCreateButton = computed(() => {
+        if (props.createButton === false) return false;
+        return hasInlineCreateEverPerm.value
             || (hasInlineCreatePerm.value && editModeEnabled.value)
             || (hasModalCreatePerm.value && editModeEnabled.value);
     }),
@@ -882,7 +889,14 @@ watch(filtersFormData, () => {
                 </lkt-button>
 
                 <create-button
-                    v-if="computedDisplayCreateButton && Items.length >= requiredItemsForTopCreate"
+                    v-if="computedDisplayInlineCreateButton && Items.length >= requiredItemsForTopCreate"
+                    :config="safeInlineCreateButton"
+                    :disabled="!createEnabled"
+                    @click="onClickAddItem"
+                    @append="onAppend"
+                />
+                <create-button
+                    v-else-if="computedDisplayCreateButton && Items.length >= requiredItemsForTopCreate"
                     :config="safeCreateButton"
                     :disabled="!createEnabled"
                     @click="onClickAddItem"
@@ -1281,7 +1295,14 @@ watch(filtersFormData, () => {
             <div v-if="computedDisplayCreateButton || slots.bottomButtons"
                  class="lkt-table-page-buttons lkt-table-page-buttons-bottom">
                 <create-button
-                    v-if="computedDisplayCreateButton && Items.length >= requiredItemsForBottomCreate"
+                    v-if="computedDisplayInlineCreateButton && Items.length >= requiredItemsForBottomCreate"
+                    :config="safeInlineCreateButton"
+                    :disabled="!createEnabled"
+                    @click="onClickAddItem"
+                    @append="onAppend"
+                />
+                <create-button
+                    v-else-if="computedDisplayCreateButton && Items.length >= requiredItemsForBottomCreate"
                     :config="safeCreateButton"
                     :disabled="!createEnabled"
                     @click="onClickAddItem"
