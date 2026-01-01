@@ -125,6 +125,17 @@ const computedFieldLabel = computed(() => {
             prop: item,
         }"
     />
+
+    <div class="lkt-content-container"
+         :class="column.class"
+        v-else-if="column.type === ColumnType.Content && Array.isArray(column.content)"
+    >
+        <template v-for="element in column.content">
+            <lkt-polymorphic-element v-if="typeof element === 'function'" v-bind="element({item})"/>
+            <lkt-polymorphic-element v-else v-bind="element"/>
+        </template>
+    </div>
+
     <template v-else>
         {{ getColumnDisplayContent(column, item, i, columns) }}
     </template>
