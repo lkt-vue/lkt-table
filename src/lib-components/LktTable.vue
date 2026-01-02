@@ -564,6 +564,7 @@ defineExpose({
     getRowByIndex,
     doRefresh,
     doRemoveIndex: (index: number) => {
+        if (accordionsModelValue.value[index] === true) accordionsModelValue.value[index] = false;
         Items.value.splice(index, 1);
         reRender();
     },
@@ -600,8 +601,6 @@ const hasEmptySlot = computed(() => {
             && Object.keys(props.header).length > 0;
     }),
     displayFiltersLktForm = computed(() => {
-        console.log('displayFiltersLktForm: ', typeof props.filtersForm === 'object'
-            && Object.keys(props.filtersForm).length > 0)
         return typeof props.filtersForm === 'object'
             && Object.keys(props.filtersForm).length > 0;
     }),

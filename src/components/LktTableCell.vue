@@ -131,7 +131,7 @@ const computedFieldLabel = computed(() => {
         v-else-if="column.type === ColumnType.Content && Array.isArray(column.content)"
     >
         <template v-for="element in column.content">
-            <lkt-polymorphic-element v-if="typeof element === 'function'" v-bind="element({item})"/>
+            <lkt-polymorphic-element v-if="typeof element === 'function'" v-bind="element({item, index: i})"/>
             <lkt-polymorphic-element v-else v-bind="element"/>
         </template>
     </div>

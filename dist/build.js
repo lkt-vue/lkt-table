@@ -1071,7 +1071,7 @@ const ba = (e) => e && xl(e), ha = Ce({
           typeof O == "function" ? (c(), R(P, K({
             key: 0,
             ref_for: !0
-          }, O({ item: l.value })), null, 16)) : (c(), R(P, K({
+          }, O({ item: l.value, index: e.i })), null, 16)) : (c(), R(P, K({
             key: 1,
             ref_for: !0
           }, O), null, 16))
@@ -1617,7 +1617,7 @@ const Fl = ["data-i", "data-draggable"], Pl = ["data-role", "data-i"], Ul = {
       getRowByIndex: A,
       doRefresh: nt,
       doRemoveIndex: (a) => {
-        s.value.splice(a, 1), m();
+        v.value[a] === !0 && (v.value[a] = !1), s.value.splice(a, 1), m();
       },
       getHtml: () => ve.value,
       reRender: m,
@@ -1627,7 +1627,7 @@ const Fl = ["data-i", "data-draggable"], Pl = ["data-role", "data-i"], Ul = {
         });
       }
     });
-    const ra = r(() => typeof Se.defaultEmptySlot < "u"), Fa = r(() => Se.defaultEmptySlot), Pa = r(() => !t.drag || Object.keys(t.drag).length === 0 || !t.drag.enabled ? !1 : typeof t.drag.canRender > "u" ? !0 : t.drag.canRender), Ua = r(() => !t.drag || Object.keys(t.drag).length === 0 || !t.drag.enabled || typeof t.drag.isDisabled > "u" ? !1 : t.drag.isDisabled), ja = r(() => typeof t.header == "object" && Object.keys(t.header).length > 0), za = r(() => (console.log("displayFiltersLktForm: ", typeof t.filtersForm == "object" && Object.keys(t.filtersForm).length > 0), typeof t.filtersForm == "object" && Object.keys(t.filtersForm).length > 0)), Te = r(() => Array.isArray(t.switchableTypes) && t.switchableTypes.length > 0 ? me.value : t.type), Ga = r(() => Array.isArray(t.switchableTypes) ? t.switchableTypes.length > 0 ? t.switchableTypes.includes(t.type) ? t.switchableTypes : [
+    const ra = r(() => typeof Se.defaultEmptySlot < "u"), Fa = r(() => Se.defaultEmptySlot), Pa = r(() => !t.drag || Object.keys(t.drag).length === 0 || !t.drag.enabled ? !1 : typeof t.drag.canRender > "u" ? !0 : t.drag.canRender), Ua = r(() => !t.drag || Object.keys(t.drag).length === 0 || !t.drag.enabled || typeof t.drag.isDisabled > "u" ? !1 : t.drag.isDisabled), ja = r(() => typeof t.header == "object" && Object.keys(t.header).length > 0), za = r(() => typeof t.filtersForm == "object" && Object.keys(t.filtersForm).length > 0), Te = r(() => Array.isArray(t.switchableTypes) && t.switchableTypes.length > 0 ? me.value : t.type), Ga = r(() => Array.isArray(t.switchableTypes) ? t.switchableTypes.length > 0 ? t.switchableTypes.includes(t.type) ? t.switchableTypes : [
       t.type,
       ...t.switchableTypes
     ] : [] : []), Ha = r(() => {
