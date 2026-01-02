@@ -64,7 +64,8 @@ const Sorter = ref(typeof props.sorter === 'function' ? props.sorter : defaultTa
     SortingDirection = ref(SortDirection.Asc),
     Items = ref(props.modelValue),
     tableBody = ref(<HTMLElement | null>null),
-    Columns = ref(props.columns);
+    Columns = ref(props.columns),
+    accordionsModelValue = ref([]);
 
 const Page = ref(props.paginator?.modelValue),
     isLoading = ref(props.loading),
@@ -744,6 +745,14 @@ watch(filtersFormData, () => {
     }, 400);
 }, {deep: true})
 
+const onAccordionToggled = (status, i, item) => {
+    if (status && props.accordionList?.limitOpened) {
+        accordionsModelValue.value.forEach((val, k) => {
+            if (val && k !== i) accordionsModelValue.value[k] = false;
+        })
+    }
+}
+
 
 </script>
 
@@ -1119,14 +1128,16 @@ watch(filtersFormData, () => {
                         <template v-else>
                             <lkt-accordion
                                 v-if="canDisplayItem(item, i)"
+                                v-model="accordionsModelValue[i]"
                                 class="lkt-table-item"
                                 :class="getItemContainerClass(item, i)"
                                 :data-i="i"
                                 :key="getRowKey(item, i)"
                                 v-bind="<AccordionConfig>{
-                                ...accordion,
-                                title: getAccordionHeaderText(item, i),
-                            }"
+                                    ...accordion,
+                                    title: getAccordionHeaderText(item, i),
+                                }"
+                                @update:modelValue="onAccordionToggled($event, i, item)"
                             >
                                 <template #header>
                                     <lkt-table-cell
@@ -1278,7 +1289,7 @@ watch(filtersFormData, () => {
                 </div>
             </div>
 
-            <div class="lkt-table-empty" v-if="!isLoading && Items.length === 0">
+            <div class="lkt-table-empty" v-if="!isLoading && Items.length === 0 && (slots.empty || hasEmptySlot || noResultsText)">
                 <template v-if="slots.empty">
                     <slot name="empty"/>
                 </template>
