@@ -11,7 +11,7 @@ import {
     CalendarItemConfig,
     ClickEventArgs,
     Column,
-    ColumnConfig,
+    ColumnConfig, DotConfig,
     ensureButtonConfig,
     extractI18nValue, FormUiConfig,
     getDefaultValues,
@@ -675,22 +675,32 @@ const computedCalendarEvents = computed(() => {
 
     Items.value.forEach((item: LktObject) => {
         let dateObj = item[computedCalendarDateColumn.value.key];
-        let stringDate = date('Y-m-d H:i:s', dateObj);
+        let stringDate = date('Y-m-d H:i:s', dateObj, computedCalendarGroupColumn.value);
 
         let groupValue: string | undefined = undefined;
         if (computedCalendarGroupColumn.value?.key) {
             groupValue = item[computedCalendarGroupColumn.value.key];
         }
 
-        let groupConfig = {};
-        if (groupValue && props.calendarGroups && typeof props.calendarGroups[groupValue] === 'object') {
-            groupConfig = props.calendarGroups[groupValue];
-        }
-
         const controlKey = [stringDate, groupValue].join('-');
 
         let i = -1;
         if (!rControl.includes(controlKey)) {
+
+            let groupConfig:Partial<DotConfig> = {};
+            if (groupValue && props.calendarGroups && typeof props.calendarGroups[groupValue] === 'object') {
+                groupConfig = props.calendarGroups[groupValue];
+            }
+
+            let generatedClassName = `lkt-calendar-group--${groupValue}`;
+            if (groupConfig.class) {
+                groupConfig.class = [
+                    groupConfig.class, generatedClassName
+                ].join(' ')
+            } else {
+                groupConfig.class = generatedClassName;
+            }
+
             i = rControl.length;
             rControl.push(controlKey);
             r.push({
@@ -700,7 +710,6 @@ const computedCalendarEvents = computed(() => {
                 },
                 dot: {
                     ...groupConfig,
-                    class: `lkt-calendar-group--${groupValue}`,
                 },
             })
         } else {
