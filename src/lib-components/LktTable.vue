@@ -675,7 +675,7 @@ const computedCalendarEvents = computed(() => {
 
     Items.value.forEach((item: LktObject) => {
         let dateObj = item[computedCalendarDateColumn.value.key];
-        let stringDate = date('Y-m-d H:i:s', dateObj, computedCalendarGroupColumn.value);
+        let stringDate = date('Y-m-d H:i:s', dateObj);
 
         let groupValue: string | undefined = undefined;
         if (computedCalendarGroupColumn.value?.key) {
