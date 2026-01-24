@@ -12,6 +12,7 @@ import {
     ClickEventArgs,
     Column,
     ColumnConfig, DotConfig,
+    EmptySlotData,
     ensureButtonConfig,
     extractI18nValue, FormUiConfig,
     getDefaultValues,
@@ -583,6 +584,16 @@ const hasEmptySlot = computed(() => {
     }),
     emptySlot = computed(() => {
         return Settings.defaultEmptySlot;
+    }),
+    computedNoResultsConfig = computed(() => {
+        if (typeof props.noResults !== 'object') return undefined;
+
+        let r = <EmptySlotData>{
+            ...props.noResults
+        }
+
+        if (r.text) r.text = extractI18nValue(r.text);
+        return r;
     }),
     computedRenderDrag = computed(() => {
         if (!props.drag || Object.keys(props.drag).length === 0) return false;
@@ -1300,6 +1311,9 @@ const onAccordionToggled = (status, i, item) => {
             <div class="lkt-table-empty" v-if="!isLoading && Items.length === 0 && (slots.empty || hasEmptySlot || noResultsText)">
                 <template v-if="slots.empty">
                     <slot name="empty"/>
+                </template>
+                <template v-else-if="hasEmptySlot && typeof computedNoResultsConfig === 'object'">
+                    <component :is="emptySlot" v-bind="computedNoResultsConfig"/>
                 </template>
                 <template v-else-if="hasEmptySlot">
                     <component :is="emptySlot" :message="noResultsText"/>
