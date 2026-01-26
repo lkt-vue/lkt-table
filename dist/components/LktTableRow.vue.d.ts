@@ -25,38 +25,76 @@ type __VLS_Props = {
     itemSlotEvents?: LktObject | Function;
     permissions?: Array<TablePermission>;
 };
-declare var __VLS_30: `item-${number}`, __VLS_31: {
-    item: LktObject;
-    index: number;
-    editing: boolean;
-    canCreate: boolean;
-    canRead: boolean;
-    canUpdate: boolean;
-    canDrop: boolean;
-    isLoading: boolean;
-    doDrop: () => void;
-}, __VLS_33: {
-    item: LktObject;
-    index: number;
-    editing: boolean;
-    canCreate: boolean;
-    canRead: boolean;
-    canUpdate: boolean;
-    canDrop: boolean;
-    isLoading: boolean;
-    doDrop: () => void;
-}, __VLS_36: string, __VLS_37: {
+declare var __VLS_26: string, __VLS_27: {
     value: any;
     item: LktObject;
     column: Column;
     i: number;
+    index: number;
+    editing: boolean;
+    canCreate: boolean;
+    canRead: boolean;
+    canUpdate: boolean;
+    canDrop: boolean;
+    isLoading: boolean;
+    doDrop: () => void;
+}, __VLS_41: `item-${number}`, __VLS_42: {
+    item: LktObject;
+    index: number;
+    editing: boolean;
+    canCreate: boolean;
+    canRead: boolean;
+    canUpdate: boolean;
+    canDrop: boolean;
+    isLoading: boolean;
+    doDrop: () => void;
+}, __VLS_44: {
+    item: LktObject;
+    index: number;
+    editing: boolean;
+    canCreate: boolean;
+    canRead: boolean;
+    canUpdate: boolean;
+    canDrop: boolean;
+    isLoading: boolean;
+    doDrop: () => void;
+}, __VLS_47: string, __VLS_48: {
+    value: any;
+    item: LktObject;
+    column: Column;
+    i: number;
+    index: number;
+    editing: boolean;
+    canCreate: boolean;
+    canRead: boolean;
+    canUpdate: boolean;
+    canDrop: boolean;
+    isLoading: boolean;
+    doDrop: () => void;
+}, __VLS_58: string, __VLS_59: {
+    value: any;
+    item: LktObject;
+    column: Column;
+    i: number;
+    index: number;
+    editing: boolean;
+    canCreate: boolean;
+    canRead: boolean;
+    canUpdate: boolean;
+    canDrop: boolean;
+    isLoading: boolean;
+    doDrop: () => void;
 };
 type __VLS_Slots = {} & {
-    [K in NonNullable<typeof __VLS_30>]?: (props: typeof __VLS_31) => any;
+    [K in NonNullable<typeof __VLS_26>]?: (props: typeof __VLS_27) => any;
 } & {
-    [K in NonNullable<typeof __VLS_36>]?: (props: typeof __VLS_37) => any;
+    [K in NonNullable<typeof __VLS_41>]?: (props: typeof __VLS_42) => any;
 } & {
-    item?: (props: typeof __VLS_33) => any;
+    [K in NonNullable<typeof __VLS_47>]?: (props: typeof __VLS_48) => any;
+} & {
+    [K in NonNullable<typeof __VLS_58>]?: (props: typeof __VLS_59) => any;
+} & {
+    item?: (props: typeof __VLS_44) => any;
 };
 declare const __VLS_component: import("vue").DefineComponent<__VLS_Props, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
     "update:modelValue": (...args: any[]) => void;

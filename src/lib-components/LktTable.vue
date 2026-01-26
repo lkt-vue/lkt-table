@@ -1071,6 +1071,10 @@ const onAccordionToggled = (status, i, item) => {
                             :style="getItemContainerStyle(item, i)"
                             :data-i="i"
                         >
+                            <div v-if="sortable && editModeEnabled" class="handle" :data-i="i">
+                                <i class="lkt-icn-drag-indicator"/>
+                            </div>
+
                             <template v-if="computedItemSlotComponent">
                                 <component
                                     :is="computedItemSlotComponent"

@@ -135,6 +135,12 @@ const canRenderDragIndicator = computed(() => {
 
 
         return r.join(' ');
+    }),
+    computedBeforeSlotColumns = computed(() => {
+        return props.visibleColumns.filter(c => c.includeBeforeItemSlot);
+    }),
+    computedAfterSlotColumns = computed(() => {
+        return props.visibleColumns.filter(c => c.includeAfterItemSlot);
     });
 </script>
 
@@ -168,8 +174,48 @@ const canRenderDragIndicator = computed(() => {
                 </lkt-button>
             </div>
         </td>
-        <template v-if="itemSlotComponent">
-            <td :key="'td' + i" :colspan="visibleColumns.length">
+        <template v-if="itemSlotComponent || (canCustomItem && slots[`item-${i}`]) || (canItem && slots.item)">
+
+            <template v-for="column in computedBeforeSlotColumns">
+                <td v-if="canRenderColumn(column, emptyColumns, Item)"
+                    :key="'td' + i"
+                    :data-column="column.key"
+                    :colspan="getHorizontalColSpan(column,Item)"
+                    :title="getColumnDisplayContent (column, Item, i, visibleColumns)"
+                    :class="getColumnClasses(column)"
+                    @click="onClick($event)"
+                >
+                    <template v-if="!!$slots[column.key] && colPreferSlot(column, Item)">
+                        <slot :name="column.key"
+                              :value="Item[column.key]"
+                              :item="Item"
+                              :column="column"
+                              :i="i"
+                              v-bind:index="i"
+                              v-bind:editing="editModeEnabled"
+                              v-bind:can-create="canCreate"
+                              v-bind:can-read="canRead"
+                              v-bind:can-update="canEdit"
+                              v-bind:can-drop="canDrop"
+                              v-bind:is-loading="isLoading"
+                              v-bind:do-drop="() => onClickDrop()"
+                        />
+                    </template>
+                    <template v-else-if="Item">
+                        <lkt-table-cell
+                            v-model="Item"
+                            :column="column"
+                            :columns="visibleColumns"
+                            :edit-mode-enabled="editModeEnabled"
+                            :has-inline-edit-perm="hasInlineEditPerm"
+                            :i="i"
+                            @inline-drop="onClickDrop"
+                        />
+                    </template>
+                </td>
+            </template>
+
+            <td v-if="itemSlotComponent" :key="'td' + i" :colspan="visibleColumns.length">
                 <component
                     :is="itemSlotComponent"
                     v-bind="<ItemSlotComponentConfig>{
@@ -182,9 +228,7 @@ const canRenderDragIndicator = computed(() => {
                     }"
                 />
             </td>
-        </template>
-        <template v-else-if="canCustomItem && slots[`item-${i}`]">
-            <td :key="'td' + i" :colspan="visibleColumns.length">
+            <td v-else-if="canCustomItem && slots[`item-${i}`]" :key="'td' + i" :colspan="visibleColumns.length">
                 <slot
                     :name="`item-${i}`"
                     :item="Item"
@@ -198,9 +242,7 @@ const canRenderDragIndicator = computed(() => {
                     v-bind:do-drop="() => onClickDrop()"
                 />
             </td>
-        </template>
-        <template v-else-if="canItem && slots.item">
-            <td :key="'td' + i" :colspan="visibleColumns.length">
+            <td v-else-if="canItem && slots.item" :key="'td' + i" :colspan="visibleColumns.length">
                 <slot
                     name="item"
                     :item="Item"
@@ -214,6 +256,46 @@ const canRenderDragIndicator = computed(() => {
                     v-bind:do-drop="() => onClickDrop()"
                 />
             </td>
+
+            <template v-for="column in computedAfterSlotColumns">
+                <td v-if="canRenderColumn(column, emptyColumns, Item)"
+                    :key="'td' + i"
+                    :data-column="column.key"
+                    :colspan="getHorizontalColSpan(column,Item)"
+                    :title="getColumnDisplayContent (column, Item, i, visibleColumns)"
+                    :class="getColumnClasses(column)"
+                    @click="onClick($event)"
+                >
+                    <template v-if="!!$slots[column.key] && colPreferSlot(column, Item)">
+                        <slot :name="column.key"
+                              :value="Item[column.key]"
+                              :item="Item"
+                              :column="column"
+                              :i="i"
+                              v-bind:index="i"
+                              v-bind:editing="editModeEnabled"
+                              v-bind:can-create="canCreate"
+                              v-bind:can-read="canRead"
+                              v-bind:can-update="canEdit"
+                              v-bind:can-drop="canDrop"
+                              v-bind:is-loading="isLoading"
+                              v-bind:do-drop="() => onClickDrop()"
+                        />
+                    </template>
+                    <template v-else-if="Item">
+                        <lkt-table-cell
+                            v-model="Item"
+                            :column="column"
+                            :columns="visibleColumns"
+                            :edit-mode-enabled="editModeEnabled"
+                            :has-inline-edit-perm="hasInlineEditPerm"
+                            :i="i"
+                            @inline-drop="onClickDrop"
+                        />
+                    </template>
+                </td>
+            </template>
+
         </template>
         <template v-else v-for="column in visibleColumns">
             <td v-if="canRenderColumn(column, emptyColumns, Item)"
@@ -230,6 +312,14 @@ const canRenderDragIndicator = computed(() => {
                           :item="Item"
                           :column="column"
                           :i="i"
+                          v-bind:index="i"
+                          v-bind:editing="editModeEnabled"
+                          v-bind:can-create="canCreate"
+                          v-bind:can-read="canRead"
+                          v-bind:can-update="canEdit"
+                          v-bind:can-drop="canDrop"
+                          v-bind:is-loading="isLoading"
+                          v-bind:do-drop="() => onClickDrop()"
                     />
                 </template>
                 <template v-else-if="Item">
