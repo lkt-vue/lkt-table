@@ -133,6 +133,7 @@
 
 .lkt-table-page-buttons-bottom {
     justify-content: center;
+    position: static;
 }
 
 .lkt-table-page-buttons > .switch-edition-mode {
